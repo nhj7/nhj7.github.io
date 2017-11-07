@@ -52,13 +52,6 @@ created by
 </template>
 
 <script>
-module.exports = {
-    data: function() {
-        return {
-            myAccount: '@nhj12311'
-        }
-    }
-}
 
 function addTextDiv(txt) {
 		var div = document.createElement("div");
@@ -181,4 +174,14 @@ function addTextDiv(txt) {
 		});
 
 	}
+	
+module.exports = {
+    data: function() {
+        return {
+            myAccount: '@nhj12311'
+        }
+    }
+}
+
+
 </script>
