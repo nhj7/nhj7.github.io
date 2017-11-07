@@ -61,6 +61,13 @@ created by
 
 	var newAccountName = '';
 	
+	function addTextDiv(txt) {
+				var div = document.createElement("div");
+				div.innerHTML = txt;
+				console.log("addTextDiv : " + txt);
+				document.getElementById("textDiv").appendChild(div);
+			}
+	
 	
 module.exports = {
     data: function() {
