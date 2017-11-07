@@ -60,7 +60,12 @@ created by
 	var creatorWif = '';
 
 	var newAccountName = '';
-	
+	function addTextDiv(txt) {
+		var div = document.createElement("div");
+		div.innerHTML = txt;
+		console.log("addTextDiv : " + txt);
+		document.getElementById("textDiv").appendChild(div);
+	}
 	
 module.exports = {
     data: function() {
@@ -69,12 +74,7 @@ module.exports = {
         }
     }
     , methods : {    	
-			addTextDiv : function(txt) {
-				var div = document.createElement("div");
-				div.innerHTML = txt;
-				console.log("addTextDiv : " + txt);
-				document.getElementById("textDiv").appendChild(div);
-			}
+			
 			
 			, create_account_step1 : function() {
 				creator = document.getElementById("creatorAccount").value;
