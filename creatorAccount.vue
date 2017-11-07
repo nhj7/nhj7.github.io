@@ -10,7 +10,7 @@
 </div>
 
 <div  class="container">
-	<form id="create-form" class="form-signin"
+	<form id="create-form" class="form-signin" action="javascript:;" v-on:submit="create_account_step1"
 		>
 		<h2 class="form-signin-heading">Enter Steemit creator account
 			info</h2>
@@ -29,7 +29,7 @@
 			Account</label> <input type="id" id="newAccount" class="form-control"
 			placeholder="New Account" required autofocus> <br />
 		<!--button class="btn btn-lg btn-primary btn-block" type="button" v-on:click="create_account_step1(); return false; " >Create Account</button-->
-		<button type="button" class="btn btn-lg btn-primary btn-block" v-on:click="create_account_step1">Create
+		<button type="submit" class="btn btn-lg btn-primary btn-block">Create
 			Account</button>
 	</form>
 
@@ -52,10 +52,6 @@ created by
 </template>
 
 <script>
-
-
-	
-
 	var creator = 'nhj12311';
 	var creatorWif = '';
 
@@ -90,94 +86,75 @@ created by
 		
 			}
 			
-	function create_account_step2() {
-				newAccountName = document.getElementById("newAccount").value;
-				var newAccountPassword = steem.formatter.createSuggestedPassword();
-				var roles = [ "POSTING", "ACTIVE", "OWNER", "MEMO" ];
+	function create_account_step2(){
+		newAccountName = document.getElementById("newAccount").value;
+		var newAccountPassword = steem.formatter.createSuggestedPassword();
+		var roles = ["POSTING", "ACTIVE", "OWNER", "MEMO"];
 		
-				var arrPublicKey = steem.auth.generateKeys(newAccountName,
-						newAccountPassword, roles);
-				var arrPrivateKey = steem.auth.getPrivateKeys(newAccountName,
-						newAccountPassword, roles);
+		var arrPublicKey = steem.auth.generateKeys(newAccountName, newAccountPassword, roles);
+		var arrPrivateKey = steem.auth.getPrivateKeys(newAccountName, newAccountPassword, roles);
+
 		
-				var owner = {
-					weight_threshold : 1,
-					account_auths : [],
-					key_auths : [ [ arrPublicKey["OWNER"], 1 ] ]
-				};
-				var active = {
-					weight_threshold : 1,
-					account_auths : [],
-					key_auths : [ [ arrPublicKey["ACTIVE"], 1 ] ]
-				};
-				var posting = {
-					weight_threshold : 1,
-					account_auths : [],
-					key_auths : [ [ arrPublicKey["POSTING"], 1 ] ]
-				};
 		
-				steem.api
-						.getConfig(function(err, config) {
-							if (err) {
-								console.log(err, config);
-								throw new Error(err);
-							}
-		
-							steem.api
-									.getChainProperties(function(err2, chainProps) {
-										if (err2) {
-											console.log(err2, chainProps);
-											throw new Error(err2);
-										}
-		
-										var ratio = config['STEEMIT_CREATE_ACCOUNT_WITH_STEEM_MODIFIER'];
-										var fee = dsteem.Asset.from(
-												chainProps.account_creation_fee)
-												.multiply(ratio);
-		
-										var feeString = fee.toString();
-										var jsonMetadata = '';
-		
-										steem.broadcast
-												.accountCreate(
-														creatorWif,
-														feeString,
-														creator,
-														newAccountName,
-														owner,
-														active,
-														posting,
-														arrPublicKey["MEMO"],
-														jsonMetadata,
-														function(err, result) {
-		
-															console.log("err : " + err,
-																	result);
-															addTextDiv("-------------------------------------------------------------");
-															if (err != null) {
-																addTextDiv("Error : "
-																		+ err + "["
-																		+ result + "]");
-															} else {
-																addTextDiv("GENERATE PRIVATE KEYS - Please keep the owner key. ");
-																addTextDiv(" ");
-		
-																addTextDiv("<strong>account name : "
-																		+ newAccountName
-																		+ "<strong>");
-																addTextDiv("<strong>Owner Key : "
-																		+ arrPrivateKey["OWNER"]
-																		+ "<strong>");
-															}
-															addTextDiv("-------------------------------------------------------------");
-															addTextDiv("<br />");
-		
-														});
-		
-									});
-						});
-		
+		var owner = {
+			weight_threshold: 1,
+			account_auths: [],
+			key_auths: [[ arrPublicKey["OWNER"] , 1]]
+		};
+		var active = {
+			weight_threshold: 1,
+			account_auths: [],
+			key_auths: [[arrPublicKey["ACTIVE"], 1]]
+		};
+		var posting = {
+			weight_threshold: 1,
+			account_auths: [],
+			key_auths: [[arrPublicKey["POSTING"], 1]]
+		};
+
+		steem.api.getConfig(function(err, config) {
+		  if(err){
+			console.log(err, config);
+			throw new Error(err);
+		  }
+
+		  steem.api.getChainProperties(function(err2, chainProps) {
+			if(err2){
+			  console.log(err2, chainProps);
+			  throw new Error(err2);
 			}
+
+			var ratio = config['STEEMIT_CREATE_ACCOUNT_WITH_STEEM_MODIFIER'];
+			var fee = dsteem.Asset.from(chainProps.account_creation_fee).multiply(ratio);
+
+			var feeString = fee.toString();
+			var jsonMetadata = '';		
+
+			steem.broadcast.accountCreate(creatorWif, feeString, creator, 
+						newAccountName, owner, active, posting, arrPublicKey["MEMO"], 
+						jsonMetadata, function(err, result) {
+			  
+			  console.log("err : "+err, result);
+			  addTextDiv("-------------------------------------------------------------");
+			  if( err != null){
+				addTextDiv("Error : " + err + "["+result+"]");
+			  }else{
+				addTextDiv("GENERATE PRIVATE KEYS - Please keep the owner key. ");
+				addTextDiv(" ");
+
+
+				addTextDiv("<strong>account name : " + newAccountName + "<strong>");
+				addTextDiv("<strong>Owner Key : " + arrPrivateKey["OWNER"] + "<strong>");	
+			  }
+				addTextDiv("-------------------------------------------------------------");
+				addTextDiv("<br />");
+				
+			});
+
+		  });
+		});
+		
+	}
 	
 module.exports = {
     data: function() {
