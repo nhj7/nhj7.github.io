@@ -54,7 +54,7 @@ created by
 module.exports = {
     data: function() {
         return {
-            who: 'world'
+            myAccount: 'world'
         }
     }
 }
