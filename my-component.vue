@@ -186,7 +186,7 @@ module.exports = {
         }
     }
     , methods : {
-			, create_account_step1 : function() {
+			create_account_step1 : function() {
 				create_account_step1();
 			}
 			
