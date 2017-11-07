@@ -26,7 +26,7 @@
 <script src="https://unpkg.com/dsteem@latest/dist/dsteem.js"></script>
 <script src="https://unpkg.com/vue"></script>
 <script src="https://unpkg.com/vuex"></script>
-
+<script src="https://unpkg.com/http-vue-loader"></script>
 
 </head>
 <body style="padding-top: 4em;">
@@ -75,9 +75,18 @@
 			<!--/.nav-collapse -->
 		</div>
 	</nav>
-	
-	<link rel="import" href="./tmp.html">
+	<div id="app" class="container theme-showcase">
+		<my-component></my-component>
+	</div>
+	<script>
+		new Vue({
+			'el' : '#app',
+			components : {
+				'my-component' : httpVueLoader('my-component.vue')
+			}
 
+		})
+	</script>
 
 </body>
 
