@@ -11,7 +11,7 @@
 
 <div  class="container">
 	<form id="create-form" class="form-signin"
-		action="javascript:create_account_step1();">
+		>
 		<h2 class="form-signin-heading">Enter Steemit creator account
 			info</h2>
 		<label for="creatorAccount" class="sr-only">Creator Account</label> <input
@@ -28,8 +28,8 @@
 		<br /> <br /> <label for="newAccount" class="sr-only">new
 			Account</label> <input type="id" id="newAccount" class="form-control"
 			placeholder="New Account" required autofocus> <br />
-		<!--button class="btn btn-lg btn-primary btn-block" type="button" onclick="create_account_step1(); return false; " >Create Account</button-->
-		<button class="btn btn-lg btn-primary btn-block" type="submit">Create
+		<!--button class="btn btn-lg btn-primary btn-block" type="button" v-on:click="create_account_step1(); return false; " >Create Account</button-->
+		<button class="btn btn-lg btn-primary btn-block" v-on:click="create_account_step1(); return false; ">Create
 			Account</button>
 	</form>
 
