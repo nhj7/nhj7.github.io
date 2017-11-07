@@ -53,133 +53,139 @@ created by
 
 <script>
 
-function addTextDiv(txt) {
-		var div = document.createElement("div");
-		div.innerHTML = txt;
-		console.log("addTextDiv : " + txt);
-		document.getElementById("textDiv").appendChild(div);
-	}
 
-	function create_account_step2() {
-		newAccountName = document.getElementById("newAccount").value;
-		var newAccountPassword = steem.formatter.createSuggestedPassword();
-		var roles = [ "POSTING", "ACTIVE", "OWNER", "MEMO" ];
-
-		var arrPublicKey = steem.auth.generateKeys(newAccountName,
-				newAccountPassword, roles);
-		var arrPrivateKey = steem.auth.getPrivateKeys(newAccountName,
-				newAccountPassword, roles);
-
-		var owner = {
-			weight_threshold : 1,
-			account_auths : [],
-			key_auths : [ [ arrPublicKey["OWNER"], 1 ] ]
-		};
-		var active = {
-			weight_threshold : 1,
-			account_auths : [],
-			key_auths : [ [ arrPublicKey["ACTIVE"], 1 ] ]
-		};
-		var posting = {
-			weight_threshold : 1,
-			account_auths : [],
-			key_auths : [ [ arrPublicKey["POSTING"], 1 ] ]
-		};
-
-		steem.api
-				.getConfig(function(err, config) {
-					if (err) {
-						console.log(err, config);
-						throw new Error(err);
-					}
-
-					steem.api
-							.getChainProperties(function(err2, chainProps) {
-								if (err2) {
-									console.log(err2, chainProps);
-									throw new Error(err2);
-								}
-
-								var ratio = config['STEEMIT_CREATE_ACCOUNT_WITH_STEEM_MODIFIER'];
-								var fee = dsteem.Asset.from(
-										chainProps.account_creation_fee)
-										.multiply(ratio);
-
-								var feeString = fee.toString();
-								var jsonMetadata = '';
-
-								steem.broadcast
-										.accountCreate(
-												creatorWif,
-												feeString,
-												creator,
-												newAccountName,
-												owner,
-												active,
-												posting,
-												arrPublicKey["MEMO"],
-												jsonMetadata,
-												function(err, result) {
-
-													console.log("err : " + err,
-															result);
-													addTextDiv("-------------------------------------------------------------");
-													if (err != null) {
-														addTextDiv("Error : "
-																+ err + "["
-																+ result + "]");
-													} else {
-														addTextDiv("GENERATE PRIVATE KEYS - Please keep the owner key. ");
-														addTextDiv(" ");
-
-														addTextDiv("<strong>account name : "
-																+ newAccountName
-																+ "<strong>");
-														addTextDiv("<strong>Owner Key : "
-																+ arrPrivateKey["OWNER"]
-																+ "<strong>");
-													}
-													addTextDiv("-------------------------------------------------------------");
-													addTextDiv("<br />");
-
-												});
-
-							});
-				});
-
-	}
+	
 
 	var creator = 'nhj12311';
 	var creatorWif = '';
 
 	var newAccountName = '';
-	function create_account_step1() {
-		creator = document.getElementById("creatorAccount").value;
-		creatorWif = document.getElementById("inputPassword").value;
-		newAccountName = document.getElementById("newAccount").value;
-
-		console.log("newAccountName : " + newAccountName);
-
-		//addTextDiv("password : "+ newAccountPassword);
-
-		steem.api.getAccounts([ newAccountName ], function(err, result) {
-			console.log(err, result);
-
-			if (result[0] == null) {
-				create_account_step2();
-
-			} else {
-				addTextDiv("Erorr : Exsits Account [" + newAccountName + "]");
-			}
-		});
-
-	}
+	
 	
 module.exports = {
     data: function() {
         return {
             myAccount: '@nhj12311'
         }
+    }
+    , methods : {    	
+			addTextDiv(txt) {
+				var div = document.createElement("div");
+				div.innerHTML = txt;
+				console.log("addTextDiv : " + txt);
+				document.getElementById("textDiv").appendChild(div);
+			}
+			
+			, create_account_step1() {
+				creator = document.getElementById("creatorAccount").value;
+				creatorWif = document.getElementById("inputPassword").value;
+				newAccountName = document.getElementById("newAccount").value;
+		
+				console.log("newAccountName : " + newAccountName);
+		
+				//addTextDiv("password : "+ newAccountPassword);
+		
+				steem.api.getAccounts([ newAccountName ], function(err, result) {
+					console.log(err, result);
+		
+					if (result[0] == null) {
+						create_account_step2();
+		
+					} else {
+						addTextDiv("Erorr : Exsits Account [" + newAccountName + "]");
+					}
+				});
+		
+			}
+			
+			, create_account_step2() {
+				newAccountName = document.getElementById("newAccount").value;
+				var newAccountPassword = steem.formatter.createSuggestedPassword();
+				var roles = [ "POSTING", "ACTIVE", "OWNER", "MEMO" ];
+		
+				var arrPublicKey = steem.auth.generateKeys(newAccountName,
+						newAccountPassword, roles);
+				var arrPrivateKey = steem.auth.getPrivateKeys(newAccountName,
+						newAccountPassword, roles);
+		
+				var owner = {
+					weight_threshold : 1,
+					account_auths : [],
+					key_auths : [ [ arrPublicKey["OWNER"], 1 ] ]
+				};
+				var active = {
+					weight_threshold : 1,
+					account_auths : [],
+					key_auths : [ [ arrPublicKey["ACTIVE"], 1 ] ]
+				};
+				var posting = {
+					weight_threshold : 1,
+					account_auths : [],
+					key_auths : [ [ arrPublicKey["POSTING"], 1 ] ]
+				};
+		
+				steem.api
+						.getConfig(function(err, config) {
+							if (err) {
+								console.log(err, config);
+								throw new Error(err);
+							}
+		
+							steem.api
+									.getChainProperties(function(err2, chainProps) {
+										if (err2) {
+											console.log(err2, chainProps);
+											throw new Error(err2);
+										}
+		
+										var ratio = config['STEEMIT_CREATE_ACCOUNT_WITH_STEEM_MODIFIER'];
+										var fee = dsteem.Asset.from(
+												chainProps.account_creation_fee)
+												.multiply(ratio);
+		
+										var feeString = fee.toString();
+										var jsonMetadata = '';
+		
+										steem.broadcast
+												.accountCreate(
+														creatorWif,
+														feeString,
+														creator,
+														newAccountName,
+														owner,
+														active,
+														posting,
+														arrPublicKey["MEMO"],
+														jsonMetadata,
+														function(err, result) {
+		
+															console.log("err : " + err,
+																	result);
+															addTextDiv("-------------------------------------------------------------");
+															if (err != null) {
+																addTextDiv("Error : "
+																		+ err + "["
+																		+ result + "]");
+															} else {
+																addTextDiv("GENERATE PRIVATE KEYS - Please keep the owner key. ");
+																addTextDiv(" ");
+		
+																addTextDiv("<strong>account name : "
+																		+ newAccountName
+																		+ "<strong>");
+																addTextDiv("<strong>Owner Key : "
+																		+ arrPrivateKey["OWNER"]
+																		+ "<strong>");
+															}
+															addTextDiv("-------------------------------------------------------------");
+															addTextDiv("<br />");
+		
+														});
+		
+									});
+						});
+		
+			}
     }
 }
 
