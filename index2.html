@@ -46,7 +46,7 @@
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="#">Home</a></li>
 					<li><a href="#CommentPlay">Comment Play</a></li>
-					<li><a href="#about">Creator Account</a></li>
+					<li><a href="javascript:creatorAccount();">Creator Account</a></li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false">Family Site <span class="caret"></span></a>
@@ -79,13 +79,18 @@
 		<my-component></my-component>
 	</div>
 	<script>
-		new Vue({
-			'el' : '#app',
-			components : {
-				'my-component' : httpVueLoader('/my-component.vue')
-			}
-
-		})
+	
+		function creatorAccount(){
+			var creatorAccount = new Vue({
+				'el' : '#app',
+				components : {
+					'my-component' : httpVueLoader('/creatorAccount.vue')
+				}
+	
+			})
+			
+		}
+		
 	</script>
 
 </body>
