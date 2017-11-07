@@ -29,7 +29,7 @@
 			Account</label> <input type="id" id="newAccount" class="form-control"
 			placeholder="New Account" required autofocus> <br />
 		<!--button class="btn btn-lg btn-primary btn-block" type="button" v-on:click="create_account_step1(); return false; " >Create Account</button-->
-		<button class="btn btn-lg btn-primary btn-block" v-on:click="create_account_step1(); return false; ">Create
+		<button class="btn btn-lg btn-primary btn-block" v-on:click="create_account_step1; return false; ">Create
 			Account</button>
 	</form>
 
@@ -69,14 +69,14 @@ module.exports = {
         }
     }
     , methods : {    	
-			addTextDiv(txt) {
+			addTextDiv : function(txt) {
 				var div = document.createElement("div");
 				div.innerHTML = txt;
 				console.log("addTextDiv : " + txt);
 				document.getElementById("textDiv").appendChild(div);
 			}
 			
-			, create_account_step1() {
+			, create_account_step1 : function() {
 				creator = document.getElementById("creatorAccount").value;
 				creatorWif = document.getElementById("inputPassword").value;
 				newAccountName = document.getElementById("newAccount").value;
@@ -98,7 +98,7 @@ module.exports = {
 		
 			}
 			
-			, create_account_step2() {
+			, create_account_step2 : function() {
 				newAccountName = document.getElementById("newAccount").value;
 				var newAccountPassword = steem.formatter.createSuggestedPassword();
 				var roles = [ "POSTING", "ACTIVE", "OWNER", "MEMO" ];
