@@ -89,10 +89,10 @@ module.exports = {
 					console.log(err, result);
 		
 					if (result[0] == null) {
-						create_account_step2();
+						my-component.create_account_step2();
 		
 					} else {
-						addTextDiv("Erorr : Exsits Account [" + newAccountName + "]");
+						my-component.addTextDiv("Erorr : Exsits Account [" + newAccountName + "]");
 					}
 				});
 		
