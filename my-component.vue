@@ -67,23 +67,8 @@ created by
 				console.log("addTextDiv : " + txt);
 				document.getElementById("textDiv").appendChild(div);
 			}
-	
-	
-module.exports = {
-    data: function() {
-        return {
-            myAccount: '@nhj12311'
-        }
-    }
-    , methods : {    	
-			addTextDiv : function(txt) {
-				var div = document.createElement("div");
-				div.innerHTML = txt;
-				console.log("addTextDiv : " + txt);
-				document.getElementById("textDiv").appendChild(div);
-			}
 			
-			, create_account_step1 : function() {
+	function create_account_step1() {
 				creator = document.getElementById("creatorAccount").value;
 				creatorWif = document.getElementById("inputPassword").value;
 				newAccountName = document.getElementById("newAccount").value;
@@ -105,7 +90,7 @@ module.exports = {
 		
 			}
 			
-			, create_account_step2 : function() {
+	function create_account_step2() {
 				newAccountName = document.getElementById("newAccount").value;
 				var newAccountPassword = steem.formatter.createSuggestedPassword();
 				var roles = [ "POSTING", "ACTIVE", "OWNER", "MEMO" ];
@@ -193,6 +178,19 @@ module.exports = {
 						});
 		
 			}
+	
+module.exports = {
+    data: function() {
+        return {
+            myAccount: '@nhj12311'
+        }
+    }
+    , methods : {
+			, create_account_step1 : function() {
+				create_account_step1();
+			}
+			
+			
     }
 }
 
