@@ -89,7 +89,8 @@
 		//$(".nav a").attr("href",'javascript:setToggle(this);');
 		
 		function setToggle(obj){
-			$(".nav").find(".active").removeClass("active");
+			//$(".nav").find(".active").removeClass("active");
+			$('.navbar-collapse').collapse('hide');
 			//console.log(obj);
 			$(obj).parent().addClass("active");
 			$("#navButton").click();
