@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Steemit Utility</title>
+<title>Steem Apps</title>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -15,6 +15,11 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
 	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
 	crossorigin="anonymous">
+<style>
+	.steemit-logo{
+		color:#06d6a9 !important;font-weight:bold;
+	}
+</style>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script
@@ -30,36 +35,37 @@
 
 </head>
 <body style="padding-top: 4em;">
-	<nav class="navbar navbar-default navbar-fixed-top">
+<div id="app">
+	<nav id="nav" class="navbar navbar-default navbar-fixed-top">
 		<div class="container">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed"
+				<button id="navButton" type="button" class="navbar-toggle collapsed"
 					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
 					aria-controls="navbar">
 					<span class="sr-only">Toggle navigation</span> <span
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Steemit Apps</a>
+				<a class="navbar-brand steemit-logo" href="#">Steem Apps</a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="#CommentPlay">Comment Play</a></li>
-					<li><a href="javascript:creatorAccount();">Creator Account</a></li>
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
+					<li class="active"><a href="javascript:;" @click="setCurrentView('Home')">Home</a></li>
+					<li><a href="javascript:;" @click="setCurrentView('')">Comment Play</a></li>
+					<li><a href="javascript:;" @click="setCurrentView('creatorAccount')">Creator Account</a></li>
+					<li class="dropdown"><a href="javascript:;" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false">Family Site <span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a href="https://steemus.com" target="_blank">Steem
-									Us - @jungs</a></li>
 							<li><a href="https://ianpark.github.io/steemme/"
 								target="_blank">Steem Me - @asbear</a></li>
-							<li><a href="http://tool.steem.world" target="_blank">Steemit
+							<li><a href="https://steemus.com" target="_blank">Steem
+									Us - @jungs</a></li>							
+							<li><a href="http://tool.steem.world" target="_blank">Steem
 									Tool - @segyepark</a></li>
 
 							<li role="separator" class="divider"></li>
-							<li class="dropdown-header"><bold>The Steem Platform</bold></li>
+							<li class="dropdown-header">Steem Platform</li>
 							<li><a href="https://steemkr.com/created/kr" target="_blank">Steemkr</a></li>
 							<li><a href="https://steemit.com/created/kr" target="_blank">Steemit</a></li>
 							<li><a href="https://busy.org/created/kr" target="_blank">Busy</a></li>
@@ -75,21 +81,38 @@
 			
 		</div>
 	</nav>
-	<div id="app" class="container theme-showcase">
-		<my-component></my-component>
+	<div class="container theme-showcase">
+		<component :is="currentView"></component>
 	</div>
+</div>
 	<script>
-	
-		function creatorAccount(){
-			var creatorAccount = new Vue({
-				'el' : '#app',
-				components : {
-					'my-component' : httpVueLoader('/creatorAccount.vue')
-				}
-	
-			})
-			
+		//$(".nav a").attr("href",'javascript:setToggle(this);');
+		
+		function setToggle(obj){
+			$(".nav").find(".active").removeClass("active");
+			//console.log(obj);
+			$(obj).parent().addClass("active");
+			$("#navButton").click();
 		}
+		
+		var app = new Vue({
+			'el' : '#app'
+			, data:{
+				currentView : ''
+			}
+			, components : {
+				'creatorAccount' : httpVueLoader('/creatorAccount.vue?v=1')
+			}
+			, methods : {				
+				setCurrentView : function(name){
+					//console.log(name);
+					app.currentView = name;
+					setToggle(event.target);
+				}
+			}
+
+		});
+		
 		
 	</script>
 

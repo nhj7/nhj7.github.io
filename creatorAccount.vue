@@ -1,14 +1,11 @@
 <template>
     <div id="ca_app" class="container" >
-<div class="starter-template">
-	<h1>Dear Steemit friends. .</h1>
+<div class="starter-template">	
 	<p class="lead">
-		I will share an easy way to create accounts.<br /> You want to create
+		I will share an easy way to create accounts. You want to create
 		an account and share it with your friends.
 	</p>
-
 </div>
-
 <div  class="container">
 	<form id="create-form" class="form-signin" action="javascript:;" v-on:submit="create_account_step1"
 		>
@@ -19,13 +16,8 @@
 			placeholder="Creator Account" required autofocus> <label
 			for="Active Key" class="sr-only">Active Key</label> <input
 			type="password" id="inputPassword" class="form-control"
-			placeholder="Active Key" required> <br />
-		<!--select id="createMethod" class="selectpicker">
-		  <option>Fee(6 steem)</option>
-		  <option>Delegation(0.2 steem/29 steem)</option>
-		</select-->
-		
-		<br /> <br /> <label for="newAccount" class="sr-only">new
+			placeholder="Active Key" required>		
+		<br /> <label for="newAccount" class="sr-only">new
 			Account</label> <input type="id" id="newAccount" class="form-control"
 			placeholder="New Account" required autofocus> <br />
 		<!--button class="btn btn-lg btn-primary btn-block" type="button" v-on:click="create_account_step1(); return false; " >Create Account</button-->
