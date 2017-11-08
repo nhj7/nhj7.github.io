@@ -93,7 +93,9 @@
 			//$('.navbar-collapse').collapse('hide');
 			//console.log(obj);
 			$(obj).parent().addClass("active");
-			$("#navButton").click();
+			if( $("#navButton").is(':visible') ){
+				$("#navButton").click();	
+			}
 		}
 		
 		var app = new Vue({
