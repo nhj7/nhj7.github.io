@@ -60,10 +60,10 @@
 							<li><a href="https://ianpark.github.io/steemme/"
 								target="_blank">Steem Me - @asbear</a></li>
 							<li><a href="https://steemus.com" target="_blank">Steem
-									Us - @jungs</a></li>							
+									Us - @jungs</a></li>
 							<li><a href="http://tool.steem.world" target="_blank">Steem
 									Tool - @segyepark</a></li>
-
+							<li><a href="https://iworldpark.github.io/steemit/stat/post/" target="_blank">Steemit Post Statistics - @segyepark</a></li>
 							<li role="separator" class="divider"></li>
 							<li class="dropdown-header">Steem Platform</li>
 							<li><a href="https://steemkr.com/created/kr" target="_blank">Steemkr</a></li>
@@ -78,7 +78,7 @@
 							class="sr-only">(current)</span></a></li>
 				</ul>
 			</div>
-			
+
 		</div>
 	</nav>
 	<div class="container theme-showcase">
@@ -87,17 +87,17 @@
 </div>
 	<script>
 		//$(".nav a").attr("href",'javascript:setToggle(this);');
-		
+
 		function setToggle(obj){
 			$(".nav").find(".active").removeClass("active");
 			//$('.navbar-collapse').collapse('hide');
 			//console.log(obj);
 			$(obj).parent().addClass("active");
 			if( $("#navButton").is(':visible') ){
-				$("#navButton").click();	
+				$("#navButton").click();
 			}
 		}
-		
+
 		var app = new Vue({
 			'el' : '#app'
 			, data:{
@@ -106,17 +106,17 @@
 			, components : {
 				'creatorAccount' : httpVueLoader('/creatorAccount.vue?v=1')
 			}
-			, methods : {				
+			, methods : {
 				setCurrentView : function(name){
 					//console.log(name);
 					app.currentView = name;
 					setToggle(event.target);
 				}
-			} 
+			}
 
 		});
-		
-		
+
+
 	</script>
 
 </body>
