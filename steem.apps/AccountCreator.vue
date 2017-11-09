@@ -1,6 +1,6 @@
 <template>
     <div id="ca_app" class="container" >
-<div class="starter-template">	
+<div class="starter-template">
 	<p class="lead">
 		I will share an easy way to create accounts. You want to create
 		an account and share it with your friends.
@@ -16,7 +16,7 @@
 			placeholder="Creator Account" required autofocus> <label
 			for="Active Key" class="sr-only">Active Key</label> <input
 			type="password" id="inputPassword" class="form-control"
-			placeholder="Active Key" required>		
+			placeholder="Active Key" required>
 		<br /> <label for="newAccount" class="sr-only">new
 			Account</label> <input type="id" id="newAccount" class="form-control"
 			placeholder="New Account" required autofocus> <br />
@@ -48,46 +48,46 @@ created by
 	var creatorWif = '';
 
 	var newAccountName = '';
-	
+
 	function addTextDiv(txt) {
 				var div = document.createElement("div");
 				div.innerHTML = txt;
 				console.log("addTextDiv : " + txt);
 				document.getElementById("textDiv").appendChild(div);
 			}
-			
+
 	function create_account_step1() {
 				creator = document.getElementById("creatorAccount").value;
 				creatorWif = document.getElementById("inputPassword").value;
 				newAccountName = document.getElementById("newAccount").value;
-		
+
 				console.log("newAccountName : " + newAccountName);
-		
+
 				//addTextDiv("password : "+ newAccountPassword);
-		
+
 				steem.api.getAccounts([ newAccountName ], function(err, result) {
 					console.log(err, result);
-		
+
 					if (result[0] == null) {
 						create_account_step2();
-		
+
 					} else {
 						addTextDiv("Erorr : Exsits Account [" + newAccountName + "]");
 					}
 				});
-		
+
 			}
-			
+
 	function create_account_step2(){
 		newAccountName = document.getElementById("newAccount").value;
 		var newAccountPassword = steem.formatter.createSuggestedPassword();
 		var roles = ["POSTING", "ACTIVE", "OWNER", "MEMO"];
-		
+
 		var arrPublicKey = steem.auth.generateKeys(newAccountName, newAccountPassword, roles);
 		var arrPrivateKey = steem.auth.getPrivateKeys(newAccountName, newAccountPassword, roles);
 
-		
-		
+
+
 		var owner = {
 			weight_threshold: 1,
 			account_auths: [],
@@ -120,12 +120,12 @@ created by
 			var fee = dsteem.Asset.from(chainProps.account_creation_fee).multiply(ratio);
 
 			var feeString = fee.toString();
-			var jsonMetadata = '';		
+			var jsonMetadata = '';
 
-			steem.broadcast.accountCreate(creatorWif, feeString, creator, 
-						newAccountName, owner, active, posting, arrPublicKey["MEMO"], 
+			steem.broadcast.accountCreate(creatorWif, feeString, creator,
+						newAccountName, owner, active, posting, arrPublicKey["MEMO"],
 						jsonMetadata, function(err, result) {
-			  
+
 			  console.log("err : "+err, result);
 			  addTextDiv("-------------------------------------------------------------");
 			  if( err != null){
@@ -136,18 +136,18 @@ created by
 
 
 				addTextDiv("<strong>account name : " + newAccountName + "<strong>");
-				addTextDiv("<strong>Owner Key : " + arrPrivateKey["OWNER"] + "<strong>");	
+				addTextDiv("<strong>Owner Key : " + arrPrivateKey["OWNER"] + "<strong>");
 			  }
 				addTextDiv("-------------------------------------------------------------");
 				addTextDiv("<br />");
-				
+
 			});
 
 		  });
 		});
-		
+
 	}
-	
+
 module.exports = {
     data: function() {
         return {
@@ -158,8 +158,8 @@ module.exports = {
 			create_account_step1 : function() {
 				create_account_step1();
 			}
-			
-			
+
+
     }
 }
 
