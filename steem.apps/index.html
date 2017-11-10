@@ -15,6 +15,7 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
 	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
 	crossorigin="anonymous">
+
 <style>
 	.steemit-logo{
 		color:#06d6a9 !important;font-weight:bold;
@@ -30,8 +31,8 @@
 <script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>
 <script src="https://unpkg.com/dsteem@latest/dist/dsteem.js"></script>
 <script src="https://unpkg.com/vue"></script>
-<script src="https://unpkg.com/vuex"></script>
 <script src="https://unpkg.com/http-vue-loader"></script>
+<script src="https://unpkg.com/vue-router"></script>
 
 </head>
 <body style="padding-top: 5em;">
@@ -106,19 +107,34 @@
 			}
 		}
 
+		var router = new VueRouter({
+		    mode: 'history',
+		    routes: []
+		});
+
 		var app = new Vue({
-			'el' : '#app'
+			router
+			, 'el' : '#app'
 			, data:{
 				currentView : ''
 			}
 			, components : {
-				'AccountCreator' : httpVueLoader('./AccountCreator.vue?v=1')
+				'AccountCreator' : httpVueLoader('./AccountCreator.vue')
+				, 'Home' : httpVueLoader('./Home.vue')
 			}
 			, methods : {
 				setCurrentView : function(name){
 					//console.log(name);
 					app.currentView = name;
 					setToggle(event.target);
+				}
+			}
+			, mounted: function () {
+				console.log(this.$route) // outputs 'yay'
+				if( this.$route.hash != "" ){
+					this.$data.currentView = this.$route.hash.substring(1);
+				}else{
+					this.$data.currentView = "Home";
 				}
 			}
 		});
