@@ -52,7 +52,7 @@
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="#Home" @click="setCurrentView('Home')">Home</a></li>
-					<li><a href="#PlayComment " @click="setCurrentView('')">Play Comment </a></li>
+					<li><a href="#RemindYou " @click="setCurrentView('RemindYou')">Remind You </a></li>
 					<li><a href="#AccountCreator" @click="setCurrentView('AccountCreator')">Account Creator</a></li>
 					<li class="dropdown"><a href="javascript:;" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -92,7 +92,38 @@
 	</nav>
 	<div class="container theme-showcase">
 		<component :is="currentView"></component>
+		<br /><br />
+		created by <a :href="mySteemitBlog" target="_blank">{{myAccount}}</a>
+		<br /><br />
+		<button id="toggleBarBtn" type="button" class="btn btn-primary btn-lg hidden" data-toggle="modal" data-target="#flipFlop" data-backdrop="static">
+		  Toggle Progress Bar
+		</button>
+
+		  <!-- The modal -->
+		  <div class="modal fade" id="flipFlop" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+		    <div class="modal-dialog" role="document">
+		      <div class="modal-content">
+		        <div class="modal-header">
+		          <!--button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		            <span aria-hidden="true">&times;</span>
+		          </button-->
+		          <h4 class="modal-title" id="modalLabel">Wait For Processing...</h4>
+		        </div>
+		        <div class="modal-body">
+		          <div class="progress" >
+		            <div class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+		          </div>
+		        </div>
+		        <!--div class="modal-footer">
+		          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		        </div-->
+		      </div>
+		    </div>
+		  </div>
+
+		</div>
 	</div>
+
 </div>
 	<script>
 		//$(".nav a").attr("href",'javascript:setToggle(this);');
@@ -117,10 +148,13 @@
 			, 'el' : '#app'
 			, data:{
 				currentView : ''
+				,myAccount : '@nhj12311'
+				, mySteemitBlog : 'https://steemit.com/@nhj12311'
 			}
 			, components : {
 				'AccountCreator' : httpVueLoader('./AccountCreator.vue')
 				, 'Home' : httpVueLoader('./Home.vue')
+				, 'RemindYou' : httpVueLoader('./RemindYou.vue')
 			}
 			, methods : {
 				setCurrentView : function(name){

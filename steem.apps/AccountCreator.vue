@@ -35,11 +35,9 @@
 	<div class="panel-heading">
 		<h3 class="panel-title">Result</h3>
 	</div>
-	<div class="panel-body" id=textDiv></div>
+	<div class="panel-body" id="textDiv"></div>
 </div>
 
-created by
-<a href="https://steemit.com/@nhj12311" target="_blank">{{myAccount}}</a>
 </div>
 </template>
 
