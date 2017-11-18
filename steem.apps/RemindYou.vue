@@ -58,7 +58,7 @@
 
     });
 
-    var result = steem.api.getAccountVotes(accountName, function(err, result) {
+    var result = steem.api.getAccountVotes( { voter:accountName , limit:10}, function(err, result) {
       console.log(err, result);
       $("#toggleBarBtn").click();
     });
