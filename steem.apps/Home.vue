@@ -92,6 +92,13 @@ var linkData = [
     , url : "http://cobot.co.kr"
     , creator : "nhj12311"
   }
+
+  , {
+    title : "SteemChatBot"
+    , text : "New Steem Telegram Notification Tool."
+    , url : "https://steemit.com/steemchatbot/@ludorum/steem-mentions-steemchatbot-v0-1-0"
+    , creator : "ludorum"
+  }
 ];
 
 var linkDataDummy = linkData.slice(0);
