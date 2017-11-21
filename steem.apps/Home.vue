@@ -99,6 +99,13 @@ var linkData = [
     , url : "https://steemit.com/steemchatbot/@ludorum/steem-mentions-steemchatbot-v0-1-0"
     , creator : "ludorum"
   }
+  , {
+    title : "steemd"
+    , text : "View information of steem."
+    , url : "https://steemd.com/"
+    , creator : "roadscape"
+  }
+
 ];
 
 var linkDataDummy = linkData.slice(0);
@@ -115,11 +122,11 @@ function init(){
 }
 
 function sortLinks(){
-    linkData.sort( (a, b) => parseInt(a.clickCount) <= parseInt(b.clickCount) );
+    linkData.sort( (a, b) => parseInt(a.clickCount) < parseInt(b.clickCount) );
 }
 
 init();
-sortLinks();
+//sortLinks();
 
 var home = module.exports = {
     name : "Home"
@@ -147,10 +154,13 @@ var home = module.exports = {
           linkData[i].clickCount = 0;
         }
       }
+      , sortLinks : function(){
+        this.$data.links.sort( (a, b) => parseInt(a.clickCount) < parseInt(b.clickCount) );
+      }
     }
 
     , mounted : function(){
-
+      sortLinks();
     }
 }
 </script>
