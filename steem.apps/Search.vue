@@ -3,7 +3,7 @@
 
 <div id="search">
   <div  class="container">
-  	<div class="row">
+  	<div class="row"> 
   		<div class="col-md-12">
               <div class="input-group" id="adv-search">
                   <input type="text" class="form-control" placeholder="Search for steemit" />
@@ -44,7 +44,7 @@
   	</div>
   </div>
   <vue-frame text="VueJS" url="http://www.google.co.kr" frame="myframe" type="button" class="form-control"></vue-frame>
-  
+
 
 </div>
 
