@@ -122,6 +122,36 @@
 
 </div>
 	<script>
+		// ECMAScript 5 polyfill
+		Object.defineProperty(Array.prototype, 'stableSort', {
+			configurable: true,
+			writable: true,
+			value: function stableSort (compareFunction) {
+				'use strict'
+
+				var length = this.length
+				var entries = Array(length)
+				var index
+
+				// wrap values with initial indices
+				for (index = 0; index < length; index++) {
+					entries[index] = [index, this[index]]
+				}
+
+				// sort with fallback based on initial indices
+				entries.sort(function (a, b) {
+					var comparison = Number(this(a[1], b[1]))
+					return comparison || a[0] - b[0]
+				}.bind(compareFunction))
+
+				// re-map original array to stable sorted values
+				for (index = 0; index < length; index++) {
+					this[index] = entries[index][1]
+				}
+
+				return this
+			}
+		});
 		//$(".nav a").attr("href",'javascript:setToggle(this);');
 
 		function setToggle(obj){
@@ -139,6 +169,12 @@
 		    routes: []
 		});
 
+		var updateVersion = "2017.11.22.01";
+
+		function loadVue(path){
+			return httpVueLoader(path + '.vue?v='+updateVersion);
+		}
+
 		var app = new Vue({
 			router
 			, 'el' : '#app'
@@ -148,9 +184,9 @@
 				, mySteemitBlog : 'https://steemit.com/@nhj12311'
 			}
 			, components : {
-				'AccountCreator' : httpVueLoader('./AccountCreator.vue?v=1')
-				, 'Home' : httpVueLoader('./Home.vue?v=6')
-				, 'RemindYou' : httpVueLoader('./RemindYou.vue?v=1')
+				'AccountCreator' : loadVue('./AccountCreator')
+				, 'Home' : loadVue('./Home')
+				, 'RemindYou' : loadVue('./RemindYou')
 			}
 			, methods : {
 				setCurrentView : function(name){

@@ -14,7 +14,6 @@
       </div>
     </div>
   </div>
-
 </div>
 
 <br /><br />
@@ -28,6 +27,7 @@
 </template>
 
 <script>
+
 var linkData = [
   {
     title : "Steeme"
@@ -92,7 +92,12 @@ var linkData = [
     , url : "http://cobot.co.kr"
     , creator : "nhj12311"
   }
-
+  , {
+    title : "SteemChatBot"
+    , text : "New Steem Telegram Notification Tool. "
+    , url : "https://steemit.com/steemchatbot/@ludorum/steem-mentions-steemchatbot-v0-1-0"
+    , creator : "ludorum"
+  }
 
 
 ];
@@ -100,6 +105,7 @@ var linkData = [
 var linkDataDummy = linkData.slice(0);
 
 function init(){
+  //console.log(home.data.links);
   for(var i = 0; i < linkData.length;i++){
     linkData[i] = linkDataDummy[i];
     //console.log("localStorage.getItem : "+localStorage.getItem(linkData[i].url));
@@ -111,45 +117,58 @@ function init(){
 }
 
 function sortLinks(){
-    linkData.sort( (a, b) => parseInt(a.clickCount) < parseInt(b.clickCount) );
+    linkData.stableSort( (a, b) => parseInt(b.clickCount) - parseInt(a.clickCount) );
 }
 
 init();
-//sortLinks();
+sortLinks();
+
+var homeData = { acc : '12311' };
 
 var home = module.exports = {
     name : "Home"
     , data : function () {
       return {
-        myAccount: '@nhj12311'
+        homeData: homeData
         , links : linkData
       }
     }
     , methods : {
 			goClick : function( link ) {
-				//console.log(link.url);
-        localStorage.setItem(link.url, ++link.clickCount);
-        this.sortLinks();
-        window.open(link.url);
+				goClick(link);
 			}
       , goCreator : function (link) {
-        window.open("http://steemit.com/@"+link.creator);
+        goCreator(link);
+
       }
       , resetCount : function(){
-        init();
-        var links = this.$data.links;
-        for(var i = 0; i < links.length;i++){
-          localStorage.setItem(linkData[i].url, 0 );
-          linkData[i].clickCount = 0;
-        }
-      }
-      , sortLinks : function(){
-        this.$data.links.sort( (a, b) => parseFloat(a.clickCount) < parseFloat(b.clickCount) );
+        resetCount();
       }
     }
-
     , mounted : function(){
-      this.sortLinks();
-    }
+      test();
+  }
+}
+
+function test(){
+  homeData.acc = "123123";
+}
+
+function goClick(link){
+  localStorage.setItem(link.url, ++link.clickCount);
+  sortLinks();
+  window.open(link.url);
+}
+
+function goCreator(link){
+  window.open("http://steemit.com/@"+link.creator);
+}
+
+function resetCount(){
+  init();
+  for(var i = 0; i < linkData.length;i++){
+    localStorage.setItem(linkData[i].url, 0 );
+    linkData[i].clickCount = 0;
+  }
 }
 </script>
