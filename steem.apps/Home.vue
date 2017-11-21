@@ -93,18 +93,7 @@ var linkData = [
     , creator : "nhj12311"
   }
 
-  , {
-    title : "SteemChatBot"
-    , text : "New Steem Telegram Notification Tool."
-    , url : "https://steemit.com/steemchatbot/@ludorum/steem-mentions-steemchatbot-v0-1-0"
-    , creator : "ludorum"
-  }
-  , {
-    title : "steemd"
-    , text : "View information of steem."
-    , url : "https://steemd.com/"
-    , creator : "roadscape"
-  }
+  
 
 ];
 
@@ -140,8 +129,8 @@ var home = module.exports = {
 			goClick : function( link ) {
 				//console.log(link.url);
         localStorage.setItem(link.url, ++link.clickCount);
-        sortLinks();
-        window.open(link.url);
+        this.sortLinks();
+        //window.open(link.url);
 			}
       , goCreator : function (link) {
         window.open("http://steemit.com/@"+link.creator);
@@ -155,12 +144,12 @@ var home = module.exports = {
         }
       }
       , sortLinks : function(){
-        this.$data.links.sort( (a, b) => parseInt(a.clickCount) < parseInt(b.clickCount) );
+        this.$data.links.sort( (a, b) => parseFloat(a.clickCount) < parseFloat(b.clickCount) );
       }
     }
 
     , mounted : function(){
-      sortLinks();
+      this.sortLinks();
     }
 }
 </script>
