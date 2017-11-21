@@ -115,7 +115,7 @@ function init(){
 }
 
 function sortLinks(){
-    linkData.sort( (a, b) => parseInt(a.clickCount) < parseInt(b.clickCount) );
+    linkData.sort( (a, b) => parseInt(a.clickCount) <= parseInt(b.clickCount) );
 }
 
 init();
