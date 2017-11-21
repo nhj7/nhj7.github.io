@@ -93,7 +93,7 @@ var linkData = [
     , creator : "nhj12311"
   }
 
-  
+
 
 ];
 
@@ -130,7 +130,7 @@ var home = module.exports = {
 				//console.log(link.url);
         localStorage.setItem(link.url, ++link.clickCount);
         this.sortLinks();
-        //window.open(link.url);
+        window.open(link.url);
 			}
       , goCreator : function (link) {
         window.open("http://steemit.com/@"+link.creator);
