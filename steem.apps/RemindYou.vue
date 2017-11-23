@@ -42,318 +42,131 @@
       </div>
     </div>
     <br /><br />
-    <div class="container-fluid" style="background-color:#e8e8e8">
-    <div class="container container-pad" id="property-listings">
+
+    <!-- post -->
+
+    <div class="container">
+      <div class="row">
+        <!-- for each start -->
 
         <div class="row">
-          <div class="col-md-12">
-            <h1>Million Dollar Home Listings</h1>
-            <p>A snippet I recently used to display homes for a local brokerage.  Focused more on images when accessed through mobile</p>
+          <div class="col-xs-12 col-sm-3 col-md-3">
+            <a href="#">
+                <img src="https://steemitimages.com/0x0/https://steemitimages.com/DQmQpbti4ggmThWqp4tDwFYXPes8ys9iFAEdFktsXWviVr8/image.png" class="img-responsive img-box img-thumbnail">
+            </a>
+          </div>
+          <div class="col-xs-12 col-sm-9 col-md-9">
+            <div class="list-group">
+              <div class="list-group-item">
+                <div class="row-picture">
+                  <a href="#" title="sintret">
+                      <img class="circle img-thumbnail img-box" src="https://steemitimages.com/u/nhj12311/avatar" alt="sintret">
+                  </a>
+                </div>
+                <div class="row-content">
+                  <div class="list-group-item-heading">
+                    <small><a href="#" title="sintret">@nhj12311</a>(62) </small>
+                  </div>
+                  <small>
+                      <i class="glyphicon glyphicon-time"></i> 1 days ago in kr-dev</span>
+                      <br>
+                      <span class="explore"><a href="#"><i class="glyphicon glyphicon-chevron-up"></i> 20 votes | <i class="glyphicon glyphicon-comment"></i> 6</a></span>
+                  </small>
+                </div>
+              </div>
+            </div>
+            <h4><a href="#">[개발] 자바스크립트 크롬의 불안정한 배열 정렬 문제 - Javascript chrome-v8 Unstable sorting problem</a></h4>
+            <p>최근 내 개인 프로젝트 내에 이것저것 기능을 추가하며 공부까지 겸하고 있는데 자바스크립트의 Array.sort를 사용하다가 멘탈에 금이가는 걸 겪으며 해결했던 걸 정리해본다. 앞으로 개발쪽의 글은 1차적으로 개인적인 공부를 하며 정리 하는 목표와 2차적으로 이글을 보는 개발자에게 도움이 되었으면 한다</p>
           </div>
         </div>
 
+        <hr>
+        <!-- item -->
+
         <div class="row">
-            <div class="col-sm-6">
-
-                <!-- Begin Listing: 609 W GRAVERS LN-->
-                <div class="brdr bgc-fff pad-10 box-shad btm-mrg-20 property-listing">
-                    <div class="media">
-                        <a class="pull-left" href="#" target="_parent">
-                        <img alt="image" class="img-responsive" src="http://images.prd.mris.com/image/V2/1/Yu59d899Ocpyr_RnF0-8qNJX1oYibjwp9TiLy-bZvU9vRJ2iC1zSQgFwW-fTCs6tVkKrj99s7FFm5Ygwl88xIA.jpg"></a>
-
-                        <div class="clearfix visible-sm"></div>
-
-                        <div class="media-body fnt-smaller">
-                            <a href="#" target="_parent"></a>
-
-                            <h4 class="media-heading">
-                              <a href="#" target="_parent">$1,975,000 <small class="pull-right">609 W Gravers Ln</small></a></h4>
-
-
-                            <ul class="list-inline mrg-0 btm-mrg-10 clr-535353">
-                                <li>4,820 SqFt</li>
-
-                                <li style="list-style: none">|</li>
-
-                                <li>5 Beds</li>
-
-                                <li style="list-style: none">|</li>
-
-                                <li>5 Baths</li>
-                            </ul>
-
-                            <p class="hidden-xs">Situated between fairmount
-                            park and the prestigious philadelphia cricket
-                            club, this beautiful 2+ acre property is truly
-                            ...</p><span class="fnt-smaller fnt-lighter fnt-arial">Courtesy of HS Fox & Roach-Chestnut Hill
-                            Evergreen</span>
-                        </div>
-                    </div>
-                </div><!-- End Listing-->
-
-                <!-- Begin Listing: 218 LYNNEBROOK LN-->
-                <div class="brdr bgc-fff pad-10 box-shad btm-mrg-20 property-listing">
-                    <div class="media">
-                        <a class="pull-left" href="#" target="_parent">
-                        <img alt="image" class="img-responsive" src="http://images.prd.mris.com/image/V2/1/zMjCkcFeFDXDAP8xDhbD9ZmrVL7oGkBvSnh2bDBZ6UB5UHXa3_g8c6XYhRY_OxgGaMBMehiTWXDSLzBMaIzRhA.jpg"></a>
-
-                        <div class="clearfix visible-sm"></div>
-
-                        <div class="media-body fnt-smaller">
-                            <a href="#" target="_parent"></a>
-
-                            <h4 class="media-heading">
-                              <a href="#" target="_parent">$1,975,000 <small class="pull-right">218 Lynnebrook Ln</small></a></h4>
-
-
-                            <ul class="list-inline mrg-0 btm-mrg-10 clr-535353">
-                                <li>6,959 SqFt</li>
-
-                                <li style="list-style: none">|</li>
-
-                                <li>6 Beds</li>
-
-                                <li style="list-style: none">|</li>
-
-                                <li>5 Baths</li>
-                            </ul>
-
-                            <p class="hidden-xs">Impressively positioned
-                            overlooking 3.5 captivating acres, designated
-                            as "significant" by the chestnut hill
-                            historical s...</p><span class="fnt-smaller fnt-lighter fnt-arial">Courtesy of HS Fox & Roach-Blue Bell</span>
-                        </div>
-                    </div>
-                </div><!-- End Listing-->
-
-                <!-- Begin Listing: 209 CHESTNUT HILL AVE-->
-                <div class="brdr bgc-fff pad-10 box-shad btm-mrg-20 property-listing">
-                    <div class="media">
-                        <a class="pull-left" href="#" target="_parent">
-                        <img alt="image" class="img-responsive" src="http://images.prd.mris.com/image/V2/1/iwn7qH9r9OPnqTaTTxxb8PBzQHk2EiHU2PBBntt041AZsVsGY-SeUexTMLgRcYSJukrKOwHaYnTVXAsk6RdSmA.jpg"></a>
-
-                        <div class="clearfix visible-sm"></div>
-
-                        <div class="media-body fnt-smaller">
-                            <a href="#" target="_parent"></a>
-
-                            <h4 class="media-heading">
-                              <a href="#" target="_parent">$1,599,999 <small class="pull-right">209 Chestnut Hill ve</small></a></h4>
-
-
-                            <ul class="list-inline mrg-0 btm-mrg-10 clr-535353">
-                                <li>16,581 SqFt</li>
-
-                                <li style="list-style: none">|</li>
-
-                                <li>8 Beds</li>
-
-                                <li style="list-style: none">|</li>
-
-                                <li>4 Baths</li>
-                            </ul>
-
-                            <p class="hidden-xs">Built in 1909 by
-                            pittsburgh steel magnate henry a. laughlin,
-                            greylock is a classic chestnut hill stone
-                            mansion once cons...</p><span class="fnt-smaller fnt-lighter fnt-arial">Courtesy of ng and Foster-Devon</span>
-                        </div>
-                    </div>
-                </div><!-- End Listing-->
-
-                <!-- Begin Listing: 704 SAINT GEORGES ST-->
-                <div class="brdr bgc-fff pad-10 box-shad btm-mrg-20 property-listing">
-                    <div class="media">
-                        <a class="pull-left" href="#" target="_parent">
-                        <img alt="image" class="img-responsive" src="http://images.prd.mris.com/image/V2/1/7IZk2HTN0AcHnIb7VCvisTUc3kTbn0UyHQlVAlwkNLM3_8UNN8pcgy9u6KVNoRGGH_kdUlpYehdbqzctRNUebg.jpg"></a>
-
-                        <div class="clearfix visible-sm"></div>
-
-                        <div class="media-body fnt-smaller">
-                            <a href="#" target="_parent"></a>
-
-                            <h4 class="media-heading">
-                              <a href="#" target="_parent">$1,595,000 <small class="pull-right">704 Saint Georges St</small></a></h4>
-
-
-                            <ul class="list-inline mrg-0 btm-mrg-10 clr-535353">
-                                <li>0 SqFt</li>
-
-                                <li style="list-style: none">|</li>
-
-                                <li>4 Beds</li>
-
-                                <li style="list-style: none">|</li>
-
-                                <li>5 Baths</li>
-                            </ul>
-
-                            <p class="hidden-xs">Blake development is proud
-                            to offer the second of two distinctly unique
-                            homes located on one of the most desirable
-                            stree...</p><span class="fnt-smaller fnt-lighter fnt-arial">Courtesy of HS Fox & Roach-Chestnut Hill
-                            Evergreen</span>
-                        </div>
-                    </div>
-                </div><!-- End Listing-->
-
-
-
+          <div class="col-xs-12 col-sm-3 col-md-3">
+            <a href="#">
+                <img src="https://steemitimages.com/0x0/http://pds2.egloos.com/pds/1/200512/01/24/a0012724_17453484.jpg" class="img-responsive img-box img-thumbnail">
+            </a>
+          </div>
+          <div class="col-xs-12 col-sm-9 col-md-9">
+            <div class="list-group">
+              <div class="list-group-item">
+                <div class="row-picture">
+                  <a href="#" title="sintret">
+                      <img class="circle img-thumbnail img-box" src="https://steemitimages.com/u/nhj12311/avatar" alt="sintret">
+                  </a>
+                </div>
+                <div class="row-content">
+                  <div class="list-group-item-heading">
+                    <small><a href="#" title="sintret">@nhj12311</a>(62) </small>
+                  </div>
+                  <small>
+                      <i class="glyphicon glyphicon-time"></i> 1 days ago in kr-dev</span>
+                      <br>
+                      <span class="explore"><a href="#"><i class="glyphicon glyphicon-chevron-up"></i> 20 votes | <i class="glyphicon glyphicon-comment"></i> 6</a></span>
+                  </small>
+                </div>
+              </div>
             </div>
+            <h4><a href="#">[개발] 자바스크립트 크롬의 불안정한 배열 정렬 문제 - Javascript chrome-v8 Unstable sorting problem</a></h4>
+            <p>최근 내 개인 프로젝트 내에 이것저것 기능을 추가하며 공부까지 겸하고 있는데 자바스크립트의 Array.sort를 사용하다가 멘탈에 금이가는 걸 겪으며 해결했던 걸 정리해본다. 앞으로 개발쪽의 글은 1차적으로 개인적인 공부를 하며 정리 하는 목표와 2차적으로 이글을 보는 개발자에게 도움이 되었으면 한다</p>
+          </div>
+        </div>
 
-            <div class="col-sm-6">
+        <hr>
+        <!-- item -->
 
-                <!-- Begin Listing: 1220-32 N HOWARD ST-->
-                <div class="brdr bgc-fff pad-10 box-shad btm-mrg-20 property-listing">
-                    <div class="media">
-                        <a class="pull-left" href="#" target="_parent">
-                        <img alt="image" class="img-responsive" src="http://images.prd.mris.com/image/V2/1/vGoNjc2jHGb87GlnnDQlf6LxeOUgIOn0bL6Wvn1nEnig2Ntq6W7xN5cOQBZZeNxl9O42DOkHUw0LNnj1ZB2KHA.jpg"></a>
+        <!-- for each end -->
 
-                        <div class="clearfix visible-sm"></div>
-
-                        <div class="media-body fnt-smaller">
-                            <a href="#" target="_parent"></a>
-
-                            <h4 class="media-heading">
-                              <a href="#" target="_parent">$1,500,000 <small class="pull-right">1220-32 N Howard St</small></a></h4>
+      </div>
+    </div>
 
 
-                            <ul class="list-inline mrg-0 btm-mrg-10 clr-535353">
-                                <li>4,900 SqFt</li>
-
-                                <li style="list-style: none">|</li>
-
-                                <li>1 Beds</li>
-
-                                <li style="list-style: none">|</li>
-
-                                <li>1 Baths</li>
-                            </ul>
-
-                            <p class="hidden-xs">A once in a lifetime
-                            opportunity to own a unique live / work space
-                            in one of philadelphia's most popular
-                            neighborhoods. ...</p><span class="fnt-smaller fnt-lighter fnt-arial">Courtesy of ll Banker Preferred-Philadelphia</span>
-                        </div>
-                    </div>
-                </div><!-- End Listing-->
-
-                <!-- Begin Listing: 9006 CREFELD ST-->
-                <div class="brdr bgc-fff pad-10 box-shad btm-mrg-20 property-listing">
-                    <div class="media">
-                        <a class="pull-left" href="#" target="_parent">
-                        <img alt="image" class="img-responsive" src="http://images.prd.mris.com/image/V2/1/uLp58OH37CTPHxXcgJXYw8zT2u3xg_2XIbFndB6J0WTSAStGBaEV6YsdAseSZTKAdthm0OzG-Ca_EIkoXIEBxw.jpg"></a>
-
-                        <div class="clearfix visible-sm"></div>
-
-                        <div class="media-body fnt-smaller">
-                            <a href="#" target="_parent"></a>
-
-                            <h4 class="media-heading">
-                              <a href="#" target="_parent">$1,295,000 <small class="pull-right">9006 Crefeld St</small></a></h4>
-
-
-                            <ul class="list-inline mrg-0 btm-mrg-10 clr-535353">
-                                <li>7,672 SqFt</li>
-
-                                <li style="list-style: none">|</li>
-
-                                <li>7 Beds</li>
-
-                                <li style="list-style: none">|</li>
-
-                                <li>5 Baths</li>
-                            </ul>
-
-                            <p class="hidden-xs">Located in chestnut hill,
-                            recently named by the american planning
-                            association as one of america's top 10 great
-                            neighborh...</p><span class="fnt-smaller fnt-lighter fnt-arial">Courtesy of RE/MAX Services</span>
-                        </div>
-                    </div>
-                </div><!-- End Listing-->
-
-                <!-- Begin Listing: 701 W ALLENS LN-->
-                <div class="brdr bgc-fff pad-10 box-shad btm-mrg-20 property-listing">
-                    <div class="media">
-                        <a class="pull-left" href="#" target="_parent">
-                        <img alt="image" class="img-responsive" src="http://images.prd.mris.com/image/V2/1/K12MLs4i-e2rsQ-rA6DoCwlysXSrEXZyHtCFkrOLsvK1y2mvbUrlmw5pMXX1laXlnY9_0VU82YeS3EucwIchtg.jpg"></a>
-
-                        <div class="clearfix visible-sm"></div>
-
-                        <div class="media-body fnt-smaller">
-                            <a href="#" target="_parent"></a>
-
-                            <h4 class="media-heading">
-                              <a href="#" target="_parent">$1,175,000 <small class="pull-right">701 W Allens Ln</small></a></h4>
-
-
-                            <ul class="list-inline mrg-0 btm-mrg-10 clr-535353">
-                                <li>9,824 SqFt</li>
-
-                                <li style="list-style: none">|</li>
-
-                                <li>8 Beds</li>
-
-                                <li style="list-style: none">|</li>
-
-                                <li>5 Baths</li>
-                            </ul>
-
-                            <p class="hidden-xs">A once in a lifetime
-                            opportunity! live in this grand home with its
-                            stunning entry and staircase, bedroom suites,
-                            firepla...</p><span class="fnt-smaller fnt-lighter fnt-arial">Courtesy of HS Fox & Roach-Chestnut Hill
-                            Evergreen</span>
-                        </div>
-                    </div>
-                </div><!-- End Listing-->
-            </div><!-- End Col -->
-        </div><!-- End row -->
-    </div><!-- End container -->
-</div>
 
 
 
   </div>
 </template>
 <script>
-  function RemindYou(){
+function RemindYou() {
+  $("#toggleBarBtn").click();
+
+  var accountName = $("#accountName").val();
+  localStorage.setItem("accountName", accountName);
+  steem.api.getDiscussionsByVotes({
+    author: accountName,
+    limit: 10
+  }, function(err, result) {
+    console.log(err, result);
+
+  });
+
+  var result = steem.api.getAccountVotes(accountName, function(err, result) {
+    console.log(err, result);
     $("#toggleBarBtn").click();
+  });
+  //setTimeout( () => { RemindYou(); } , 1000 );
+}
 
-    var accountName = $("#accountName").val();
-    localStorage.setItem("accountName",accountName);
-    steem.api.getDiscussionsByVotes({author : accountName , limit:10}, function(err, result) {
-      console.log(err, result);
+function init() {
+  var accountName = localStorage.getItem("accountName");
+  console.log("accountName : " + accountName);
+  $("#accountName").val(accountName);
 
-    });
+}
 
-    var result = steem.api.getAccountVotes( accountName , function(err, result) {
-      console.log(err, result);
-      $("#toggleBarBtn").click();
-    });
-    //setTimeout( () => { RemindYou(); } , 1000 );
-  }
-
-  function init(){
-    var accountName = localStorage.getItem("accountName");
-    console.log("accountName : " + accountName);
-    $("#accountName").val( accountName );
-
-  }
-
-  module.exports = {
-    methods : {
-			RemindYou : function() {
-				RemindYou();
-			}
+module.exports = {
+  methods: {
+    RemindYou: function() {
+      RemindYou();
     }
-    , mounted : function() {
-      init();
-    }
-
+  },
+  mounted: function() {
+    init();
   }
 
+}
 </script>
 
 <style>
@@ -408,5 +221,160 @@ body {
   .dropdown.dropdown-lg .dropdown-menu {
     min-width: 500px;
   }
+}
+
+.list-group {
+  border-radius: 0;
+}
+
+.list-group .list-group-item {
+  background-color: transparent;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  padding: 0 16px;
+}
+
+.list-group .list-group-item .row-picture,
+.list-group .list-group-item .row-action-primary {
+  float: left;
+  display: inline-block;
+  padding-right: 16px;
+  padding-top: 8px;
+}
+
+.list-group .list-group-item .row-picture img,
+.list-group .list-group-item .row-action-primary img,
+.list-group .list-group-item .row-picture i,
+.list-group .list-group-item .row-action-primary i,
+.list-group .list-group-item .row-picture label,
+.list-group .list-group-item .row-action-primary label {
+  display: block;
+  width: 56px;
+  height: 56px;
+}
+
+.list-group .list-group-item .row-picture img,
+.list-group .list-group-item .row-action-primary img {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 1px;
+}
+
+.list-group .list-group-item .row-picture img.circle,
+.list-group .list-group-item .row-action-primary img.circle {
+  border-radius: 100%;
+}
+
+.list-group .list-group-item .row-picture i,
+.list-group .list-group-item .row-action-primary i {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 100%;
+  text-align: center;
+  line-height: 56px;
+  font-size: 20px;
+  color: white;
+}
+
+.list-group .list-group-item .row-picture label,
+.list-group .list-group-item .row-action-primary label {
+  margin-left: 7px;
+  margin-right: -7px;
+  margin-top: 5px;
+  margin-bottom: -5px;
+}
+
+.list-group .list-group-item .row-content {
+  display: inline-block;
+  width: calc(100% - 92px);
+  min-height: 66px;
+}
+
+.list-group .list-group-item .row-content .action-secondary {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+}
+
+.list-group .list-group-item .row-content .action-secondary i {
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.list-group .list-group-item .row-content .action-secondary~* {
+  max-width: calc(100% - 30px);
+}
+
+.list-group .list-group-item .row-content .least-content {
+  position: absolute;
+  right: 16px;
+  top: 0px;
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 14px;
+}
+
+.list-group .list-group-item .list-group-item-heading {
+  color: rgba(0, 0, 0, 0.77);
+  font-size: 20px;
+  line-height: 29px;
+}
+
+.list-group .list-group-separator {
+  clear: both;
+  overflow: hidden;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.list-group .list-group-separator:before {
+  content: "";
+  width: calc(100% - 90px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  float: right;
+}
+
+.bg-profile {
+  background-color: #3498DB !important;
+  height: 150px;
+  z-index: 1;
+}
+
+.bg-bottom {
+  height: 100px;
+  margin-left: 30px;
+}
+
+.img-profile {
+  display: inline-block !important;
+  background-color: #fff;
+  border-radius: 6px;
+  margin-top: -50%;
+  padding: 1px;
+  vertical-align: bottom;
+  border: 2px solid #fff;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #fff;
+  z-index: 2;
+}
+
+.row-float {
+  margin-top: -40px;
+}
+
+.explore a {
+  color: green;
+  font-size: 13px;
+  font-weight: 600
+}
+
+.twitter a {
+  color: #4099FF
+}
+
+.img-box {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, .16), 0 3px 6px rgba(0, 0, 0, .23);
+  border-radius: 2px;
+  border: 0;
 }
 </style>
