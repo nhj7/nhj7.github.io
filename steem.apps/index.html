@@ -196,6 +196,7 @@
 				}
 			}
 			, mounted: function () {
+				steem.api.setOptions({url: 'https://api.steemit.com'});
 				console.log(this.$route) // outputs 'yay'
 				if( this.$route.hash != "" ){
 					this.$data.currentView = this.$route.hash.substring(1);
