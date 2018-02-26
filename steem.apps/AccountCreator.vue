@@ -3,7 +3,7 @@
 <div class="starter-template">
 	<p class="lead">
 		I will share an easy way to create accounts. You want to create
-		an account and share it with your friends.
+		an account and share it with your friends. To create an account, you need {{DATA.feeString}}.
 	</p>
 </div>
 <div  class="container">
@@ -75,7 +75,7 @@
 				});
 
 			}
-
+  var feeString;
 	function create_account_step2(){
 		newAccountName = document.getElementById("newAccount").value;
 		var newAccountPassword = steem.formatter.createSuggestedPassword();
@@ -145,19 +145,44 @@
 		});
 
 	}
+var DATA = {
+  feeString : ""
+}
+function getCreateAccountFee(){
+  steem.api.getConfig(function(err, config) {
+    if(err){
+      console.log(err, config);
+      throw new Error(err);
+    }
+    console.log(err, config);
+    steem.api.getChainProperties(function(err2, chainProps) {
+      if(err2){
+        console.log(err2, chainProps);
+        throw new Error(err2);
+      }
+      console.log(err2, chainProps);
+      var ratio = config['STEEMIT_CREATE_ACCOUNT_WITH_STEEM_MODIFIER'];
+      var fee = dsteem.Asset.from(chainProps.account_creation_fee).multiply(ratio);
 
+      var feeString = fee.toString();
+      DATA.feeString = feeString;
+    });
+  });
+}
 module.exports = {
     data: function() {
         return {
             myAccount: '@nhj12311'
+            , DATA : DATA
         }
     }
     , methods : {
 			create_account_step1 : function() {
 				create_account_step1();
 			}
-
-
+    }
+    , mounted : function(){
+        getCreateAccountFee();
     }
 }
 
