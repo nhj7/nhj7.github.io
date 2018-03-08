@@ -6,7 +6,12 @@
 		an account and share it with your friends. To create an account, you need {{DATA.feeString}}.
 
     Your newly created account will contain 3 steems. The creation fee is zero.
+
 	</p>
+  <p class="lead">
+    This error message indicates that the active privte key is invalid. Please check the active private key.
+    [ Expected version 128, instead got 0 ]
+  </p>
 </div>
 <div  class="container">
 	<form id="create-form" class="form-signin" action="javascript:;" v-on:submit="create_account_step1"
@@ -18,13 +23,12 @@
 			placeholder="Creator Account" required autofocus> <label
 			for="Active Key" class="sr-only">Active Key</label> <input
 			type="password" id="inputPassword" class="form-control"
-			placeholder="Active Key" required>
+			placeholder="Active Private Key" required>
 		<br /> <label for="newAccount" class="sr-only">new
 			Account</label> <input type="id" id="newAccount" class="form-control"
-			placeholder="New Account" required autofocus> <br />
+			placeholder="New Account Name" required autofocus> <br />
 		<!--button class="btn btn-lg btn-primary btn-block" type="button" v-on:click="create_account_step1(); return false; " >Create Account</button-->
-		<button type="submit" class="btn btn-lg btn-primary btn-block">Create
-			Account</button>
+		<button type="submit" class="btn btn-lg btn-primary btn-block">Check and Create Account.</button>
 	</form>
 
 </div>
