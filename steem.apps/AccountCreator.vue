@@ -5,7 +5,7 @@
 		I will share an easy way to create accounts. You want to create
 		an account and share it with your friends. To create an account, you need {{DATA.feeString}}.
 
-    Your newly created account will contain 3 steems. The creation fee is zero.
+    Your newly created account will contain {{DATA.feeString}}. The creation fee is zero.
 
 	</p>
   <p class="lead">
