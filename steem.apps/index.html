@@ -156,10 +156,10 @@
 		//$(".nav a").attr("href",'javascript:setToggle(this);');
 
 		function setToggle(obj){
-			$(".nav").find(".active").removeClass("active");
+			$(".nav").find(".active").toggleClass("active");
 			//$('.navbar-collapse').collapse('hide');
 			//console.log(obj);
-			$(obj).parent().addClass("active");
+			$(obj).parent().toggleClass("active");
 			if( $("#navButton").is(':visible') ){
 				$("#navButton").click();
 			}
@@ -308,6 +308,12 @@
 			};
 			websocket.onerror = function (error) {
 				console.log("WebSocket onerror");
+				setTimeout(function(){ initWebSocket(); }, 250);
+				// an error occurred when sending/receiving data
+			};
+			websocket.onclose = function (error) {
+				console.log("WebSocket onclose");
+				setTimeout(function(){ initWebSocket(); }, 250);
 				// an error occurred when sending/receiving data
 			};
 			websocket.onmessage = function (message) {
