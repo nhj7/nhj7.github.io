@@ -289,7 +289,9 @@
 	<script>
 
 		window.WebSocket = window.WebSocket || window.MozWebSocket;
-		const ws_addr = "ws://localhost:8081";
+		console.log("location.hostname : "+location.hostname);
+		var hostname = location.hostname=="localhost" ? "localhost" : "13.124.219.250";
+		const ws_addr =  "ws://"+hostname+":8081";
 		var websocket;
 		function initWebSocket(){
 			websocket = new WebSocket(ws_addr);
