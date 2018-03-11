@@ -290,8 +290,11 @@
 
 		window.WebSocket = window.WebSocket || window.MozWebSocket;
 		console.log("location.hostname : "+location.hostname);
-		var hostname = location.hostname=="localhost" ? "localhost" : "13.124.219.250";
-		const ws_addr =  "ws://"+hostname+":8081";
+		var protocol = location.protocol=="http:"?"ws:":"wss:";
+		var hostname = location.hostname=="localhost" ? "localhost" : "steemalls.com";
+		var port = location.hostname=="localhost" ? ":8081" : "";
+		const ws_addr =  protocol + "//"+hostname+port;
+		console.error("ws_addr : " + ws_addr);
 		var websocket;
 		function initWebSocket(){
 			websocket = new WebSocket(ws_addr);
