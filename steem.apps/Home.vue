@@ -1,174 +1,122 @@
 <template>
-<div>
 
-<div class="row" v-for="i in Math.ceil(links.length / 2)">
-  <div class="col-sm-6" v-for="link in links.slice((i - 1) * 2, i * 2)">
-    <div class="card">
-      <div class="card-block">
-        <h3 class="card-title">{{ link.title }}</h3>
-        <p class="card-text">{{ link.text }} created by <a href="#" v-on:click="goCreator(link)">@{{ link.creator }}</a></p>
-        <a v-on:click="goClick(link)" target="_blank" class="btn btn-primary">Go {{ link.title }}</a>
-        <label style="width:1em;"></label>
-        <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
-        ({{ link.clickCount }})
+<div>
+<div class="form-group">
+  <div class="row">
+    <div class="col-sm-4 col-sm-offset-4">
+      <div class="input-group">
+        <span class="input-group-addon primary">
+          <!--i class="glyphicon glyphicon-user"></i-->
+          @
+        </span>
+        <input @keyup.enter="getBusyVotingPower" v-model="data.acct_nm" id="acct_nm" type="text" class="form-control " name="acct_nm" placeholder="steemit account name">
+        <span class="input-group-btn">
+          <button type="submit" class="btn btn-primary " v-on:click="getBusyVotingPower">Submit</button>
+        </span>
+
       </div>
     </div>
-  </div>
-</div>
+  </div> <!-- row -->
+</div><!-- form-group -->
 
-<br /><br />
-
-<a v-on:click="resetCount" target="_blank" class="btn btn-danger">Reset</a>
+{{ data.busy_msg }}
 
 <br />
-
 
 </div>
 </template>
 
+<style>
+.input-group-addon.primary {
+  color: rgb(255, 255, 255);
+  background-color: rgb(50, 118, 177);
+  border-color: rgb(40, 94, 142);
+}
+.input-group-addon.success {
+  color: rgb(255, 255, 255);
+  background-color: rgb(92, 184, 92);
+  border-color: rgb(76, 174, 76);
+}
+.input-group-addon.info {
+  color: rgb(255, 255, 255);
+  background-color: rgb(57, 179, 215);
+  border-color: rgb(38, 154, 188);
+}
+.input-group-addon.warning {
+  color: rgb(255, 255, 255);
+  background-color: rgb(240, 173, 78);
+  border-color: rgb(238, 162, 54);
+}
+.input-group-addon.danger {
+  color: rgb(255, 255, 255);
+  background-color: rgb(217, 83, 79);
+  border-color: rgb(212, 63, 58);
+}
+</style>
+
 <script>
 
-var linkData = [
-  {
-    title : "Steeme"
-    , text : "Useful site to show hidden information."
-    , url : "https://ianpark.github.io/steeme/"
-    , creator : "asbear"
-  }
-  , {
-    title : "Steem Tool"
-    , text : "The Steemit tool suite."
-    , url : "http://tool.steem.world"
-    , creator : "segyepark"
-  }
-  , {
-    title : "Steem Us"
-    , text : "steemit stats and portals."
-    , url : "http://www.steemus.com"
-    , creator : "jungs"
-  }
-  , {
-    title : "MukSteem"
-    , text : "Korean Stimian's Restaurant Collection."
-    , url : "http://muksteem.com"
-    , creator : "lee2"
-  }
-
-  , {
-    title : "Under Steemed"
-    , text : "Undervalued posting excavation site."
-    , url : "https://sydneyitguy.github.io/understeemed"
-    , creator : "tabris"
-  }
-  , {
-    title : "Steem Friend"
-    , text : "Who would be best friend of me?"
-    , url : "http://steemfriend.com/"
-    , creator : "jeongmincha"
-  }
-  , {
-    title : "Steemit Post Statistics"
-    , text : "Steemit Post Statistics site."
-    , url : "https://iworldpark.github.io/steemit/stat/post/"
-    , creator : "segyepark"
-  }
-  , {
-    title : "Steem Now"
-    , text : "What if I wonder about my voting power? "
-    , url : "https://steemnow.com/"
-    , creator : "penguinpablo"
-  }
-
-  , {
-    title : "Steem Report"
-    , text : "Helping you make sense of Steemit, and your place within it."
-    , url : "http://www.steemreports.com/delegation-info/"
-    , creator : "steemreports"
-  }
-
-  , {
-    title : "Cobot"
-    , text : "All Coin Ticker. "
-    , url : "http://cobot.co.kr"
-    , creator : "nhj12311"
-  }
-  , {
-    title : "SteemChatBot"
-    , text : "New Steem Telegram Notification Tool. "
-    , url : "https://steemit.com/steemchatbot/@ludorum/steem-mentions-steemchatbot-v0-1-0"
-    , creator : "ludorum"
-  }
-
-
-];
-
-var linkDataDummy = linkData.slice(0);
-
-function init(){
-  //console.log(home.data.links);
-  for(var i = 0; i < linkData.length;i++){
-    linkData[i] = linkDataDummy[i];
-    //console.log("localStorage.getItem : "+localStorage.getItem(linkData[i].url));
-    if( localStorage.getItem(linkData[i].url) == undefined ){
-      localStorage.setItem(linkData[i].url, 0 );
+function cb_requestWS( res ){
+  //alert("콜백이 실행이 되는군....");
+  var body = JSON.parse( res.body );
+  const followers_mvest = body[0].followers_mvest;
+  console.log("followers_mvest : " + followers_mvest);
+  // Delay between 2 votes is 12 hours
+  const delay = parseInt(43200);
+  // Amount required to get the minimum upvote (1%) is 20000000 VESTS ~ 2 Dolphins ~ 10 000 SP
+  const minVests = 20000000;
+  // Amount required to get 100% upvote is 4000000000000 VESTS ~ 2 000 Whales ~ 2 000 000 000 SP
+  const maxVests = 4000000000000;
+  // Don't upvote user beyond 10000000000000 VESTS
+  const limitVests = 10000000000000;
+  // Don't upvote more than 25%
+  const maxUpvote = 2500;
+  let votingPower = 0;
+  try {
+    votingPower = followers_mvest >= minVests ? parseFloat(10000 / maxVests * followers_mvest) : 0;
+    votingPower = votingPower > 10000 ? 10000 : parseFloat(votingPower);
+    votingPower = (votingPower > 0 && votingPower < 6) ? 6 : parseInt(votingPower);
+    if (maxUpvote) {
+      votingPower = votingPower > maxUpvote ? maxUpvote : votingPower;
     }
-    linkData[i].clickCount = localStorage.getItem(linkData[i].url);
+    if (limitVests && followers_mvest >= limitVests) {
+      votingPower = 0;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+  console.log( "votingPower : " + votingPower );
+  if( votingPower > 0 ){
+      votingPower = votingPower / 100.0;
+  }
+
+  data.busy_msg = "@"+data.acct_nm+"님께서는 @busy.org에게 " + votingPower + "% 의 파워로 보팅 받으실 수 있습니다." ;
+
+  waitingDialog.hide();
+}
+function getBusyVotingPower() {
+  if(requestWS( { cmd : "proxy" , url : "https://steemdb.com/api/accounts?account=" + data.acct_nm }, cb_requestWS )){
+    waitingDialog.show('Calculate the voting power of @busy.org', { progressType: 'primary'});
   }
 }
-
-function sortLinks(){
-    linkData.stableSort( (a, b) => parseInt(b.clickCount) - parseInt(a.clickCount) );
-}
-
-init();
-sortLinks();
-
-var homeData = { acc : '12311' };
-
+var data = {
+  acct_nm: 'nhj12311'
+  , busy_msg : ''
+};
 var home = module.exports = {
-    name : "Home"
-    , data : function () {
-      return {
-        homeData: homeData
-        , links : linkData
-      }
+
+  data: function() {
+    return {
+      data: data
     }
-    , methods : {
-			goClick : function( link ) {
-				goClick(link);
-			}
-      , goCreator : function (link) {
-        goCreator(link);
-
-      }
-      , resetCount : function(){
-        resetCount();
-      }
+  },
+  methods: {
+    getBusyVotingPower : function(){
+      getBusyVotingPower();
     }
-    , mounted : function(){
-      test();
-  }
-}
+  },
+  mounted: function() {
 
-function test(){
-  homeData.acc = "123123";
-}
-
-function goClick(link){
-  localStorage.setItem(link.url, ++link.clickCount);
-  sortLinks();
-  window.open(link.url);
-}
-
-function goCreator(link){
-  window.open("http://steemit.com/@"+link.creator);
-}
-
-function resetCount(){
-  init();
-  for(var i = 0; i < linkData.length;i++){
-    localStorage.setItem(linkData[i].url, 0 );
-    linkData[i].clickCount = 0;
   }
 }
 </script>

@@ -156,6 +156,119 @@ function init() {
 
 }
 
+// function getSPFollower(name) {
+//   var spv;
+//   var steemPower;
+//
+//   steem.api.getDynamicGlobalProperties(function(err, result) {
+//     spv = result.total_vesting_fund_steem.replace(" STEEM", "") / result.total_vesting_shares.replace(" VESTS", "");
+//     steemPower = spv;
+//     console.log("spv : "+spv);
+//     console.log("steemPower : "+steemPower);
+//   });
+//
+//   var followers = [];
+//   var totalSP = 0.0;
+//   steem.api.getFollowCount(name, function(err, result) {
+//
+//     var follower_count = result.follower_count - 100 ;
+//     console.log("follower_count : "+ follower_count);
+//     steem.api.getFollowers(name, 0, 'blog', 1050, function(err, result) {
+//       console.log(result);
+//       console.log("result.length : "+result.length);
+//       for (var j = 0; j < result.length; j++) {
+//         followers[j] = result[j]['follower'];
+//       }
+//       steem.api.getAccounts(followers, function(err, res) {
+//         for (var j = 0; j < result.length; j++) {
+//           userTotalVest = parseInt(res[j].vesting_shares.replace(" VESTS", ""))
+//           - parseInt(res[j].delegated_vesting_shares.replace(" VESTS", ""))
+//           + parseInt(res[j].received_vesting_shares.replace(" VESTS", ""));
+//
+//           accountSP = userTotalVest * steemPower;
+//           console.log(res[j].name, accountSP);
+//
+//           totalSP += accountSP;
+//         }
+//
+//         console.log('Total Follower SP:', totalSP);
+//
+//       });
+//     });
+//   });
+// }
+
+// async function getSPFollower2( name ){
+//   try{
+//     var spv;
+//     var steemPower;
+//     var result = await steem.api.getDynamicGlobalPropertiesAsync();
+//     spv = result.total_vesting_fund_steem.replace(" STEEM", "") / result.total_vesting_shares.replace(" VESTS", "");
+//     steemPower = spv;
+//     console.log("spv : "+spv);
+//     console.log("steemPower : "+steemPower);
+//
+//     result = await steem.api.getAccountsAsync( [name] );
+//     console.log("getAccountsAsync");
+//     console.log(result);
+//
+//     var followers = [];
+//     result = await steem.api.getFollowCountAsync(name);
+//     console.log("getFollowCountAsync");
+//     console.log(result.length);
+//     let vmaxLmt = 1000;
+//     const maxLmt = 1000;
+//     const follower_count = result.follower_count;
+//     var followers = [];
+//     let totalSP = 0.0;
+//     let totalVest = 0.0;
+//     for(var i = 0 ; !result.length || vmaxLmt == result.length ; i = result[result.length - 1].follower ){
+//       console.log("i : " + i + ", maxLmt : " + vmaxLmt );
+//       result = await steem.api.getFollowersAsync(name, i, 'blog', maxLmt );
+//       if( i != 0 ){
+//         if( result.length == 1 ) { break; }
+//         result.splice(0, 1);
+//         vmaxLmt = 999;
+//       }
+//       console.log(result);
+//       for (var j = 0; j < result.length; j++) {
+//         followers[j] = result[j]['follower'];
+//       }
+//       var arrAcct = await steem.api.getAccountsAsync(followers);
+//       for (var j = 0; j < arrAcct.length; j++) {
+//         userTotalVest = parseInt(arrAcct[j].vesting_shares.replace(" VESTS", ""))
+//         //- parseInt(arrAcct[j].delegated_vesting_shares.replace(" VESTS", ""))
+//         + parseInt(arrAcct[j].received_vesting_shares.replace(" VESTS", ""));
+//
+//         accountSP = userTotalVest * steemPower;
+//         console.log(arrAcct[j].name, accountSP);
+//         totalVest += userTotalVest;
+//         totalSP += accountSP;
+//       }
+//
+//     } // end for.
+//
+//     console.log("totalSP : " + totalSP);
+//     console.log("totalVest : " + totalVest);
+//     const delay = parseInt(43200);
+//     // Amount required to get the minimum upvote (1%) is 20000000 VESTS ~ 2 Dolphins ~ 10 000 SP
+//     const minVests = 20000000;
+//     // Amount required to get 100% upvote is 4000000000000 VESTS ~ 2 000 Whales ~ 2 000 000 000 SP
+//     const maxVests = 4000000000000;
+//     // Don't upvote user beyond 10000000000000 VESTS
+//     const limitVests = 10000000000000;
+//     // Don't upvote more than 25%
+//     const maxUpvote = 2500;
+//
+//   }catch(err){
+//     console.error(err, "존나 계산하다가 에러남.");
+//   }finally{
+//     waitingDialog.hide();
+//   }
+//
+//
+// }
+
 module.exports = {
   methods: {
     RemindYou: function() {
