@@ -297,7 +297,7 @@
 		console.error("ws_addr : " + ws_addr);
 		var websocket;
 		function initWebSocket(){
-			websocket = new WebSocket(ws_addr);
+			websocket = new WebSocket(ws_addr, {secure: true});
 			websocket.onopen = function () {
 				// connection is opened and ready to use
 				console.log("WebSocket onopen");
