@@ -37,6 +37,7 @@
 <script src="https://unpkg.com/vue"></script>
 <script src="https://unpkg.com/http-vue-loader"></script>
 <script src="https://unpkg.com/vue-router"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
 <script src="./js/util.js"></script>
 
 </head>
@@ -221,7 +222,7 @@
 				}
 				$("#navbar").children().first().children().each(
 					function(idx, val){
-						console.log(idx, val);
+						//console.log(idx, val);
 						$(val).on("click",
 							function(){
 								app.setCurrentView(val);
@@ -314,13 +315,14 @@
 
 		//window.WebSocket = window.WebSocket || window.MozWebSocket;
 		console.log("location.hostname : "+location.hostname);
-		var protocol = location.protocol=="http:"?"ws:":"wss:";
+		var ws_protocol = location.protocol=="http:"?"ws:":"wss:";
 		var hostname = location.hostname=="localhost" ? "localhost" : "steemalls.com";
-		var port = location.hostname=="localhost" ? ":8081" : "";
-		let ws_addr =  protocol + "//"+hostname+port;
+		var port = location.hostname=="localhost" ? ":8088" : "";
+		let socket_io_addr = location.protocol + "//" + hostname + port;
+		let ws_addr =  ws_protocol + "//"+hostname+port;
 		//ws_addr = "wss://steemalls.com/";
 		window.domain = "steemalls.com";
-		console.error("ws_addr : " + ws_addr);
+		//console.error("ws_addr : " + ws_addr);
 		var websocket;
 		function initWebSocket(){
 			websocket = new WebSocket(ws_addr);
@@ -360,7 +362,7 @@
 			};
 		}
 
-		initWebSocket();
+		//initWebSocket();
 
 		var callback;
 		function requestWS( json, cb ){
@@ -374,6 +376,23 @@
 			websocket.send( JSON.stringify(json) );
 			return true;
 		}
+	</script>
+
+	<script>
+	console.log("socket_io_addr : "+socket_io_addr);
+
+	var socket = io.connect( socket_io_addr );
+
+	socket.on( 'io.res', function( json ) {
+		console.log("io.res", json);
+		callback(json);
+	});
+	var callback;
+	function requestIO( json, cb ){
+		callback = cb;
+		socket.emit('proxy', json );
+		return true;
+	}
 	</script>
 
 </body>

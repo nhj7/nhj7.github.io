@@ -140,7 +140,7 @@ function getBusyVotingPower() {
     return;
   }
 
-  if(requestWS( { cmd : "proxy" , url : "https://steemdb.com/api/accounts?account=" + data.acct_nm }, cb_requestWS )){
+  if(requestIO( { cmd : "proxy" , url : "https://steemdb.com/api/accounts?account=" + data.acct_nm }, cb_requestWS )){
     waitingDialog.show('Calculate the voting power of @busy.org', { progressType: 'primary'});
   }
 }
