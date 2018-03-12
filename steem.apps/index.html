@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ko">
 <head>
+
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,6 +18,9 @@
 	crossorigin="anonymous">
 
 <style>
+	a {
+		cursor : hand;
+	}
 	.steemit-logo{
 		color:#06d6a9 !important;font-weight:bold;
 	}
@@ -48,15 +52,18 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand steemit-logo" href="#">Steem Apps</a>
+				<a class="navbar-brand steemit-logo" href="#">
+					<span><img width="36px" height="36px" src="./asset/img/steemapps_opt.png"></span>
+					Steem Apps
+				</a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="#Home" @click="setCurrentView('Home')">Home</a></li>
-					<li><a href="#AppCenter " @click="setCurrentView('AppCenter')">App Center</a></li>
+					<li class="active" name="Home"><a href="#">Home</a></li>
+					<li name="AppCenter"><a href="#">App Center</a></li>
 					<!--li><a href="#RemindYou " @click="setCurrentView('RemindYou')">Remind You </a></li-->
-					<li><a href="#AccountCreator" @click="setCurrentView('AccountCreator')">Account Creator</a></li>
-					<li class="dropdown"><a href="javascript:;" class="dropdown-toggle"
+					<li name="AccountCreator"><a href="#">Account Creator</a></li>
+					<li class="dropdown"><a class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false">Family Site <span class="caret"></span></a>
 						<ul class="dropdown-menu">
@@ -157,10 +164,11 @@
 		//$(".nav a").attr("href",'javascript:setToggle(this);');
 
 		function setToggle(obj){
+			//console.error( $(".nav").find(".active").length );
 			$(".nav").find(".active").toggleClass("active");
 			//$('.navbar-collapse').collapse('hide');
 			//console.log(obj);
-			$(obj).parent().toggleClass("active");
+			$(obj).toggleClass("active");
 			if( $("#navButton").is(':visible') ){
 				$("#navButton").click();
 			}
@@ -192,11 +200,16 @@
 				, 'Home' : loadVue('./Home')
 			}
 			, methods : {
-				setCurrentView : function(name){
-					//console.log(name);
-					app.currentView = name;
-					setToggle(event.target);
+				setCurrentView : function(li){
+					var name = $(li).attr('name');
+					if(!name) return;
+
+					app.currentView = name.trim();
+					setToggle( li );
 				}
+			}
+			, created() {
+			  console.log("created...");
 			}
 			, mounted: function () {
 				steem.api.setOptions({url: 'https://api.steemit.com'});
@@ -206,6 +219,16 @@
 				}else{
 					this.$data.currentView = "Home";
 				}
+				$("#navbar").children().first().children().each(
+					function(idx, val){
+						console.log(idx, val);
+						$(val).on("click",
+							function(){
+								app.setCurrentView(val);
+							}
+						);
+					}
+				);
 			}
 		});
 
@@ -309,12 +332,12 @@
 			};
 			websocket.onerror = function (error) {
 				console.log("WebSocket onerror");
-				setTimeout(function(){ initWebSocket(); }, 250);
+				//setTimeout(function(){ initWebSocket(); }, 250);
 				// an error occurred when sending/receiving data
 			};
 			websocket.onclose = function (error) {
 				console.log("WebSocket onclose");
-				setTimeout(function(){ initWebSocket(); }, 250);
+				setTimeout(function(){ initWebSocket(); }, 500);
 				// an error occurred when sending/receiving data
 			};
 			websocket.onmessage = function (message) {
