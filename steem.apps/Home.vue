@@ -102,6 +102,7 @@ function calculateVotingPower(followers_mvest){
 
 async function cb_requestWS( res ){
   //alert("콜백이 실행이 되는군....");
+
   var body = JSON.parse( res.body );
   const followers_mvest = body[0].followers_mvest;
   console.log("followers_mvest : " + followers_mvest);

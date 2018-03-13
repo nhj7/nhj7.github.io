@@ -385,6 +385,11 @@
 
 	socket.on( 'io.res', function( json ) {
 		console.log("io.res", json);
+		if( json.err ){
+			waitingDialog.hide();
+			alert(json.err);
+			return;
+		}
 		callback(json);
 	});
 	var callback;
