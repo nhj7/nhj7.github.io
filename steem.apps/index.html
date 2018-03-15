@@ -21,8 +21,14 @@
 	a {
 		cursor : hand;
 	}
-	.steemit-logo{
+	.logo1{
 		color:#06d6a9 !important;font-weight:bold;
+	}
+	.logo2{
+		color:#69A9EC !important;font-weight:bold;
+	}
+	.logo3{
+		color:#FF94B0 !important;font-weight:bold;
 	}
 </style>
 <script
@@ -53,9 +59,9 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand steemit-logo" href="#">
-					<span><img width="36px" height="36px" src="./asset/img/steemapps_opt.png"></span>
-					Steem Apps
+				<a class="navbar-brand " href="#">
+					<span><img width="36px" height="36px" v-bind:src="img_src"></span>
+					<span id="logo">Steem Apps</span>
 				</a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
@@ -158,8 +164,7 @@
 				for (index = 0; index < length; index++) {
 					this[index] = entries[index][1]
 				}
-
-				return this
+				return this;
 			}
 		});
 		//$(".nav a").attr("href",'javascript:setToggle(this);');
@@ -180,7 +185,7 @@
 		    routes: []
 		});
 
-		var updateVersion = "2018.02.26.01";
+		var updateVersion = "2018.03.15.01";
 
 		function loadVue(path){
 			return httpVueLoader(path + '.vue?v='+updateVersion);
@@ -193,6 +198,7 @@
 				currentView : ''
 				,myAccount : '@nhj12311'
 				, mySteemitBlog : 'https://steemit.com/@nhj12311'
+				, img_src : './asset/img/new_steem_apps_sm_1.png'
 			}
 			, components : {
 				'AccountCreator' : loadVue('./AccountCreator')
@@ -210,7 +216,12 @@
 				}
 			}
 			, created() {
-			  console.log("created...");
+				var rani = Math.floor(Math.random() * 3 + 1) ;
+				this.$data.img_src = "./asset/img/new_steem_apps_sm_" + rani + ".png";
+			  $("#logo").addClass("logo" + rani);
+
+				//console.error($("#logo").text());
+
 			}
 			, mounted: function () {
 				steem.api.setOptions({url: 'https://api.steemit.com'});
