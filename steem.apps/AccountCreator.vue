@@ -120,7 +120,7 @@
 			  throw new Error(err2);
 			}
 
-			var ratio = config['STEEMIT_CREATE_ACCOUNT_WITH_STEEM_MODIFIER'];
+			var ratio = config['STEEM_CREATE_ACCOUNT_WITH_STEEM_MODIFIER'];
 			var fee = dsteem.Asset.from(chainProps.account_creation_fee).multiply(ratio);
 
 			var feeString = fee.toString();
