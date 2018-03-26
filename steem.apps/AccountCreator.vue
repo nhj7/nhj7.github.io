@@ -67,6 +67,12 @@
 
 				console.log("newAccountName : " + newAccountName);
 
+        var rsltValidAcctNm = steem.utils.validateAccountName(newAccountName);
+        if( rsltValidAcctNm ){
+            addTextDiv("Erorr : " + rsltValidAcctNm );
+            return;
+        }
+
 				//addTextDiv("password : "+ newAccountPassword);
 
 				steem.api.getAccounts([ newAccountName ], function(err, result) {
