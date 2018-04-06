@@ -1,31 +1,58 @@
 <template>
 
 <div>
-<div>
-  <center>
-    <img src="./asset/img/busy.png" /><br />
-    내겐 얼마나 보팅을 해줄까?<br /><br />
-  </center>
-</div>
-<div class="form-group">
-  <div class="row">
-    <div class="col-sm-4 col-sm-offset-4">
-      <div class="input-group">
-        <span class="input-group-addon primary">
-          <!--i class="glyphicon glyphicon-user"></i-->
-          @
-        </span>
-        <input data-toggle="tooltip" title="아이디를 입력해주세요!" required @keyup.enter="getBusyVotingPower" v-model="data.acct_nm" id="acct_nm" type="text" class="form-control " name="acct_nm" placeholder="steemit account name">
-        <span class="input-group-btn">
-          <button type="submit" class="btn btn-primary " v-on:click="getBusyVotingPower">Submit</button>
-        </span>
 
+  <div class="form-group">
+    <div class="row">
+      <div class="col-sm-4 col-sm-offset-4">
+        <div class="input-group">
+          <span class="input-group-addon primary">
+            <!--i class="glyphicon glyphicon-user"></i-->
+            @
+          </span>
+          <input data-toggle="tooltip" title="아이디를 입력해주세요!" required @keyup.enter="inqryAccountInfo" v-model="data.acct_nm" id="acct_nm" type="text" class="form-control " name="acct_nm" placeholder="account name">
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-primary " v-on:click="inqryAccountInfo">Submit</button>
+          </span>
+        </div>
+      </div>
+    </div> <!-- row -->
+  </div><!-- form-group -->
+
+<div id="acct_info" class="form-group">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="input-group">
+        <span class="input-group-addon white">
+          <div class="margin-bottom-sm"><h4><a :href="`https://steemit.com/@${data.inqry_acct}`" target="_blank">@{{data.inqry_acct}}</a> ({{data.reputation}}) </h4></div>
+
+          <div class="strong margin-bottom-xs">{{data.acct_sp_tot}} SP</div>
+          <div class="small margin-bottom-sm text-warning ">({{data.acct_sp}} - {{data.acct_sp_delegate}} + {{data.acct_sp_received}} )</div>
+          <img :src="`https://steemitimages.com/64x64/https://steemitimages.com/u/${data.inqry_acct}/avatar`" class="img-circle" alt="avatar">
+        </span>
+        <span class="input-group-addon white">
+          <div class="text-info margin-top-md">Voting Power ( $ {{data.voting_value}} )</div>
+          <div class="progress">
+            <div id="voting_power" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" style="width: 0%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+              <span>{{data.voting_power}}%</span>
+            </div>
+          </div>
+          <div class="text-success">Bandwidth Remaining</div>
+          <div class="progress">
+            <div id="bandwidth_remaining" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width: 0%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+              <span>{{data.bandwidth_remaining}}%</span>
+            </div>
+          </div>
+        </span>
       </div>
     </div>
-  </div> <!-- row -->
-</div><!-- form-group -->
+  </div>
 
-<div class="panel panel-success">
+</div>
+
+
+
+<div class="panel panel-success hidden">
 	<div class="panel-heading">
 		<h5 class="panel-title">Result</h5>
 	</div>
@@ -34,6 +61,15 @@
 
 
 <br />
+
+<div class="hidden">
+  <center>
+    <img src="./asset/img/busy.png" /><br />
+    내겐 얼마나 보팅을 해줄까?<br />
+    <button type="submit" class="btn btn-primary " v-on:click="getBusyVotingPower">Calc @busy.org</button>
+    <br />
+  </center>
+</div>
 
 </div>
 </template>
@@ -63,6 +99,11 @@
   color: rgb(255, 255, 255);
   background-color: rgb(217, 83, 79);
   border-color: rgb(212, 63, 58);
+}
+.input-group-addon.white {
+  color: black;
+  background-color: white;
+  border-color: black;
 }
 </style>
 
@@ -100,6 +141,13 @@ function calculateVotingPower(followers_mvest){
   return votingPower;
 }
 
+async function getSteemPower(callback){
+  var result = await steem.api.getDynamicGlobalPropertiesAsync();
+  var steemPower = result.total_vesting_fund_steem.replace(" STEEM", "") / result.total_vesting_shares.replace(" VESTS", "");
+  //callback(steemPower);
+  return steemPower;
+}
+
 async function cb_requestWS( res ){
   //alert("콜백이 실행이 되는군....");
 
@@ -109,8 +157,10 @@ async function cb_requestWS( res ){
   var votingPower = calculateVotingPower(followers_mvest);
 
   var steemPower;
-  var result = await steem.api.getDynamicGlobalPropertiesAsync();
-  steemPower = result.total_vesting_fund_steem.replace(" STEEM", "") / result.total_vesting_shares.replace(" VESTS", "");
+  var result;
+  steemPower = await getSteemPower();
+
+
 
   result = await steem.api.getAccountsAsync( ["busy.org", data.acct_nm ] );
   var userTotalVest = parseInt(result[0].vesting_shares.replace(" VESTS", ""))
@@ -141,28 +191,169 @@ function getBusyVotingPower() {
     return;
   }
 
+  localStorage.setItem('steem.id', data.acct_nm);
+
   if(requestIO( { cmd : "proxy" , url : "https://steemdb.com/api/accounts?account=" + data.acct_nm }, cb_requestWS )){
     waitingDialog.show('Calculate the voting power of @busy.org', { progressType: 'primary'});
+  }else{
+    data.busy_msg = "현재 서비스가 원활하지 않습니다.잠시 후에 재시도 해주세요.";
   }
+}
+
+async function inqryAccountInfo(){
+  try{
+    if( !data.acct_nm ){
+      return;
+    }
+
+    waitingDialog.show('계정정보를 조회하고 있습니다.', { progressType: 'primary'});
+
+    localStorage.setItem('steem.id', data.acct_nm);
+    data.inqry_acct = data.acct_nm;
+    var acctInfo = await steem.api.getAccountsAsync( [ data.acct_nm ] );
+
+    if( acctInfo.length == 0  ){
+      return;
+    }
+
+    var gprops = await steem.api.getDynamicGlobalPropertiesAsync();
+    var steemPower = gprops.total_vesting_fund_steem.replace(" STEEM", "") / gprops.total_vesting_shares.replace(" VESTS", "");
+
+    console.log(gprops, acctInfo, steemPower);
+    var userTotalVest = parseInt(acctInfo[0].vesting_shares.replace(" VESTS", ""))
+    - parseInt(acctInfo[0].delegated_vesting_shares.replace(" VESTS", ""))
+    + parseInt(acctInfo[0].received_vesting_shares.replace(" VESTS", ""));
+    data.acct_sp_tot = Math.floor(userTotalVest * steemPower);
+    data.acct_sp = Math.floor(parseInt(acctInfo[0].vesting_shares.replace(" VESTS", "")) * steemPower);
+    data.acct_sp_delegate = Math.floor(parseInt(acctInfo[0].delegated_vesting_shares.replace(" VESTS", "")) * steemPower);
+    data.acct_sp_received = Math.floor(parseInt(acctInfo[0].received_vesting_shares.replace(" VESTS", "")) * steemPower);
+
+    var secondsago = (new Date - new Date(acctInfo[0].last_vote_time + "Z")) / 1000;
+    var vpow = acctInfo[0].voting_power + (10000 * secondsago / 432000);
+    vpow = Math.min(vpow / 100, 100).toFixed(2);
+
+    const STEEMIT_BANDWIDTH_AVERAGE_WINDOW_SECONDS = 60 * 60 * 24 * 7;
+    let vestingShares = parseFloat(acctInfo[0].vesting_shares.replace(" VESTS", ""))
+    let receivedVestingShares = parseFloat(acctInfo[0].received_vesting_shares.replace(" VESTS", ""))
+    let totalVestingShares = parseFloat(gprops.total_vesting_shares.replace(" VESTS", ""))
+    let max_virtual_bandwidth = parseInt(gprops.max_virtual_bandwidth, 10)
+    let average_bandwidth = parseInt(acctInfo[0].average_bandwidth, 10)
+
+    let delta_time = (new Date - new Date(acctInfo[0].last_bandwidth_update + "Z")) / 1000
+
+    let bandwidthAllocated = (max_virtual_bandwidth  * (vestingShares + receivedVestingShares) / totalVestingShares)
+    bandwidthAllocated = Math.round(bandwidthAllocated / 1000000);
+
+    let new_bandwidth = 0
+    if (delta_time < STEEMIT_BANDWIDTH_AVERAGE_WINDOW_SECONDS) {
+      new_bandwidth = (((STEEMIT_BANDWIDTH_AVERAGE_WINDOW_SECONDS - delta_time)*average_bandwidth)/STEEMIT_BANDWIDTH_AVERAGE_WINDOW_SECONDS)
+    }
+    new_bandwidth = Math.round(new_bandwidth / 1000000);
+    let bandwidth_remaining = 100 - (100 * new_bandwidth / bandwidthAllocated);
+    bandwidth_remaining = bandwidth_remaining.toFixed(2);
+    console.log("current bandwidth used", new_bandwidth);
+    console.log("current bandwidth allocated", bandwidthAllocated);
+    console.log("bandwidth % used", 100 * new_bandwidth / bandwidthAllocated);
+    console.log("bandwidth % remaining", bandwidth_remaining);
+
+
+
+    data.voting_power = vpow;
+    data.bandwidth_remaining = bandwidth_remaining;
+
+    // max(log10(abs(reputation))-9,0)*((reputation>= 0)?1:-1)*9+25
+
+    var reputation = Math.max(Math.log10(Math.abs(acctInfo[0].reputation))-9,0)*((acctInfo[0].reputation>= 0)?1:-1)*9+25;
+
+    //data.reputation = steem.formatter.reputation(acctInfo[0].reputation);
+    data.reputation = reputation.toFixed(1);
+
+    $("#voting_power").css("width", vpow+"%");
+    $("#bandwidth_remaining").css("width", bandwidth_remaining+"%");
+
+    var rewardFund = await steem.api.getRewardFundAsync("post");
+
+    console.log("rewardFund", rewardFund);
+
+    var reward_balance = rewardFund.reward_balance.replace(" STEEM", "");
+    var recent_claims = rewardFund.recent_claims;
+
+    var marketInfo = await steem.api.getCurrentMedianHistoryPriceAsync();
+
+    console.log("marketInfo", marketInfo);
+
+    var base = marketInfo.base.replace(" SBD", "");
+    var quote = marketInfo.quote.replace(" STEEM", "");
+    var a = gprops.total_vesting_fund_steem.replace(" STEEM", "") / gprops.total_vesting_shares.replace(" VESTS", "");
+    var e = data.acct_sp_tot,
+      t = data.voting_power,
+      n = 100,
+      r = e / a,
+      p = 1e4,
+      m = parseInt(100 * t * (100 * n) / p);
+    m = parseInt((m + 49) / 50);
+    i = reward_balance / recent_claims;
+    var l = parseInt(r * m * 100) * i * (base / quote);
+
+    data.voting_value = l.toFixed(2);
+
+    console.log("voting value : ", l, l.toFixed(2));
+  }catch(err){
+    console.error("error!", err);
+  }finally{
+    $("#acct_info").removeClass("hidden");
+    waitingDialog.hide();
+    $("#acct_nm").focus();
+  }
+
 }
 
 var data = {
   acct_nm: ''
+  , inqry_acct : ''
   , busy_msg : ''
+  , acct_sp_tot : 0
+  , acct_sp : 0
+  , acct_sp_delegate : 0
+  , acct_sp_received : 0
+  , voting_power : 0
+  , bandwidth_remaining : 0
+  , reputation : 0
+  , voting_value : 0
 };
+
+//var data2 = data.clone();
 var home = module.exports = {
 
   data: function() {
     return {
       data: data
     }
-  },
-  methods: {
+  }
+  , methods: {
     getBusyVotingPower : function(){
       getBusyVotingPower();
     }
-  },
-  mounted: function() {
+    , inqryAccountInfo : function(){
+      inqryAccountInfo();
+    }
+  }
+  , created : function(){
+    var steem_id = localStorage.getItem('steem.id');
+    if( !steem_id ){
+      $("#acct_info").addClass("hidden");
+      //console.log("eeeeeeeeeeeeee");
+    }
+  }
+  , mounted: function() {
+    var steem_id = localStorage.getItem('steem.id');
+    if( steem_id ){
+        data.acct_nm = steem_id;
+        inqryAccountInfo();
+    }else{
+      $("#acct_info").addClass("hidden");
+    }
+
 
   }
 }

@@ -21,7 +21,7 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
 	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
 	crossorigin="anonymous">
-
+<link rel="stylesheet" href="./css/bootstrap_my.css">
 <style>
 	a {
 		cursor : hand;
@@ -49,6 +49,7 @@
 <script src="https://unpkg.com/http-vue-loader"></script>
 <script src="https://unpkg.com/vue-router"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="./js/util.js"></script>
 
 </head>
@@ -71,10 +72,11 @@
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li class="active" name="Home"><a href="#">Home</a></li>
-					<li name="AppCenter"><a href="#">App Center</a></li>
+					<li class="active" name="Home" id="Home"><a href="#Home">Home</a></li>
+					<li name="VoteRating" id="VoteRating"><a href="#VoteRating">Vote Rating</a></li>
+					<li name="AppCenter" id="AppCenter"><a href="#AppCenter">App Center</a></li>
 					<!--li><a href="#RemindYou " @click="setCurrentView('RemindYou')">Remind You </a></li-->
-					<li name="AccountCreator"><a href="#">Account Creator</a></li>
+					<li name="AccountCreator" id="AccountCreator"><a href="#AccountCreator">Account Creator</a></li>
 					<li class="dropdown"><a class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false">Family Site <span class="caret"></span></a>
@@ -172,6 +174,12 @@
 				return this;
 			}
 		});
+
+		if (typeof JSON.clone !== "function") {
+		    JSON.clone = function(obj) {
+		        return JSON.parse(JSON.stringify(obj));
+		    };
+		}
 		//$(".nav a").attr("href",'javascript:setToggle(this);');
 
 		function setToggle(obj){
@@ -210,6 +218,8 @@
 				, 'AppCenter' : loadVue('./AppCenter')
 				, 'RemindYou' : loadVue('./RemindYou')
 				, 'Home' : loadVue('./Home')
+				, 'VoteRating' : loadVue('./VoteRating')
+
 			}
 			, methods : {
 				setCurrentView : function(li){
@@ -232,7 +242,10 @@
 				steem.api.setOptions({url: 'https://api.steemit.com'});
 				console.log(this.$route) // outputs 'yay'
 				if( this.$route.hash != "" ){
-					this.$data.currentView = this.$route.hash.substring(1);
+					var vueName = this.$route.hash.substring(1);
+					this.$data.currentView = vueName;
+					$(".nav").find(".active").toggleClass("active");
+					$("#"+vueName).toggleClass("active");
 				}else{
 					this.$data.currentView = "Home";
 				}
@@ -263,7 +276,7 @@
 			'<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
 			'<div class="modal-dialog modal-m">' +
 			'<div class="modal-content">' +
-				'<div class="modal-header"><h3 style="margin:0;"></h3></div>' +
+				'<div class="modal-header"><h4 style="margin:0;"></h4></div>' +
 				'<div class="modal-body">' +
 					'<div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div>' +
 				'</div>' +
@@ -297,7 +310,7 @@
 				if (settings.progressType) {
 					$dialog.find('.progress-bar').addClass('progress-bar-' + settings.progressType);
 				}
-				$dialog.find('h3').text(message);
+				$dialog.find('h4').text(message);
 				// Adding callbacks
 				if (typeof settings.onHide === 'function') {
 					$dialog.off('hidden.bs.modal').on('hidden.bs.modal', function (e) {
@@ -337,7 +350,6 @@
 		let socket_io_addr = location.protocol + "//" + hostname + port;
 		let ws_addr =  ws_protocol + "//"+hostname+port;
 		//ws_addr = "wss://steemalls.com/";
-		window.domain = "steemalls.com";
 		//console.error("ws_addr : " + ws_addr);
 		var websocket;
 		function initWebSocket(){
@@ -397,21 +409,34 @@
 	<script>
 	console.log("socket_io_addr : "+socket_io_addr);
 
-	var socket = io.connect( socket_io_addr );
+	function initSocket(){
+		socket = io.connect( socket_io_addr );
+		socket.on( 'io.res', function( json ) {
+			console.log("io.res", json);
+			if( json.err ){
+				waitingDialog.hide();
+				alert(json.err);
+				return;
+			}
+			callback(json);
+		});
+	}
 
-	socket.on( 'io.res', function( json ) {
-		console.log("io.res", json);
-		if( json.err ){
-			waitingDialog.hide();
-			alert(json.err);
-			return;
-		}
-		callback(json);
-	});
+	var socket;
+	if( location.protocol =="https:" ){
+		initSocket();
+	}else{
+
+	}
+
 	var callback;
 	function requestIO( json, cb ){
 		callback = cb;
-		socket.emit('proxy', json );
+		if( socket ){
+				socket.emit('proxy', json );
+		}else{
+			return false;
+		}
 		return true;
 	}
 	</script>
