@@ -31,7 +31,7 @@
           <img :src="`https://steemitimages.com/64x64/https://steemitimages.com/u/${data.inqry_acct}/avatar`" class="img-circle" alt="avatar">
         </span>
         <span class="input-group-addon white">
-          <div class="text-info margin-top-md">Voting Power ( $ {{data.voting_value}} )</div>
+          <div class="text-info margin-top-md">VP ( $ {{data.voting_value}} / {{data.voting_full_value}} )</div>
           <div class="progress">
             <div id="voting_power" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" style="width: 0%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
               <span>{{data.voting_power}}%</span>
@@ -200,26 +200,77 @@ function getBusyVotingPower() {
   }
 }
 
-async function inqryAccountInfo(){
-  try{
-    if( !data.acct_nm ){
-      return;
+function getCurrentMedianHistoryPrice(){
+  var deferred = $.Deferred();
+  //console.error(deferred);
+  steem.api.getCurrentMedianHistoryPrice(function(err, result){
+    if(err){
+      deferred.reject(err);
+    }else{
+      deferred.resolve(result);
     }
+  });
+  return deferred.promise();
+}
 
-    waitingDialog.show('계정정보를 조회하고 있습니다.', { progressType: 'primary'});
+function getRewardFund(){
+  var deferred = $.Deferred();
+  //console.error(deferred);
+  //steem.api.getRewardFundAsync("post")
+  steem.api.getRewardFund("post",function(err, result){
+    if(err){
+      deferred.reject(err);
+    }else{
+      deferred.resolve(result);
+    }
+  });
+  return deferred.promise();
+}
 
-    localStorage.setItem('steem.id', data.acct_nm);
-    data.inqry_acct = data.acct_nm;
-    var acctInfo = await steem.api.getAccountsAsync( [ data.acct_nm ] );
+function getDynamicGlobalProperties(){
+  var deferred = $.Deferred();
+  //console.error(deferred);
+  //steem.api.getRewardFundAsync("post")
+  steem.api.getDynamicGlobalProperties(function(err, result){
+    if(err){
+      deferred.reject(err);
+    }else{
+      deferred.resolve(result);
+    }
+  });
+  return deferred.promise();
+}
 
+// steem.api.getAccounts
+function getAccounts( arr_acct_nm ){
+  var deferred = $.Deferred();
+  //console.error(deferred);
+  //steem.api.getRewardFundAsync("post")
+  steem.api.getAccounts( arr_acct_nm, function(err, result){
+    if(err){
+      deferred.reject(err);
+    }else{
+      deferred.resolve(result);
+    }
+  });
+  return deferred.promise();
+}
+
+function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo){
+
+  try{
+
+    //var acctInfo = await steem.api.getAccountsAsync( [ data.acct_nm ] );
     if( acctInfo.length == 0  ){
       return;
     }
 
-    var gprops = await steem.api.getDynamicGlobalPropertiesAsync();
+    waitingDialog.hide();
+
+    //var gprops = await steem.api.getDynamicGlobalPropertiesAsync();
     var steemPower = gprops.total_vesting_fund_steem.replace(" STEEM", "") / gprops.total_vesting_shares.replace(" VESTS", "");
 
-    console.log(gprops, acctInfo, steemPower);
+    //console.log(gprops, acctInfo, steemPower);
     var userTotalVest = parseInt(acctInfo[0].vesting_shares.replace(" VESTS", ""))
     - parseInt(acctInfo[0].delegated_vesting_shares.replace(" VESTS", ""))
     + parseInt(acctInfo[0].received_vesting_shares.replace(" VESTS", ""));
@@ -251,18 +302,14 @@ async function inqryAccountInfo(){
     new_bandwidth = Math.round(new_bandwidth / 1000000);
     let bandwidth_remaining = 100 - (100 * new_bandwidth / bandwidthAllocated);
     bandwidth_remaining = bandwidth_remaining.toFixed(2);
-    console.log("current bandwidth used", new_bandwidth);
-    console.log("current bandwidth allocated", bandwidthAllocated);
-    console.log("bandwidth % used", 100 * new_bandwidth / bandwidthAllocated);
-    console.log("bandwidth % remaining", bandwidth_remaining);
-
-
+    //console.log("current bandwidth used", new_bandwidth);
+    //console.log("current bandwidth allocated", bandwidthAllocated);
+    //console.log("bandwidth % used", 100 * new_bandwidth / bandwidthAllocated);
+    //console.log("bandwidth % remaining", bandwidth_remaining);
 
     data.voting_power = vpow;
     data.bandwidth_remaining = bandwidth_remaining;
-
     // max(log10(abs(reputation))-9,0)*((reputation>= 0)?1:-1)*9+25
-
     var reputation = Math.max(Math.log10(Math.abs(acctInfo[0].reputation))-9,0)*((acctInfo[0].reputation>= 0)?1:-1)*9+25;
 
     //data.reputation = steem.formatter.reputation(acctInfo[0].reputation);
@@ -270,42 +317,73 @@ async function inqryAccountInfo(){
 
     $("#voting_power").css("width", vpow+"%");
     $("#bandwidth_remaining").css("width", bandwidth_remaining+"%");
-
-    var rewardFund = await steem.api.getRewardFundAsync("post");
-
-    console.log("rewardFund", rewardFund);
+    //var rewardFund = await steem.api.getRewardFundAsync("post");
 
     var reward_balance = rewardFund.reward_balance.replace(" STEEM", "");
     var recent_claims = rewardFund.recent_claims;
-
-    var marketInfo = await steem.api.getCurrentMedianHistoryPriceAsync();
-
-    console.log("marketInfo", marketInfo);
-
+    //var marketInfo = await steem.api.getCurrentMedianHistoryPriceAsync();
     var base = marketInfo.base.replace(" SBD", "");
     var quote = marketInfo.quote.replace(" STEEM", "");
     var a = gprops.total_vesting_fund_steem.replace(" STEEM", "") / gprops.total_vesting_shares.replace(" VESTS", "");
-    var e = data.acct_sp_tot,
-      t = data.voting_power,
-      n = 100,
-      r = e / a,
-      p = 1e4,
-      m = parseInt(100 * t * (100 * n) / p);
+    var e = data.acct_sp_tot;
+    var t = data.voting_power;
+    var n = 100;
+    var r = e / a;
+    var p = 1e4;
+
+    var m = parseInt(100 * t * (100 * n) / p);
     m = parseInt((m + 49) / 50);
-    i = reward_balance / recent_claims;
+
+    var m_full = parseInt(100 * 100 * (100 * n) / p);
+    m_full = parseInt((m_full + 49) / 50);
+
+    var i = reward_balance / recent_claims;
     var l = parseInt(r * m * 100) * i * (base / quote);
+    var l_full = parseInt(r * m_full * 100) * i * (base / quote);
 
     data.voting_value = l.toFixed(2);
-
+    data.voting_full_value = l_full.toFixed(2);
     console.log("voting value : ", l, l.toFixed(2));
   }catch(err){
-    console.error("error!", err);
+
   }finally{
     $("#acct_info").removeClass("hidden");
     waitingDialog.hide();
-    $("#acct_nm").focus();
+    //$("#acct_nm").focus();
   }
 
+}
+
+
+function inqryAccountInfo(){
+  try{
+    if( !data.acct_nm ){
+      return;
+    }
+    waitingDialog.show('계정정보를 조회하고 있습니다.', { progressType: 'primary'});
+    var combinedPromise = $.when(
+      getCurrentMedianHistoryPrice()
+      , getRewardFund("poste")
+      , getDynamicGlobalProperties()
+      , getAccounts([data.acct_nm])
+    );
+    combinedPromise.fail(function(f1Val, f2Val, f3Val, f4Val) {
+        waitingDialog.hide();
+        alert('Steem Node Error!');
+        console.error('fail!', f1Val, f2Val, f3Val, f4Val);
+    });
+    localStorage.setItem('steem.id', data.acct_nm);
+    data.inqry_acct = data.acct_nm;
+    // 함수는 getData와 getLocation이 둘 다 해결됐을 때 호출될 것이다.
+    combinedPromise.done(function(marketInfo, rewardFund, gprops, acctInfo){
+      console.log("We get data: " , marketInfo, rewardFund, gprops, acctInfo);
+      _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo);
+    });
+  }catch(err){
+    console.error("error!", err);
+  }finally{
+
+  }
 }
 
 var data = {
@@ -320,6 +398,7 @@ var data = {
   , bandwidth_remaining : 0
   , reputation : 0
   , voting_value : 0
+  , voting_full_value : 0
 };
 
 //var data2 = data.clone();
@@ -337,6 +416,9 @@ var home = module.exports = {
     , inqryAccountInfo : function(){
       inqryAccountInfo();
     }
+    , getCurrentMedianHistoryPriceAsync : function(){
+      getCurrentMedianHistoryPriceAsync();
+    }
   }
   , created : function(){
     var steem_id = localStorage.getItem('steem.id');
@@ -353,6 +435,8 @@ var home = module.exports = {
     }else{
       $("#acct_info").addClass("hidden");
     }
+
+
 
 
   }
