@@ -1,10 +1,10 @@
 <template>
 
-<div>
+<div class="">
 
-  <div class="form-group">
-    <div class="row">
-      <div class="col-sm-4 col-sm-offset-4">
+  <div class="form-group ">
+    <div class="row ">
+      <div class="col-sm-6 col-sm-offset-2">
         <div class="input-group">
           <span class="input-group-addon primary">
             <!--i class="glyphicon glyphicon-user"></i-->
@@ -21,17 +21,21 @@
 
 <div id="acct_info" class="form-group">
   <div class="row">
-    <div class="col-lg-6">
+    <div class="col-sm-6">
       <div class="input-group">
         <span class="input-group-addon white">
           <div class="margin-bottom-sm"><h4><a :href="`https://steemit.com/@${data.inqry_acct}`" target="_blank">@{{data.inqry_acct}}</a> ({{data.reputation}}) </h4></div>
-
           <div class="strong margin-bottom-xs">{{data.acct_sp_tot}} SP</div>
           <div class="small margin-bottom-sm text-warning ">({{data.acct_sp}} - {{data.acct_sp_delegate}} + {{data.acct_sp_received}} )</div>
           <img :src="`https://steemitimages.com/64x64/https://steemitimages.com/u/${data.inqry_acct}/avatar`" class="img-circle" alt="avatar">
         </span>
+      </div>
+    </div>
+
+    <div class="col-sm-3">
+      <div class="input-group">
         <span class="input-group-addon white">
-          <div class="text-info margin-top-md">VP ( $ {{data.voting_value}} / {{data.voting_full_value}} )</div>
+          <div class="text-info margin-top-md">Voting Power ( $ {{data.voting_value}} / {{data.voting_full_value}} )</div>
           <div class="progress">
             <div id="voting_power" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" style="width: 0%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
               <span>{{data.voting_power}}%</span>
@@ -45,9 +49,18 @@
           </div>
         </span>
       </div>
-    </div>
-  </div>
+    </div> <!-- col -->
 
+    <!--div class="col-sm-4">
+      <div class="input-group">
+        <span class="input-group-addon white">
+          ffff
+        </span>
+      </div>
+    </div--><!-- / col -->
+
+  </div> <!-- row -->
+<hr />
 </div>
 
 
@@ -75,36 +88,7 @@
 </template>
 
 <style>
-.input-group-addon.primary {
-  color: rgb(255, 255, 255);
-  background-color: rgb(50, 118, 177);
-  border-color: rgb(40, 94, 142);
-}
-.input-group-addon.success {
-  color: rgb(255, 255, 255);
-  background-color: rgb(92, 184, 92);
-  border-color: rgb(76, 174, 76);
-}
-.input-group-addon.info {
-  color: rgb(255, 255, 255);
-  background-color: rgb(57, 179, 215);
-  border-color: rgb(38, 154, 188);
-}
-.input-group-addon.warning {
-  color: rgb(255, 255, 255);
-  background-color: rgb(240, 173, 78);
-  border-color: rgb(238, 162, 54);
-}
-.input-group-addon.danger {
-  color: rgb(255, 255, 255);
-  background-color: rgb(217, 83, 79);
-  border-color: rgb(212, 63, 58);
-}
-.input-group-addon.white {
-  color: black;
-  background-color: white;
-  border-color: black;
-}
+
 </style>
 
 <script>
