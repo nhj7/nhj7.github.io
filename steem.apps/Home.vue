@@ -25,21 +25,24 @@
       <div class="input-group">
         <span class="input-group-addon white">
           <div class="margin-bottom-sm"><h4><a :href="`https://steemit.com/@${data.inqry_acct}`" target="_blank">@{{data.inqry_acct}}</a> ({{data.reputation}}) </h4></div>
-          <div class="strong margin-bottom-xs">{{data.acct_sp_tot}} SP</div>
-          <div class="small margin-bottom-sm text-warning ">({{data.acct_sp}} - {{data.acct_sp_delegate}} + {{data.acct_sp_received}} )</div>
+          <div class="strong margin-bottom-xs">{{data.acct_sp_tot | comma }} SP</div>
+          <div class="small margin-bottom-sm text-warning ">({{data.acct_sp | comma }} - {{data.acct_sp_delegate | comma}} + {{data.acct_sp_received | comma}} )</div>
           <img :src="`https://steemitimages.com/64x64/https://steemitimages.com/u/${data.inqry_acct}/avatar`" class="img-circle" alt="avatar">
         </span>
       </div>
     </div>
 
-    <div class="col-sm-3">
+    <div class="col-sm-4">
       <div class="input-group">
         <span class="input-group-addon white">
-          <div class="text-info margin-top-md">Voting Power ( $ {{data.voting_value}} / {{data.voting_full_value}} )</div>
+          <div class="text-info margin-top-md">
+            VP ( $ {{data.voting_value}} / {{data.voting_full_value}} )
+            Full in {{data.full_in_hour}} hours
+          </div>
           <div class="text-info">
             <input id="vp_slider" data-slider-id='data_vp_slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-popup-enabled="true" />
           </div>
-          <div class="progress">
+          <div class="progress margin-bottom-sm">
             <div id="voting_power" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" style="width: 0%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
               <span>
                 {{data.voting_power}}%
@@ -50,7 +53,7 @@
 
 
           <div class="text-success">Bandwidth Remaining</div>
-          <div class="progress">
+          <div class="progress margin-bottom-sm">
             <div id="bandwidth_remaining" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width: 0%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
               <span>{{data.bandwidth_remaining}}%</span>
             </div>
@@ -62,6 +65,12 @@
     <div class="col-sm-3">
       <div class="input-group">
         <span class="input-group-addon white">
+          <div class="text-info text-left margin-top-xs">
+            <div class="margin-bottom-xs" >POSTS : {{ data.post_count | comma }}</div>
+            <div class="margin-bottom-xs" >KRW/USD ￦ {{data.krw_usd | comma}} </div>
+            <div v-bind:class="inc_color_steem" >STEEM ￦ {{data.upbit_krw_steem | comma}} ( {{ data.upbit_krw_steem_change>0?'+':'' }} {{ data.upbit_krw_steem_change| inc_round }}%) </div>
+            <div v-bind:class="inc_color_sbd" >SBD ￦ {{data.upbit_krw_sbd | comma}} ( {{ data.upbit_krw_steem_change>0?'+':'' }} {{ data.upbit_krw_sbd_change | inc_round}}%) </div>
+          </div>
 
         </span>
       </div>
@@ -271,11 +280,12 @@ function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo){
       return;
     }
 
+
     waitingDialog.hide();
 
     //var gprops = await steem.api.getDynamicGlobalPropertiesAsync();
     var steemPower = gprops.total_vesting_fund_steem.replace(" STEEM", "") / gprops.total_vesting_shares.replace(" VESTS", "");
-
+    data.post_count = acctInfo[0].post_count;
     //console.log(gprops, acctInfo, steemPower);
     var userTotalVest = parseInt(acctInfo[0].vesting_shares.replace(" VESTS", ""))
     - parseInt(acctInfo[0].delegated_vesting_shares.replace(" VESTS", ""))
@@ -363,7 +373,9 @@ function calcVotingValue( value ){
   var r = data.acct_sp_tot / data.steem_power;
   var p = 1e4;
 
-  var m = parseInt(100 * ( value ? value : data.voting_power) * (100 * n) / p);
+  value = value ? value : data.voting_power;
+
+  var m = parseInt(100 * ( value) * (100 * n) / p);
   m = parseInt((m + 49) / 50);
 
   var m_full = parseInt(100 * 100 * (100 * n) / p);
@@ -376,6 +388,9 @@ function calcVotingValue( value ){
   data.voting_value = l.toFixed(2);
   data.voting_full_value = l_full.toFixed(2);
   console.log("voting value : ", l, l.toFixed(2));
+
+  data.full_in_hour = parseInt( (100 - data.voting_power) / 20 * 24 );
+
 
 }
 
@@ -438,6 +453,28 @@ function setVpSlider( initValue ){
   round_div.on( 'touchend', ()=>{ slider.bootstrapSlider('hideTooltip'); });
 }
 
+function getExternalApi(url, fromNames, toNames){
+  $.ajax({
+      url:url,
+      dataType:'json',
+      type: 'get',
+      data: '',
+      success:function(response){
+        if( Array.isArray(fromNames) ){
+          for(let i = 0; i < fromNames.length;i++){
+            data[toNames[i]] = response[0][fromNames[i]];
+          }
+        }else{
+          data[toNames] = response[0][fromNames];
+        }
+        //console.error(response);
+      }
+      , fail : function(err){
+        console.error(err);
+      }
+  });
+}
+
 var data = {
   acct_nm: ''
   , inqry_acct : ''
@@ -456,6 +493,13 @@ var data = {
   , base : 0
   , quote : 0
   , steem_power : 0
+  , full_in_hour : 0
+  , krw_usd : 0
+  , upbit_krw_sbd : 0
+  , upbit_krw_sbd_change : 0
+  , upbit_krw_steem : 0
+  , upbit_krw_steem_change : 0
+  , post_count : 0
 };
 //var data2 = data.clone();
 var home = module.exports = {
@@ -482,7 +526,48 @@ var home = module.exports = {
       //console.log("eeeeeeeeeeeeee");
     }
   }
+  ,filters: {
+      comma : function (value) {
+        if( !value ) return value;
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+      , inc_round : function ( value ){
+        if( !value ) return value;
+        var newValue = Math.floor(parseFloat(value) * 10000);
+        if( newValue == 0 ) return 0;
+        return newValue / 100.0;
+      }
+    }
+  ,computed: {
+    inc_color_steem: function (  ) {
+      return [
+        ( this.data.upbit_krw_steem_change > 0 ) ?  'text-danger' : 'text-primary'
+        , 'margin-bottom-xs'
+        //this.data.upbit_krw_steem_change
+      ]
+    }
+    , inc_color_sbd: function (  ) {
+      return [
+        ( this.data.upbit_krw_sbd_change > 0 ) ?  'text-danger' : 'text-primary'
+        //this.data.upbit_krw_steem_change
+      ]
+    }
+  }
+
   , mounted: function() {
+    // get krw/usd
+    getExternalApi(
+      'https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD'
+      , 'basePrice'
+      , 'krw_usd'
+    );
+    // get upbit steem
+    getSteemPrice();
+    setInterval(getSteemPrice, 19000);
+    // get upbit sbd
+    getSBDPrice();
+    setInterval(getSBDPrice, 20000);
+
     var steem_id = localStorage.getItem('steem.id');
     if( steem_id ){
         data.acct_nm = steem_id;
@@ -493,4 +578,16 @@ var home = module.exports = {
     setVpSlider(0);
   }
 }
+
+getSteemPrice = () => {getExternalApi(
+  'https://crix-api-endpoint.upbit.com/v1/crix/candles/days?code=CRIX.UPBIT.KRW-STEEM&count=1'
+  , ['tradePrice', 'signedChangeRate']
+  , ['upbit_krw_steem', 'upbit_krw_steem_change']
+)}
+
+getSBDPrice = () => {getExternalApi(
+  'https://crix-api-endpoint.upbit.com/v1/crix/candles/days?code=CRIX.UPBIT.KRW-SBD&count=1'
+  , ['tradePrice', 'signedChangeRate']
+  , ['upbit_krw_sbd', 'upbit_krw_sbd_change']
+)}
 </script>
