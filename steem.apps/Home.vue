@@ -21,7 +21,7 @@
 
 <div id="acct_info" class="form-group">
   <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-3">
       <div class="input-group">
         <span class="input-group-addon white">
           <div class="margin-bottom-sm"><h4><a :href="`https://steemit.com/@${data.inqry_acct}`" target="_blank">@{{data.inqry_acct}}</a> ({{data.reputation}}) </h4></div>
@@ -36,17 +36,33 @@
       <div class="input-group">
         <span class="input-group-addon white">
           <div class="text-info margin-top-md">Voting Power ( $ {{data.voting_value}} / {{data.voting_full_value}} )</div>
+          <div class="text-info">
+            <input id="vp_slider" data-slider-id='data_vp_slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0" />
+          </div>
           <div class="progress">
             <div id="voting_power" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" style="width: 0%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
-              <span>{{data.voting_power}}%</span>
+              <span>
+                {{data.voting_power}}%
+              </span>
             </div>
           </div>
+
+
+
           <div class="text-success">Bandwidth Remaining</div>
           <div class="progress">
             <div id="bandwidth_remaining" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width: 0%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
               <span>{{data.bandwidth_remaining}}%</span>
             </div>
           </div>
+        </span>
+      </div>
+    </div> <!-- col -->
+
+    <div class="col-sm-3">
+      <div class="input-group">
+        <span class="input-group-addon white">
+
         </span>
       </div>
     </div> <!-- col -->
@@ -88,10 +104,16 @@
 </template>
 
 <style>
-
+#data_vp_slider .slider-selection {
+  background: #69A9EC;
+}
+.slider {
+    width: 100% !important;
+}
 </style>
 
 <script>
+
 // Delay between 2 votes is 12 hours
 const delay = parseInt(43200);
 // Amount required to get the minimum upvote (1%) is 20000000 VESTS ~ 2 Dolphins ~ 10 000 SP
@@ -291,7 +313,7 @@ function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo){
     //console.log("bandwidth % used", 100 * new_bandwidth / bandwidthAllocated);
     //console.log("bandwidth % remaining", bandwidth_remaining);
 
-    data.voting_power = vpow;
+
     data.bandwidth_remaining = bandwidth_remaining;
     // max(log10(abs(reputation))-9,0)*((reputation>= 0)?1:-1)*9+25
     var reputation = Math.max(Math.log10(Math.abs(acctInfo[0].reputation))-9,0)*((acctInfo[0].reputation>= 0)?1:-1)*9+25;
@@ -299,35 +321,32 @@ function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo){
     //data.reputation = steem.formatter.reputation(acctInfo[0].reputation);
     data.reputation = reputation.toFixed(1);
 
+
+    //$('#vp_slider').slider('value', parseInt(vpow));
+    //$('#vp_slider').val( parseInt(vpow));
+    //$('#vp_slider').bootstrapSlider('setValue', parseInt(vpow));
+    //$("#vp_slider").attr('data-slider-value', parseInt(vpow));
+    //$("#vp_slider").bootstrapSlider('refresh');
+
+    $("#vp_slider").bootstrapSlider('setValue', vpow);
+
     $("#voting_power").css("width", vpow+"%");
+    data.voting_power = vpow;
+    //setVpSlider( parseInt(vpow)  );
     $("#bandwidth_remaining").css("width", bandwidth_remaining+"%");
     //var rewardFund = await steem.api.getRewardFundAsync("post");
 
-    var reward_balance = rewardFund.reward_balance.replace(" STEEM", "");
-    var recent_claims = rewardFund.recent_claims;
+    data.reward_balance = rewardFund.reward_balance.replace(" STEEM", "");
+    data.recent_claims = rewardFund.recent_claims;
     //var marketInfo = await steem.api.getCurrentMedianHistoryPriceAsync();
-    var base = marketInfo.base.replace(" SBD", "");
-    var quote = marketInfo.quote.replace(" STEEM", "");
-    var a = gprops.total_vesting_fund_steem.replace(" STEEM", "") / gprops.total_vesting_shares.replace(" VESTS", "");
-    var e = data.acct_sp_tot;
-    var t = data.voting_power;
-    var n = 100;
-    var r = e / a;
-    var p = 1e4;
+    data.base = marketInfo.base.replace(" SBD", "");
+    data.quote = marketInfo.quote.replace(" STEEM", "");
+    data.steem_power = steemPower;
+    //var a = gprops.total_vesting_fund_steem.replace(" STEEM", "") / gprops.total_vesting_shares.replace(" VESTS", "");
 
-    var m = parseInt(100 * t * (100 * n) / p);
-    m = parseInt((m + 49) / 50);
+    calcVotingValue();
 
-    var m_full = parseInt(100 * 100 * (100 * n) / p);
-    m_full = parseInt((m_full + 49) / 50);
 
-    var i = reward_balance / recent_claims;
-    var l = parseInt(r * m * 100) * i * (base / quote);
-    var l_full = parseInt(r * m_full * 100) * i * (base / quote);
-
-    data.voting_value = l.toFixed(2);
-    data.voting_full_value = l_full.toFixed(2);
-    console.log("voting value : ", l, l.toFixed(2));
   }catch(err){
 
   }finally{
@@ -338,6 +357,26 @@ function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo){
 
 }
 
+function calcVotingValue( value ){
+  var n = 100;
+  var r = data.acct_sp_tot / data.steem_power;
+  var p = 1e4;
+
+  var m = parseInt(100 * ( value ? value : data.voting_power) * (100 * n) / p);
+  m = parseInt((m + 49) / 50);
+
+  var m_full = parseInt(100 * 100 * (100 * n) / p);
+  m_full = parseInt((m_full + 49) / 50);
+
+  var i = data.reward_balance / data.recent_claims;
+  var l = parseInt(r * m * 100) * i * (data.base / data.quote);
+  var l_full = parseInt(r * m_full * 100) * i * (data.base / data.quote);
+
+  data.voting_value = l.toFixed(2);
+  data.voting_full_value = l_full.toFixed(2);
+  console.log("voting value : ", l, l.toFixed(2));
+
+}
 
 function inqryAccountInfo(){
   try{
@@ -370,6 +409,27 @@ function inqryAccountInfo(){
   }
 }
 
+function setVpSlider( initValue ){
+  $('#vp_slider').bootstrapSlider({
+    formatter: function(value) {
+      $("#voting_power").css("width", value+"%");
+      data.voting_power = value;
+      calcVotingValue();
+      return 'voting power: ' + value;
+    }
+    , change: function(event, ui) {
+      console.log("has changed");
+    }
+    , value : initValue
+    , min : 0
+    , max : 100
+    , step : 1
+    , width: '100%'
+
+  });
+  //data-slider-min="0" data-slider-max="100" data-slider-step="1"
+}
+
 var data = {
   acct_nm: ''
   , inqry_acct : ''
@@ -383,11 +443,14 @@ var data = {
   , reputation : 0
   , voting_value : 0
   , voting_full_value : 0
+  , reward_balance : 0
+  , recent_claims : 0
+  , base : 0
+  , quote : 0
+  , steem_power : 0
 };
-
 //var data2 = data.clone();
 var home = module.exports = {
-
   data: function() {
     return {
       data: data
@@ -419,10 +482,7 @@ var home = module.exports = {
     }else{
       $("#acct_info").addClass("hidden");
     }
-
-
-
-
+    setVpSlider(0);
   }
 }
 </script>
