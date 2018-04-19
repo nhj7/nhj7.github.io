@@ -68,8 +68,8 @@
           <div class="text-info text-left margin-top-xs">
             <div class="margin-bottom-xs" >POSTS : {{ data.post_count | comma }}</div>
             <div class="margin-bottom-xs" >KRW/USD ￦ {{data.krw_usd | comma}} </div>
-            <div v-bind:class="inc_color_steem" >STEEM ￦ {{data.upbit_krw_steem | comma}} ( {{ data.upbit_krw_steem_change>0?'+':'' }} {{ data.upbit_krw_steem_change| inc_round }}%) </div>
-            <div v-bind:class="inc_color_sbd" >SBD ￦ {{data.upbit_krw_sbd | comma}} ( {{ data.upbit_krw_steem_change>0?'+':'' }} {{ data.upbit_krw_sbd_change | inc_round}}%) </div>
+            <div v-bind:class="inc_color_steem" >STEEM ￦ {{data.upbit_krw_steem | comma}} ( {{ data.upbit_krw_steem_change>0?'+':'' }} {{ data.upbit_krw_steem_change| inc_round }}%, $ {{ Math.floor(data.upbit_krw_steem / data.krw_usd * 100)/100.0 }} ) </div>
+            <div v-bind:class="inc_color_sbd" >SBD ￦ {{data.upbit_krw_sbd | comma}} ( {{ data.upbit_krw_steem_change>0?'+':'' }} {{ data.upbit_krw_sbd_change | inc_round}}%, $ {{ Math.floor(data.upbit_krw_sbd / data.krw_usd * 100)/100.0 }}) </div>
           </div>
 
         </span>
