@@ -37,7 +37,7 @@
         <span class="input-group-addon white">
           <div class="text-info margin-top-md">Voting Power ( $ {{data.voting_value}} / {{data.voting_full_value}} )</div>
           <div class="text-info">
-            <input id="vp_slider" data-slider-id='data_vp_slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0" />
+            <input id="vp_slider" data-slider-id='data_vp_slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-popup-enabled="true" />
           </div>
           <div class="progress">
             <div id="voting_power" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" style="width: 0%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
@@ -329,6 +329,7 @@ function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo){
     //$("#vp_slider").bootstrapSlider('refresh');
 
     $("#vp_slider").bootstrapSlider('setValue', vpow);
+    //$("#vp_slider").slider('setValue', vpow);
 
     $("#voting_power").css("width", vpow+"%");
     data.voting_power = vpow;
@@ -410,12 +411,13 @@ function inqryAccountInfo(){
 }
 
 function setVpSlider( initValue ){
-  $('#vp_slider').bootstrapSlider({
+  var slider = $('#vp_slider').bootstrapSlider({
+  //var slider = $('#vp_slider').slider({
     formatter: function(value) {
       $("#voting_power").css("width", value+"%");
       data.voting_power = value;
       calcVotingValue();
-      return 'voting power: ' + value;
+      return value + ' %';
     }
     , change: function(event, ui) {
       console.log("has changed");
@@ -425,9 +427,15 @@ function setVpSlider( initValue ){
     , max : 100
     , step : 1
     , width: '100%'
+    , ticks_tooltip : true
+    //, data-popup-enabled="true"
+    //, tooltip : 'always'
 
   });
-  //data-slider-min="0" data-slider-max="100" data-slider-step="1"
+  // .find(".slider-handle min-slider-handle round")
+  var round_div = $(slider.bootstrapSlider('getElement')).find(".slider-handle.min-slider-handle.round");
+  round_div.on( 'touchstart', ()=>{ slider.bootstrapSlider('showTooltip'); });
+  round_div.on( 'touchend', ()=>{ slider.bootstrapSlider('hideTooltip'); });
 }
 
 var data = {
