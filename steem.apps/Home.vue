@@ -71,7 +71,7 @@
             <div class="margin-bottom-xs" >KRW/USD ￦ {{data.krw_usd | comma}} </div>
             <div class="margin-bottom-xs" >STEEM:SBD {{ Math.floor(data.upbit_krw_sbd/data.upbit_krw_steem*1000)/1000.0 }} : 1 </div>
             <div v-bind:class="inc_color_steem" >STEEM  $ {{ Math.floor(data.upbit_krw_steem / data.krw_usd * 100)/100.0 }} ( {{ data.upbit_krw_steem_change>0?'+':'' }} {{ data.upbit_krw_steem_change| inc_round }}%, ￦ {{data.upbit_krw_steem | comma}} ) </div>
-            <div v-bind:class="inc_color_sbd" >SBD $ {{ Math.floor(data.upbit_krw_sbd / data.krw_usd * 100)/100.0 }} ( {{ data.upbit_krw_steem_change>0?'+':'' }} {{ data.upbit_krw_sbd_change | inc_round}}%, ￦ {{data.upbit_krw_sbd | comma}}) </div>
+            <div v-bind:class="inc_color_sbd" >SBD $ {{ Math.floor(data.upbit_krw_sbd / data.krw_usd * 100)/100.0 }} ( {{ data.upbit_krw_sbd_change>0?'+':'' }} {{ data.upbit_krw_sbd_change | inc_round}}%, ￦ {{data.upbit_krw_sbd | comma}}) </div>
           </div>
 
         </span>
@@ -88,6 +88,19 @@
 
   </div> <!-- row -->
 <hr />
+
+<div class="row">
+  <div class="col-sm-3">
+    <div class="input-group">
+      <span class="input-group-addon white">
+        <span class="input-group-btn">
+
+        </span>
+      </span>
+    </div>
+  </div> <!-- col -->
+</div><!-- row -->
+
 </div>
 
 
@@ -397,6 +410,19 @@ function calcVotingValue( value ){
 
 }
 
+function inqryVoteRating(){
+  try{
+    if( !data.acct_nm ){
+      return;
+    }
+
+  }catch(err){
+    console.error("inqryVoteRating Error!", err);
+  }finally{
+
+  }
+}
+
 function inqryAccountInfo(){
   try{
     if( !data.acct_nm ){
@@ -576,14 +602,17 @@ var home = module.exports = {
     getSBDPrice();
     setInterval(getSBDPrice, 20000);
 
+    setVpSlider(0);
+
     var steem_id = localStorage.getItem('steem.id');
     if( steem_id ){
         data.acct_nm = steem_id;
         inqryAccountInfo();
+        inqryVoteRating();
     }else{
       $("#acct_info").addClass("hidden");
     }
-    setVpSlider(0);
+
   }
 }
 
