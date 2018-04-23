@@ -65,11 +65,13 @@
     <div class="col-sm-3">
       <div class="input-group">
         <span class="input-group-addon white">
-          <div class="text-info text-left margin-top-xs">
+          <div class="text-info text-left margin-top-xs well">
+            <div class="margin-bottom-xs" >CREATED : {{ data.created }} {{ calc_created_days }}</div>
             <div class="margin-bottom-xs" >POSTS : {{ data.post_count | comma }}</div>
             <div class="margin-bottom-xs" >KRW/USD ￦ {{data.krw_usd | comma}} </div>
-            <div v-bind:class="inc_color_steem" >STEEM ￦ {{data.upbit_krw_steem | comma}} ( {{ data.upbit_krw_steem_change>0?'+':'' }} {{ data.upbit_krw_steem_change| inc_round }}%, $ {{ Math.floor(data.upbit_krw_steem / data.krw_usd * 100)/100.0 }} ) </div>
-            <div v-bind:class="inc_color_sbd" >SBD ￦ {{data.upbit_krw_sbd | comma}} ( {{ data.upbit_krw_steem_change>0?'+':'' }} {{ data.upbit_krw_sbd_change | inc_round}}%, $ {{ Math.floor(data.upbit_krw_sbd / data.krw_usd * 100)/100.0 }}) </div>
+            <div class="margin-bottom-xs" >STEEM:SBD {{ Math.floor(data.upbit_krw_sbd/data.upbit_krw_steem*1000)/1000.0 }} : 1 </div>
+            <div v-bind:class="inc_color_steem" >STEEM  $ {{ Math.floor(data.upbit_krw_steem / data.krw_usd * 100)/100.0 }} ( {{ data.upbit_krw_steem_change>0?'+':'' }} {{ data.upbit_krw_steem_change| inc_round }}%, ￦ {{data.upbit_krw_steem | comma}} ) </div>
+            <div v-bind:class="inc_color_sbd" >SBD $ {{ Math.floor(data.upbit_krw_sbd / data.krw_usd * 100)/100.0 }} ( {{ data.upbit_krw_steem_change>0?'+':'' }} {{ data.upbit_krw_sbd_change | inc_round}}%, ￦ {{data.upbit_krw_sbd | comma}}) </div>
           </div>
 
         </span>
@@ -279,14 +281,12 @@ function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo){
     if( acctInfo.length == 0  ){
       return;
     }
-
-
     waitingDialog.hide();
-
     //var gprops = await steem.api.getDynamicGlobalPropertiesAsync();
     var steemPower = gprops.total_vesting_fund_steem.replace(" STEEM", "") / gprops.total_vesting_shares.replace(" VESTS", "");
     data.post_count = acctInfo[0].post_count;
     //console.log(gprops, acctInfo, steemPower);
+    data.created = moment(acctInfo[0].created).format('YYYY-MM-DD');
     var userTotalVest = parseInt(acctInfo[0].vesting_shares.replace(" VESTS", ""))
     - parseInt(acctInfo[0].delegated_vesting_shares.replace(" VESTS", ""))
     + parseInt(acctInfo[0].received_vesting_shares.replace(" VESTS", ""));
@@ -329,7 +329,7 @@ function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo){
     var reputation = Math.max(Math.log10(Math.abs(acctInfo[0].reputation))-9,0)*((acctInfo[0].reputation>= 0)?1:-1)*9+25;
 
     //data.reputation = steem.formatter.reputation(acctInfo[0].reputation);
-    data.reputation = reputation.toFixed(1);
+    data.reputation = reputation.toFixed(2);
 
 
     //$('#vp_slider').slider('value', parseInt(vpow));
@@ -369,6 +369,9 @@ function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo){
 }
 
 function calcVotingValue( value ){
+  if( !data.steem_power || !data.acct_sp_tot || data.acct_sp_tot <= 0 ){
+    return;
+  }
   var n = 100;
   var r = data.acct_sp_tot / data.steem_power;
   var p = 1e4;
@@ -387,7 +390,7 @@ function calcVotingValue( value ){
 
   data.voting_value = l.toFixed(2);
   data.voting_full_value = l_full.toFixed(2);
-  console.log("voting value : ", l, l.toFixed(2));
+  console.log("voting value : ", l, l.toFixed(2), value);
 
   data.full_in_hour = parseInt( (100 - data.voting_power) / 20 * 24 );
 
@@ -500,6 +503,7 @@ var data = {
   , upbit_krw_steem : 0
   , upbit_krw_steem_change : 0
   , post_count : 0
+  , created : ''
 };
 //var data2 = data.clone();
 var home = module.exports = {
@@ -551,6 +555,10 @@ var home = module.exports = {
         ( this.data.upbit_krw_sbd_change > 0 ) ?  'text-danger' : 'text-primary'
         //this.data.upbit_krw_steem_change
       ]
+    }
+    , calc_created_days : function(){
+      if( !this.data.created ) return '';
+      return ' | '+ comma(moment().diff( moment(this.data.created) , 'day')) + ' days';
     }
   }
 

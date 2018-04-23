@@ -52,8 +52,8 @@ async function inqryVoteRating(){
 
   console.log(result);
 
-  //google.charts.load("current", {packages:["corechart"]});
-  //google.charts.setOnLoadCallback(drawTrendlines);
+  google.charts.load("current", {packages:["corechart"]});
+  google.charts.setOnLoadCallback(drawTrendlines);
 }
 
 function drawTrendlines() {
