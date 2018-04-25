@@ -158,11 +158,18 @@ function isEmail(email) {
               var send_memo = ' { "account":"'+newAccountName+'", "email":"'+$("#email").val()+'", "addr_memo" : "'+$("#exchange_memo").val()+'" } ';
               sendTxt += send_memo;
               sendTxt += '<button href="#" data-toggle="tooltip" title="copied" id="btnCopy" type="button" class="btn btn-sm btn-info" data-clipboard-text=\''+send_memo+'\'  >copy</button>';
+              sendTxt += ' <a target="_blank" href="https://steemconnect.com/sign/transfer?to=steem.apps&amount='+DATA.feeString+'&memo='+encodeURIComponent(send_memo)+'" > ';
+              sendTxt += ' <button id="btnSendSc" type="button" class="btn btn-sm btn-info">send steemconnect</button></a>';
               addTextDiv(sendTxt);
               new ClipboardJS('.btn');
               $('#btnCopy').tooltip( {trigger: 'click'});
               $('#btnCopy').on('click', function(){  setTimeout( ()=>$('#btnCopy').tooltip('hide') ,1000); });
               $('#btnCopy').on('touchend', function(){ $('#btnCopy').tooltip('show'); setTimeout( ()=>$('#btnCopy').tooltip('hide') ,1000); });
+              $("#btnSendSc").on('click', () => {
+                var sendSc = $("<a>");
+                sendSc.attr("target","_blank");
+                sendSc.attr("href","https://steemconnect.com/sign/transfer?to=steem.apps&amount="+DATA.feeString+"&memo="+send_memo);
+              });
               waitingDialog.hide();
               //copyClipboard(send_memo);
             }
