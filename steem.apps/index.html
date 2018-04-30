@@ -138,13 +138,12 @@
 						<ul class="dropdown-menu">
 							<li><a href="https://ianpark.github.io/steeme/"
 								target="_blank">Steeme - @asbear</a></li>
-							<li><a href="https://steemus.com" target="_blank">Steem
-									Us - @jungs</a></li>
-							<li><a href="http://tool.steem.world" target="_blank">Steem
-									Tool - @segyepark</a></li>
+							<li><a href="https://steemus.com" target="_blank">Steem Us - @jungs</a></li>
+							<li><a href="http://tool.steem.world" target="_blank">STEEM TOOL - @segyepark</a></li>
+							<li><a href="https://asinayo.github.io/sibba/" target="_blank">sibba - @asinayo</a></li>
 							<li><a href="https://iworldpark.github.io/steemit/stat/post/" target="_blank">Steemit Post Statistics - @segyepark</a></li>
-							<li><a href="https://steemnow.com/" target="_blank">Steem Now</a></li>
-							<li><a href="http://cobot.co.kr" target="_blank">Cobot - All Coin Ticker @nhj12311</a></li>
+
+							<li><a href="http://cobot.co.kr" target="_blank">cobot - All Coin Ticker @nhj12311</a></li>
 							<li role="separator" class="divider"></li>
 							<li class="dropdown-header">Steem Platform</li>
 							<li><a href="https://steemkr.com/created/kr" target="_blank">Steemkr</a></li>
@@ -253,7 +252,7 @@
 		    routes: []
 		});
 
-		var updateVersion = "2018.04.30.01";
+		var updateVersion = "2018.04.30.02";
 
 		function loadVue(path){
 			return httpVueLoader(path + '.vue?v='+updateVersion);
@@ -319,7 +318,6 @@
 
 		/**
 	 * Module for displaying "Waiting for..." dialog using Bootstrap
-	 *
 	 * @author Eugene Maslovich <ehpc@em42.ru>
 	 */
 
@@ -437,8 +435,7 @@
 					//console.log(json);
 				} catch (e) {
 					console.error(e);
-					console.log('This doesn\'t look like a valid JSON: ',
-							message.data);
+					console.log('This doesn\'t look like a valid JSON: ', message.data);
 					return;
 				}
 				// handle incoming message
