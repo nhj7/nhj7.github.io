@@ -237,9 +237,9 @@ function isEmail(email) {
 
 			var ratio = config['STEEM_CREATE_ACCOUNT_WITH_STEEM_MODIFIER'];
 			//var fee = dsteem.Asset.from(chainProps.account_creation_fee).multiply(ratio);
-      var fee = chainProps.account_creation_fee.replace(" STEEM","") * (ratio);
+      var fee = chainProps.account_creation_fee.split(" ")[0] * (ratio);
 
-			var feeString = fee.toString()+".000 STEEM";
+			var feeString = fee.toFixed(3) + chainProps.account_creation_fee.split(" ")[1];
 			var jsonMetadata = '';
 
 			steem.broadcast.accountCreate(creatorWif, feeString, creator,

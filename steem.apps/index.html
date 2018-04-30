@@ -56,10 +56,11 @@
 <script src="https://cdn.jsdelivr.net/npm/http-vue-loader/src/httpVueLoader.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.slim.js"></script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/bootstrap-slider.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script src="./js/Chart.PieceLabel.min.js"></script>
 <script src="./js/util.js"></script>
 
 <style>
@@ -127,7 +128,7 @@
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<li class="active" name="Home" id="Home"><a href="#Home">Home</a></li>
-					<li name="VoteRating" id="VoteRating"><a href="#VoteRating">Vote Rating</a></li>
+					<li name="VotingStat" id="VotingStat"><a href="#VotingStat">Voting Stat</a></li>
 					<li name="AppCenter" id="AppCenter"><a href="#AppCenter">App Center</a></li>
 					<!--li><a href="#RemindYou " @click="setCurrentView('RemindYou')">Remind You </a></li-->
 					<li name="AccountCreator" id="AccountCreator"><a href="#AccountCreator">Account Creator</a></li>
@@ -252,7 +253,7 @@
 		    routes: []
 		});
 
-		var updateVersion = "2018.04.25.03";
+		var updateVersion = "2018.04.30.01";
 
 		function loadVue(path){
 			return httpVueLoader(path + '.vue?v='+updateVersion);
@@ -272,7 +273,7 @@
 				, 'AppCenter' : loadVue('./AppCenter')
 				, 'RemindYou' : loadVue('./RemindYou')
 				, 'Home' : loadVue('./Home')
-				, 'VoteRating' : loadVue('./VoteRating')
+				, 'VotingStat' : loadVue('./VotingStat')
 
 			}
 			, methods : {
