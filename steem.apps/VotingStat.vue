@@ -51,7 +51,12 @@
               <tbody>
                 <tr v-for="(item, idx) in data.votingRateList" v-on:click="clickVotingRateRow(item.account)">
                   <td>{{ idx+1 }}</td>
-                  <td>{{ item.account }}</td>
+                  <td>
+                    {{ item.account }}
+                    <a :href="`https://steemit.com/@${item.account}`" target="_blank">
+                      <span class="glyphicon glyphicon-share"></span>
+                    </a>
+                  </td>
                   <td>{{ comma(item.sp) }}</td>
                   <td>{{ item.info.count }}</td>
                   <td>{{ comma(item.info.totWeigt / 100.0) }}</td>
