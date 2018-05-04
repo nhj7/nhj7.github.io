@@ -137,8 +137,8 @@ async function inqryVotingStatistics(){
     }
 
     data.acct_nm = data.acct_nm.trim();
-
     localStorage.setItem('steem.id', data.acct_nm);
+    $('#votingRateList').addClass("hidden");
 
     waitingDialog.show('Calculating Vote Statistics...', { progressType: 'primary'});
     const lmtCnt = 10000;
