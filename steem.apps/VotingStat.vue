@@ -219,7 +219,7 @@ async function inqryVotingStatistics(){
       ,{
           title: {
             display: true,
-            text: 'Voting Rate'
+            text: '@'+data.acct_nm + ' Voting Rate'
           }
           , animation: {
                 animateScale: true,
