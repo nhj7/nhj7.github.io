@@ -99,24 +99,30 @@ function initChart(parent, id, data, options){
   });
 }
 
+function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+}
+
+let votingStat;
+
 async function inqryVotingStatistics(){
   try{
     if( !data.acct_nm ){
       return;
     }
-
-    waitingDialog.show('Calculate Vote statistics...', { progressType: 'primary'});
-
-    var gprops = await steem.api.getDynamicGlobalPropertiesAsync();
-    var steemPower = gprops.total_vesting_fund_steem.replace(" STEEM", "") / gprops.total_vesting_shares.replace(" VESTS", "");
-
-
+    waitingDialog.show('Calculating Vote Statistics...', { progressType: 'primary'});
     const lmtCnt = 10000;
     let idxHist = -1;
+    let arrVoter = new Array();
+    let arrAuthor = new Array();
+    var gprops = await steem.api.getDynamicGlobalPropertiesAsync();
+    var steemPower = gprops.total_vesting_fund_steem.replace(" STEEM", "") / gprops.total_vesting_shares.replace(" VESTS", "");
     do{
-      console.error(idxHist, lmtCnt);
+      console.log(idxHist, lmtCnt);
       var result = await steem.api.getAccountHistoryAsync(data.acct_nm, idxHist, lmtCnt);
-      console.error(result.length, result[0][0] + '~' + result[result.length-1][0]);
+      console.log(result.length, result[0][0] + '~' + result[result.length-1][0]);
+      var totDoVotingVal = {};
+      var totRcvVotingVal = {};
       for(var i = 0; i < result.length;i++){
 
         if( result[i][1].op[0] == 'vote' ){
@@ -126,15 +132,73 @@ async function inqryVotingStatistics(){
           var hours = d.getHours();
           d.setHours(hours - offset);
 
+          /*
+
           console.log("date : "+(result[i][1].timestamp), d);
           console.log("num : "+result[i][0]);
           console.log("type : "+result[i][1].op[0]);
           console.log("info : "+JSON.stringify(result[i][1].op[1]));
 
+          */
+
+          arrVoter.push(result[i][1].op[1].voter);
+          arrAuthor.push(result[i][1].op[1].author);
+
+          if( result[i][1].op[1].voter == data.acct_nm){
+            if( !totDoVotingVal[result[i][1].op[1].author] ) {
+              totDoVotingVal[result[i][1].op[1].author] = { totWeigt : 0, count : 0, votingList : [] };
+            }
+            totDoVotingVal[result[i][1].op[1].author].totWeigt += result[i][1].op[1].weight;
+            totDoVotingVal[result[i][1].op[1].author].count++;
+            totDoVotingVal[result[i][1].op[1].author].votingList.push( (result[i][1].op[1]) );
+          }else{
+            if( !totRcvVotingVal[result[i][1].op[1].voter] ) {
+              totRcvVotingVal[result[i][1].op[1].voter] = { totWeigt : 0, count : 0 , votingList : []};
+            }
+            totRcvVotingVal[result[i][1].op[1].voter].totWeigt += result[i][1].op[1].weight;
+            totRcvVotingVal[result[i][1].op[1].voter].count++;
+            totRcvVotingVal[result[i][1].op[1].voter].votingList.push( (result[i][1].op[1]) );
+          }
         }
       }
       idxHist = result[0][0]-1;
     }while( result.length == lmtCnt)
+
+    //console.error("totRcvVotingVal", totRcvVotingVal);
+    //console.error("totDoVotingVal", totDoVotingVal);
+    var arrUniqueAuthor = arrAuthor.filter(onlyUnique);
+    //console.error("arrVoter after fileter.", arrVoter.length, arrVoter);
+    //console.error("arrVoterObj", arrVoterObj);
+
+    var arrRangeSp = [ 0, 1000, 5000, 10000 ];
+    var objRangeGrp = {};
+    for(let i = 0; i < arrRangeSp.length;i++){
+      objRangeGrp[arrRangeSp[i]] = { totWeigt : 0, count : 0, voteList : [] };
+    }
+    var accounts = await steem.api.getAccountsAsync(arrUniqueAuthor);
+    for(let i = 0; i < accounts.length;i++){
+      var userTotalVest = parseInt(accounts[i].vesting_shares.replace(" VESTS", ""))
+      - parseInt(accounts[i].delegated_vesting_shares.replace(" VESTS", ""))
+      + parseInt(accounts[i].received_vesting_shares.replace(" VESTS", ""));
+      let acct_sp_tot = Math.floor(userTotalVest * steemPower);
+      accounts[i].acct_sp_tot = acct_sp_tot;
+      for(let spIdx = arrRangeSp.length; spIdx >= 0;spIdx--){
+        //console.error(acct_sp_tot, arrRangeSp[spIdx]);
+        if( acct_sp_tot >= arrRangeSp[spIdx] ){
+          //objRangeGrp[arrRangeSp[spIdx]].push( accounts[i].name );
+          objRangeGrp[arrRangeSp[spIdx]].totWeigt += totDoVotingVal[accounts[i].name].totWeigt;
+          objRangeGrp[arrRangeSp[spIdx]].count++;
+          objRangeGrp[arrRangeSp[spIdx]].voteList.push(
+            {account : accounts[i].name, info : totDoVotingVal[accounts[i].name] }
+          );
+          break;
+        }
+      }
+    }
+    //console.error("accounts", accounts);
+    console.error("objRangeGrp", objRangeGrp);
+    //console.error("objRangeGrp[0]", objRangeGrp[0]);
+    //console.error("objRangeGrp[0]", objRangeGrp[0].voteList[0].info);
 
     waitingDialog.hide();
 
@@ -148,7 +212,7 @@ async function inqryVotingStatistics(){
             label: ""
             //backgroundColor: ["silver","skyblue","green","red"],
             , backgroundColor: ["#edebea","#c1d9ff","#75abff","#287bff"]
-            , data: [10,15,15,30]
+            , data: [ objRangeGrp[0].totWeigt ,objRangeGrp[1000].totWeigt,objRangeGrp[5000].totWeigt, objRangeGrp[10000].totWeigt ]
           }
         ]
       }
@@ -175,6 +239,8 @@ async function inqryVotingStatistics(){
           }
         }
     );
+
+    return;
 
     initChart( 'spanVotingPairChart', 'votingPairChart'
     , {
@@ -212,9 +278,10 @@ async function inqryVotingStatistics(){
         }
     );
   }catch(err){
+
     console.error("inqryVoteRating Error!", err);
   }finally{
-
+    waitingDialog.hide();
   }
 }
 
