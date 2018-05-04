@@ -384,12 +384,8 @@ var home = module.exports = {
     }
     , clickVotingRateRow : function( name ){
       data.acct_nm = name;
-      //$(window).scrollTop(0);
-      window.scroll({
-        top: 0,
-        left: 0,
-        behavior: 'smooth'
-      });
+      $(window).scrollTop(0);
+      //window.scroll({top: 0,left: 0,behavior: 'smooth'});
     }
   },
   mounted: function() {
