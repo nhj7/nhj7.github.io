@@ -49,7 +49,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, idx) in data.votingRateList">
+                <tr v-for="(item, idx) in data.votingRateList" v-on:click="clickVotingRateRow(item.account)">
                   <td>{{ idx+1 }}</td>
                   <td>{{ item.account }}</td>
                   <td>{{ item.sp }}</td>
@@ -382,7 +382,9 @@ var home = module.exports = {
     , drawChart : function(){
       drawChart();
     }
-
+    , clickVotingRateRow : function( name ){
+      data.acct_nm = name;
+    }
   },
   mounted: function() {
     data.acct_nm = localStorage.getItem('steem.id');
