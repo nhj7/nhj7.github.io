@@ -52,9 +52,9 @@
                 <tr v-for="(item, idx) in data.votingRateList" v-on:click="clickVotingRateRow(item.account)">
                   <td>{{ idx+1 }}</td>
                   <td>{{ item.account }}</td>
-                  <td>{{ item.sp }}</td>
+                  <td>{{ comma(item.sp) }}</td>
                   <td>{{ item.info.count }}</td>
-                  <td>{{ item.info.totWeigt / 100.0 }}</td>
+                  <td>{{ comma(item.info.totWeigt / 100.0) }}</td>
                 </tr>
               </tbody>
             </table>
