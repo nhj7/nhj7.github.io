@@ -34,9 +34,31 @@
 
         </div>
       </div>
-      <div class="row hidden">
+      <div class="row">
         <hr />
-          hellow~
+          <div id="votingRateList" class="hidden" >
+            <h4>{{ data.votingRateListLabel }} ({{ data.votingRateList.length}})</h4>
+            <table class="table table-striped table-hover text-center">
+              <thead>
+                <tr>
+                  <td>NO</td>
+                  <td>ACCOUNT</td>
+                  <td>SP</td>
+                  <td>CNT</td>
+                  <td>WEIGHT</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, idx) in data.votingRateList">
+                  <td>{{ idx+1 }}</td>
+                  <td>{{ item.account }}</td>
+                  <td>{{ item.sp }}</td>
+                  <td>{{ item.info.count }}</td>
+                  <td>{{ item.info.totWeigt / 100.0 }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         <hr />
       </div>
     </div> <!-- col -->
@@ -83,6 +105,8 @@ var data = {
   , acct_nm : ''
   , toDay : ''
   , chart_id : 'chart_div'
+  , votingStat : {}
+  , votingRateList : []
 };
 
 function initChart(parent, id, data, options){
@@ -92,24 +116,30 @@ function initChart(parent, id, data, options){
   $("#"+parent).append(votingRateCanvas);
   //alert();
   var ctx = document.getElementById(id).getContext('2d');
-  new Chart(ctx , {
+  var newChart = new Chart(ctx , {
       type: 'doughnut'
       , data: data
       , options : options
   });
+  return newChart;
 }
 
 function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
 }
 
-let votingStat;
 
+var arrRangeSp = [ 0, 1000, 5000, 10000 ];
 async function inqryVotingStatistics(){
   try{
     if( !data.acct_nm ){
       return;
     }
+
+    data.acct_nm = data.acct_nm.trim();
+
+    localStorage.setItem('steem.id', data.acct_nm);
+
     waitingDialog.show('Calculating Vote Statistics...', { progressType: 'primary'});
     const lmtCnt = 10000;
     let idxHist = -1;
@@ -120,7 +150,7 @@ async function inqryVotingStatistics(){
     do{
       console.log(idxHist, lmtCnt);
       var result = await steem.api.getAccountHistoryAsync(data.acct_nm, idxHist, lmtCnt);
-      console.log(result.length, result[0][0] + '~' + result[result.length-1][0]);
+      //console.log(result);
       var totDoVotingVal = {};
       var totRcvVotingVal = {};
       for(var i = 0; i < result.length;i++){
@@ -164,13 +194,13 @@ async function inqryVotingStatistics(){
       idxHist = result[0][0]-1;
     }while( result.length == lmtCnt)
 
-    //console.error("totRcvVotingVal", totRcvVotingVal);
-    //console.error("totDoVotingVal", totDoVotingVal);
+    console.error("totRcvVotingVal", totRcvVotingVal);
+    console.error("totDoVotingVal", totDoVotingVal);
     var arrUniqueAuthor = arrAuthor.filter(onlyUnique);
     //console.error("arrVoter after fileter.", arrVoter.length, arrVoter);
     //console.error("arrVoterObj", arrVoterObj);
 
-    var arrRangeSp = [ 0, 1000, 5000, 10000 ];
+
     var objRangeGrp = {};
     for(let i = 0; i < arrRangeSp.length;i++){
       objRangeGrp[arrRangeSp[i]] = { totWeigt : 0, count : 0, voteList : [] };
@@ -186,10 +216,18 @@ async function inqryVotingStatistics(){
         //console.error(acct_sp_tot, arrRangeSp[spIdx]);
         if( acct_sp_tot >= arrRangeSp[spIdx] ){
           //objRangeGrp[arrRangeSp[spIdx]].push( accounts[i].name );
-          objRangeGrp[arrRangeSp[spIdx]].totWeigt += totDoVotingVal[accounts[i].name].totWeigt;
+          if( !totDoVotingVal[accounts[i].name] ){
+            continue;
+          }
+          try{
+              objRangeGrp[arrRangeSp[spIdx]].totWeigt += totDoVotingVal[accounts[i].name].totWeigt;
+          }catch(e){
+            alert(accounts[i].name);
+          }
+
           objRangeGrp[arrRangeSp[spIdx]].count++;
           objRangeGrp[arrRangeSp[spIdx]].voteList.push(
-            {account : accounts[i].name, info : totDoVotingVal[accounts[i].name] }
+            {account : accounts[i].name, sp : acct_sp_tot, info : totDoVotingVal[accounts[i].name] }
           );
           break;
         }
@@ -197,6 +235,8 @@ async function inqryVotingStatistics(){
     }
     //console.error("accounts", accounts);
     console.error("objRangeGrp", objRangeGrp);
+
+    data.votingStat = objRangeGrp;
     //console.error("objRangeGrp[0]", objRangeGrp[0]);
     //console.error("objRangeGrp[0]", objRangeGrp[0].voteList[0].info);
 
@@ -204,7 +244,7 @@ async function inqryVotingStatistics(){
 
 
     //<span id="spanVotingRateChart" class="input-group-addon white">
-    initChart( 'spanVotingRateChart', 'votingRateChart'
+    var votingRateChart = initChart( 'spanVotingRateChart', 'votingRateChart'
     , {
         labels: ["0~1000", "1001~5000", "5001~10000", "10001~"],
         datasets: [
@@ -237,6 +277,32 @@ async function inqryVotingStatistics(){
             },
             precision: 2
           }
+        }
+    );
+
+    $("#votingRateChart").click(
+        function(evt){
+            var activePoints = votingRateChart.getElementsAtEvent (evt);
+            console.log(activePoints, activePoints[0].label, activePoints[0].value);
+            if(activePoints.length > 0)
+            {
+              //get the internal index of slice in pie chart
+              var clickedElementindex = activePoints[0]["_index"];
+
+              //get specific label by index
+              var label = votingRateChart.data.labels[clickedElementindex];
+
+              //get value by index
+              var value = votingRateChart.data.datasets[0].data[clickedElementindex];
+              console.log(clickedElementindex, label, value );
+              /* other stuff that requires slice's label and value */
+
+              data.votingRateListLabel = label + ' list';
+
+              data.votingRateList = data.votingStat[arrRangeSp[clickedElementindex]].voteList;
+
+              $('#votingRateList').removeClass("hidden");
+           }
         }
     );
 
@@ -280,6 +346,8 @@ async function inqryVotingStatistics(){
   }catch(err){
 
     console.error("inqryVoteRating Error!", err);
+
+    alert(err.message);
   }finally{
     waitingDialog.hide();
   }
