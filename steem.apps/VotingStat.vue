@@ -52,8 +52,8 @@
                 <tr v-for="(item, idx) in data.votingRateList" v-on:click="clickVotingRateRow(item.account)">
                   <td>{{ idx+1 }}</td>
                   <td>
-                    {{ item.account }}
-                    <a :href="`https://steemit.com/@${item.account}`" target="_blank">
+                    {{ item.account.substring(1) }}
+                    <a :href="`https://steemit.com/${item.account}`" target="_blank">
                       <span class="glyphicon glyphicon-share"></span>
                     </a>
                   </td>
@@ -178,25 +178,23 @@ async function inqryVotingStatistics(){
 
           arrVoter.push(result[i][1].op[1].voter);
           arrAuthor.push(result[i][1].op[1].author);
-
+          let author = "@"+result[i][1].op[1].author;
+          let voter = "@"+result[i][1].op[1].voter;
           try{
             if( result[i][1].op[1].voter == data.acct_nm){
-              if( !totDoVotingVal[result[i][1].op[1].author] ) {
-                totDoVotingVal[result[i][1].op[1].author] = { totWeigt : 0, count : 0, votingList : [] };
+              if( !totDoVotingVal[author] ) {
+                totDoVotingVal[author] = { totWeigt : 0, count : 0, votingList : [] };
               }
-              totDoVotingVal[result[i][1].op[1].author].totWeigt += result[i][1].op[1].weight;
-              totDoVotingVal[result[i][1].op[1].author].count++;
-              totDoVotingVal[result[i][1].op[1].author].votingList.push( (result[i][1].op[1]) );
+              totDoVotingVal[author].totWeigt += result[i][1].op[1].weight;
+              totDoVotingVal[author].count++;
+              totDoVotingVal[author].votingList.push( (result[i][1].op[1]) );
             }else{
-              if( "constructor" ==  result[i][1].op[1].voter){
-                result[i][1].op[1].voter = "'constructor'";
+              if( !totRcvVotingVal[voter] ) {
+                totRcvVotingVal[voter] = { totWeigt : 0, count : 0 , votingList : []};
               }
-              if( !totRcvVotingVal[result[i][1].op[1].voter] ) {
-                totRcvVotingVal[result[i][1].op[1].voter] = { totWeigt : 0, count : 0 , votingList : []};
-              }
-              totRcvVotingVal[result[i][1].op[1].voter].totWeigt += result[i][1].op[1].weight;
-              totRcvVotingVal[result[i][1].op[1].voter].count++;
-              totRcvVotingVal[result[i][1].op[1].voter].votingList.push( (result[i][1].op[1]) );
+              totRcvVotingVal[voter].totWeigt += result[i][1].op[1].weight;
+              totRcvVotingVal[voter].count++;
+              totRcvVotingVal[voter].votingList.push( (result[i][1].op[1]) );
             }
           }catch(e){
             console.error(result[i][1].op[1], totRcvVotingVal);
@@ -223,6 +221,7 @@ async function inqryVotingStatistics(){
     }
     var accounts = await steem.api.getAccountsAsync(arrUniqueAuthor);
     for(let i = 0; i < accounts.length;i++){
+      let name = "@"+accounts[i].name;
       var userTotalVest = parseInt(accounts[i].vesting_shares.replace(" VESTS", ""))
       - parseInt(accounts[i].delegated_vesting_shares.replace(" VESTS", ""))
       + parseInt(accounts[i].received_vesting_shares.replace(" VESTS", ""));
@@ -232,18 +231,18 @@ async function inqryVotingStatistics(){
         //console.error(acct_sp_tot, arrRangeSp[spIdx]);
         if( acct_sp_tot >= arrRangeSp[spIdx] ){
           //objRangeGrp[arrRangeSp[spIdx]].push( accounts[i].name );
-          if( !totDoVotingVal[accounts[i].name] ){
+          if( !totDoVotingVal[name] ){
             continue;
           }
           try{
-              objRangeGrp[arrRangeSp[spIdx]].totWeigt += totDoVotingVal[accounts[i].name].totWeigt;
+              objRangeGrp[arrRangeSp[spIdx]].totWeigt += totDoVotingVal[name].totWeigt;
           }catch(e){
-            alert(accounts[i].name);
+            alert(name);
           }
 
           objRangeGrp[arrRangeSp[spIdx]].count++;
           objRangeGrp[arrRangeSp[spIdx]].voteList.push(
-            {account : accounts[i].name, sp : acct_sp_tot, info : totDoVotingVal[accounts[i].name] }
+            {account : name, sp : acct_sp_tot, info : totDoVotingVal[name] }
           );
           break;
         }
@@ -399,7 +398,7 @@ var home = module.exports = {
       drawChart();
     }
     , clickVotingRateRow : function( name ){
-      data.acct_nm = name;
+      data.acct_nm = name.substring(1);
       $(window).scrollTop(0);
       //window.scroll({top: 0,left: 0,behavior: 'smooth'});
     }
