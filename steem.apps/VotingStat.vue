@@ -179,21 +179,32 @@ async function inqryVotingStatistics(){
           arrVoter.push(result[i][1].op[1].voter);
           arrAuthor.push(result[i][1].op[1].author);
 
-          if( result[i][1].op[1].voter == data.acct_nm){
-            if( !totDoVotingVal[result[i][1].op[1].author] ) {
-              totDoVotingVal[result[i][1].op[1].author] = { totWeigt : 0, count : 0, votingList : [] };
+          try{
+            if( result[i][1].op[1].voter == data.acct_nm){
+              if( !totDoVotingVal[result[i][1].op[1].author] ) {
+                totDoVotingVal[result[i][1].op[1].author] = { totWeigt : 0, count : 0, votingList : [] };
+              }
+              totDoVotingVal[result[i][1].op[1].author].totWeigt += result[i][1].op[1].weight;
+              totDoVotingVal[result[i][1].op[1].author].count++;
+              totDoVotingVal[result[i][1].op[1].author].votingList.push( (result[i][1].op[1]) );
+            }else{
+              if( "constructor" ==  result[i][1].op[1].voter){
+                result[i][1].op[1].voter = "'constructor'";
+              }
+              if( !totRcvVotingVal[result[i][1].op[1].voter] ) {
+                totRcvVotingVal[result[i][1].op[1].voter] = { totWeigt : 0, count : 0 , votingList : []};
+              }
+              totRcvVotingVal[result[i][1].op[1].voter].totWeigt += result[i][1].op[1].weight;
+              totRcvVotingVal[result[i][1].op[1].voter].count++;
+              totRcvVotingVal[result[i][1].op[1].voter].votingList.push( (result[i][1].op[1]) );
             }
-            totDoVotingVal[result[i][1].op[1].author].totWeigt += result[i][1].op[1].weight;
-            totDoVotingVal[result[i][1].op[1].author].count++;
-            totDoVotingVal[result[i][1].op[1].author].votingList.push( (result[i][1].op[1]) );
-          }else{
-            if( !totRcvVotingVal[result[i][1].op[1].voter] ) {
-              totRcvVotingVal[result[i][1].op[1].voter] = { totWeigt : 0, count : 0 , votingList : []};
-            }
-            totRcvVotingVal[result[i][1].op[1].voter].totWeigt += result[i][1].op[1].weight;
-            totRcvVotingVal[result[i][1].op[1].voter].count++;
-            totRcvVotingVal[result[i][1].op[1].voter].votingList.push( (result[i][1].op[1]) );
+          }catch(e){
+            console.error(result[i][1].op[1], totRcvVotingVal);
+            console.error(e.message);
+            throw e;
           }
+
+
         }
       }
       idxHist = result[0][0]-1;
