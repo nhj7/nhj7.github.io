@@ -145,7 +145,7 @@ async function inqryVotingStatistics(){
     localStorage.setItem('steem.id', data.acct_nm);
     $('#votingRateList').addClass("hidden");
 
-    waitingDialog.show('Calculating Vote Statistics...', { progressType: 'primary'});
+    waitingDialog.show('Collecting voting information...', { progressType: 'primary'});
     const lmtCnt = 10000;
     let idxHist = -1;
     let arrVoter = new Array();
@@ -219,6 +219,9 @@ async function inqryVotingStatistics(){
     for(let i = 0; i < arrRangeSp.length;i++){
       objRangeGrp[arrRangeSp[i]] = { totWeigt : 0, count : 0, voteList : [] };
     }
+
+    waitingDialog.show('Collecting accounts information...', { progressType: 'info'});
+
     var accounts = await steem.api.getAccountsAsync(arrUniqueAuthor);
     for(let i = 0; i < accounts.length;i++){
       let name = "@"+accounts[i].name;
@@ -267,7 +270,7 @@ async function inqryVotingStatistics(){
             label: ""
             //backgroundColor: ["silver","skyblue","green","red"],
             , backgroundColor: ["#edebea","#c1d9ff","#75abff","#287bff"]
-            , data: [ objRangeGrp[0].totWeigt ,objRangeGrp[1000].totWeigt,objRangeGrp[5000].totWeigt, objRangeGrp[10000].totWeigt ]
+            , data: [ Math.abs(objRangeGrp[0].totWeigt) ,Math.abs(objRangeGrp[1000].totWeigt),Math.abs(objRangeGrp[5000].totWeigt), Math.abs(objRangeGrp[10000].totWeigt) ]
           }
         ]
       }
