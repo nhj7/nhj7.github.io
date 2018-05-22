@@ -100,7 +100,7 @@
                 <div class="panel-body">
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="tab_post">
-                          <div id="tab_post_spinner" class="text-center"><span class="glyphicon glyphicon-repeat fast-right-spinner"></span></div>
+                          <div id="tab_post_spinner" class="text-center"><span class="text-info glyphicon glyphicon-repeat fast-right-spinner"></span></div>
                           <table id="tab_post_table" class="table table-striped table-hover text-center hidden">
                             <thead class="alert alert-success">
                               <tr>
