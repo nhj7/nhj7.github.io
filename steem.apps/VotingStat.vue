@@ -6,13 +6,13 @@
     <div class="row ">
       <div class="col-sm-6 col-sm-offset-2">
         <div class="input-group">
-          <span class="input-group-addon primary">
+          <span class="input-group-addon info">
             <!--i class="glyphicon glyphicon-user"></i-->
             @
           </span>
           <input data-toggle="tooltip" title="아이디를 입력해주세요!" required @keyup.enter="inqryVotingStatistics" v-model="data.acct_nm" id="acct_nm" type="text" class="form-control " name="acct_nm" placeholder="account name">
           <span class="input-group-btn">
-            <button type="submit" class="btn btn-primary " v-on:click="inqryVotingStatistics">Submit</button>
+            <button type="submit" class="btn btn-info " v-on:click="inqryVotingStatistics">Submit</button>
           </span>
         </div>
       </div>

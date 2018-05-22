@@ -61,7 +61,7 @@
     </div>
     <br />
 		<!--button class="btn btn-lg btn-primary btn-block" type="button" v-on:click="create_account_step1(); return false; " >Create Account</button-->
-		<button type="submit" class="btn btn-sm btn-primary btn-block">Check and Create Account</button>
+		<button type="submit" class="btn btn-sm btn-info btn-block">Check and Create Account</button>
 	</form>
 
 </div>
