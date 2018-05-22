@@ -98,7 +98,7 @@
                             </li>
                         </ul-->
                 </div>
-                <div class="panel-body">
+                <div class="panel-body padding-xs">
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="tab_post">
                           <div id="tab_post_spinner" class="text-center"><span class="text-info glyphicon glyphicon-repeat fast-right-spinner"></span></div>
@@ -178,6 +178,8 @@
 </template>
 
 <style>
+
+
 
 .glyphicon.fast-right-spinner {
     -webkit-animation: glyphicon-spin-r 1s infinite linear;
