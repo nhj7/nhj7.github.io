@@ -251,7 +251,7 @@
 		    routes: []
 		});
 
-		var updateVersion = "2018.05.22.04";
+		var updateVersion = "2018.05.22.05";
 
 		function loadVue(path){
 			return httpVueLoader(path + '.vue?v='+updateVersion);
@@ -312,7 +312,7 @@
 						);
 					}
 				);
-				$(document).on('touchend', function(event) {
+				$(document).on('touchmove touchend', function(event) {
 					if( "true"==$("#navButton").attr('aria-expanded') ){
 						$("#navButton").click();
 					}
