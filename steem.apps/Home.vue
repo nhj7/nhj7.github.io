@@ -145,7 +145,7 @@
                         </div>
                         <div class="tab-pane fade" id="tab_comments">
                           <div id="tab_comments_spinner" class="text-center"><span class="text-info glyphicon glyphicon-repeat fast-right-spinner"></span></div>
-                          <table id="tab_comments_table" class="table table-striped table-hover hidden">
+                          <table id="tab_comments_table" class="table table-striped table-hover table_fixed hidden">
 
                             <tbody>
                               <tr v-for="(item, idx) in data.commentsList" v-on:click="" data-html = "true" >
@@ -174,7 +174,7 @@
                                   <b><a :href="`https://steemit.com${item.url}`" target="_blank">RE : {{ item.root_title }}</a>
                                   <a :href="`https://steemit.com/@${item.author}`" target="_blank">- @{{item.author}}</a></b>
                                   <br />
-                                  <span v-text="item.body" v-on:click="window.open('https://steemit.com'+item.url)"></span>                                  
+                                  <span v-text="item.body" v-on:click="window.open('https://steemit.com'+item.url)"></span>
                                 </td>
                               </tr>
                             </tbody>
@@ -216,6 +216,10 @@
 
 .table_fixed {
     table-layout:fixed;
+}
+.table_fixed td {
+  overflow: auto;
+  text-overflow: ellipsis;
 }
 
 .glyphicon.fast-right-spinner {
