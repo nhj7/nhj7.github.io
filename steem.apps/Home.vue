@@ -153,7 +153,8 @@
                                   <b><a :href="`https://steemit.com${item.url}`" target="_blank">RE : {{ item.root_title }}</a>
                                   <a :href="`https://steemit.com/@${item.root_author}`" target="_blank">- @{{item.root_author}}</a></b>
                                   <br />
-                                  <span v-text="item.body"></span>
+                                  <span v-text="item.body" v-on:click="window.open('https://steemit.com'+item.url)"></span>
+
                                 </td>
                               </tr>
                             </tbody>
@@ -173,7 +174,7 @@
                                   <b><a :href="`https://steemit.com${item.url}`" target="_blank">RE : {{ item.root_title }}</a>
                                   <a :href="`https://steemit.com/@${item.author}`" target="_blank">- @{{item.author}}</a></b>
                                   <br />
-                                  <span v-text="item.body"></span>
+                                  <span v-text="item.body" v-on:click="window.open('https://steemit.com'+item.url)"></span>                                  
                                 </td>
                               </tr>
                             </tbody>
