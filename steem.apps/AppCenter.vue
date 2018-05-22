@@ -7,7 +7,7 @@
       <div class="card-block">
         <h3 class="card-title">{{ link.title }}</h3>
         <p class="card-text">{{ link.text }} created by <a href="#" v-on:click="goCreator(link)">@{{ link.creator }}</a></p>
-        <a v-on:click="goClick(link)" target="_blank" class="btn btn-primary">Go {{ link.title }}</a>
+        <a v-on:click="goClick(link)" target="_blank" class="btn btn-info">Go {{ link.title }}</a>
         <label style="width:1em;"></label>
         <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
         ({{ link.clickCount }})
