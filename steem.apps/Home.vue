@@ -10,9 +10,9 @@
             <!--i class="glyphicon glyphicon-user"></i-->
             @
           </span>
-          <input data-toggle="tooltip" title="아이디를 입력해주세요!" required @keyup.enter="inqryAccountInfo" v-model="data.acct_nm" id="acct_nm" type="text" class="form-control " name="acct_nm" placeholder="account name">
+          <input data-toggle="tooltip" title="아이디를 입력해주세요!" required @keyup.enter="homeSubmit" v-model="data.acct_nm" id="acct_nm" type="text" class="form-control " name="acct_nm" placeholder="account name">
           <span class="input-group-btn">
-            <button type="submit" class="btn btn-info " v-on:click="inqryAccountInfo">Submit</button>
+            <button type="submit" class="btn btn-info " v-on:click="homeSubmit">Submit</button>
           </span>
         </div>
       </div>
@@ -607,6 +607,14 @@ function calcVotingValue( value ){
 
 }
 
+function homeSubmit(){
+
+  data.muterList = [];
+
+  inqryAccountInfo();
+  inqryMuteInfo();
+}
+
 function inqryMuteInfo(){
   try{
     if( !data.acct_nm ){
@@ -774,6 +782,9 @@ var home = module.exports = {
     }
     , getCurrentMedianHistoryPriceAsync : function(){
       getCurrentMedianHistoryPriceAsync();
+    }
+    , homeSubmit : function(){
+      homeSubmit();
     }
   }
   , created : function(){
