@@ -127,14 +127,14 @@
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li class="active" name="Home" id="Home"><a href="#Home">Home</a></li>
-					<li name="VotingStat" id="VotingStat"><a href="#VotingStat">Voting Stat</a></li>
-					<li name="AppCenter" id="AppCenter"><a href="#AppCenter">App Center</a></li>
+					<li class="active" name="Home" id="Home"><a href="#Home"><span class="text-info glyphicon glyphicon-home"></span> Home</a></li>
+					<li name="VotingStat" id="VotingStat"><a href="#VotingStat"><span class="text-info glyphicon glyphicon-stats"></span> Voting Stat</a></li>
+					<li name="AppCenter" id="AppCenter"><a href="#AppCenter"><span class="text-info glyphicon glyphicon-th"></span> App Center</a></li>
 					<!--li><a href="#RemindYou " @click="setCurrentView('RemindYou')">Remind You </a></li-->
-					<li name="AccountCreator" id="AccountCreator"><a href="#AccountCreator">Account Creator</a></li>
+					<li name="AccountCreator" id="AccountCreator"><a href="#AccountCreator"><span class="text-info glyphicon glyphicon-user"></span> Account Creator</a></li>
 					<li class="dropdown" id="dropdown_family"><a class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
-						aria-expanded="false">Family Site <span class="caret"></span></a>
+						aria-expanded="false"><span class="text-info glyphicon glyphicon-link"></span> Family Site <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="https://ianpark.github.io/steeme/"
 								target="_blank">Steeme - @asbear</a></li>
@@ -251,7 +251,7 @@
 		    routes: []
 		});
 
-		var updateVersion = "2018.05.22.11";
+		var updateVersion = "2018.05.22.12";
 
 		function loadVue(path){
 			return httpVueLoader(path + '.vue?v='+updateVersion);

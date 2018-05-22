@@ -85,9 +85,10 @@
             <div class="panel with-nav-tabs panel-info">
                 <div class="panel-heading">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab_post" data-toggle="tab">POST</a></li>
-                            <li><a href="#tab_mute" data-toggle="tab">MUTE</a></li>
-                            <!--li><a href="#tab3" data-toggle="tab">Default 3</a></li-->
+                            <li class="active"><a href="#tab_post" data-toggle="tab"><span class="text-info glyphicon glyphicon-list-alt"></span> Post</a></li>
+                            <li><a href="#tab_comments" data-toggle="tab"><span class="text-info glyphicon glyphicon-share-alt"></span> Comments</a></li>
+                            <li><a href="#tab_replies" data-toggle="tab"><span class="text-info glyphicon glyphicon glyphicon-circle-arrow-left"></span> Replies</a></li>
+                            <li><a href="#tab_mute" data-toggle="tab"><span class="text-info glyphicon glyphicon-remove"></span> Mute</a></li>
                             <!--li class="dropdown">
                                 <a href="#" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
@@ -142,8 +143,8 @@
                           </table>
 
                         </div>
-                        <div class="tab-pane fade" id="tab3">Default 3</div>
-                        <div class="tab-pane fade" id="tab4">Default 4</div>
+                        <div class="tab-pane fade" id="tab_comments">comments</div>
+                        <div class="tab-pane fade" id="tab_replies">replies</div>
                         <div class="tab-pane fade" id="tab5">Default 5</div>
                     </div>
                 </div>
