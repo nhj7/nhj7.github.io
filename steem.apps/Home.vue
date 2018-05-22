@@ -100,7 +100,8 @@
                 <div class="panel-body">
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="tab_post">
-                          <table class="table table-striped table-hover text-center">
+                          <div id="tab_post_spinner" class="text-center"><span class="glyphicon glyphicon-repeat fast-right-spinner"></span></div>
+                          <table id="tab_post_table" class="table table-striped table-hover text-center hidden">
                             <thead class="alert alert-success">
                               <tr>
                                 <td>NO</td>
@@ -176,6 +177,36 @@
 </template>
 
 <style>
+
+.glyphicon.fast-right-spinner {
+    -webkit-animation: glyphicon-spin-r 1s infinite linear;
+    animation: glyphicon-spin-r 1s infinite linear;
+}
+
+@-webkit-keyframes glyphicon-spin-r {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+
+@keyframes glyphicon-spin-r {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+
 #data_vp_slider .slider-selection {
   background: #69A9EC;
 }
@@ -639,6 +670,10 @@ async function inqryPostInfo(){
     if( !data.acct_nm ){
       return;
     }
+
+    $("#tab_post_spinner").removeClass("hidden");
+    $("#tab_post_table").addClass("hidden");
+
     var author = data.acct_nm;
     var result = await steem.api.getDiscussionsByAuthorBeforeDateAsync(author, null, '2100-01-01T00:00:00', 30);
     for(var i = 0; i < result.length;i++){
@@ -655,6 +690,8 @@ async function inqryPostInfo(){
           , tooltip : tooltip
       });
     }
+    $("#tab_post_spinner").addClass("hidden");
+    $("#tab_post_table").removeClass("hidden");
     Vue.nextTick(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
