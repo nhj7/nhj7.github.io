@@ -85,8 +85,8 @@
             <div class="panel with-nav-tabs panel-info">
                 <div class="panel-heading">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab_mute" data-toggle="tab">MUTE</a></li>
-                            <li><a href="#tab_post" data-toggle="tab">POST(not yet)</a></li>
+                            <li class="active"><a href="#tab_post" data-toggle="tab">POST</a></li>
+                            <li><a href="#tab_mute" data-toggle="tab">MUTE</a></li>
                             <!--li><a href="#tab3" data-toggle="tab">Default 3</a></li-->
                             <!--li class="dropdown">
                                 <a href="#" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
@@ -99,7 +99,27 @@
                 </div>
                 <div class="panel-body">
                     <div class="tab-content">
-                        <div class="tab-pane fade in active" id="tab_mute">
+                        <div class="tab-pane fade in active" id="tab_post">
+                          <table class="table table-striped table-hover text-center">
+                            <thead class="alert alert-success">
+                              <tr>
+                                <td>NO</td>
+                                <td>Title</td>
+                                <td>Reward</td>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr v-for="(item, idx) in data.postList" v-on:click="" data-html = "true" data-toggle="tooltip" :title="`${item.tooltip}`">
+                                <td>{{ idx+1 }}</td>
+                                <td>
+                                  <a :href="`https://steemit.com${item.url}`" target="_blank">{{ item.title }}</a>
+                                </td>
+                                <td >{{ item.payout_val }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="tab-pane fade" id="tab_mute">
                           <table class="table table-striped table-hover text-center">
                             <thead class="alert alert-success">
                               <tr>
@@ -119,8 +139,8 @@
                               </tr>
                             </tbody>
                           </table>
+
                         </div>
-                        <div class="tab-pane fade" id="tab_post">post coming soon</div>
                         <div class="tab-pane fade" id="tab3">Default 3</div>
                         <div class="tab-pane fade" id="tab4">Default 4</div>
                         <div class="tab-pane fade" id="tab5">Default 5</div>
@@ -607,9 +627,42 @@ function calcVotingValue( value ){
 function homeSubmit(){
 
   data.muterList = [];
+  data.postList = [];
 
   inqryAccountInfo();
   inqryMuteInfo();
+  inqryPostInfo();
+}
+
+async function inqryPostInfo(){
+  try{
+    if( !data.acct_nm ){
+      return;
+    }
+    var author = data.acct_nm;
+    var result = await steem.api.getDiscussionsByAuthorBeforeDateAsync(author, null, '2100-01-01T00:00:00', 30);
+    for(var i = 0; i < result.length;i++){
+      var payout_val = (parseFloat(result[i].total_payout_value.replace(" SBD","")) + parseFloat(result[i].curator_payout_value.replace(" SBD","")) + parseFloat(result[i].pending_payout_value.replace(" SBD",""))).toFixed(2);
+      //console.log(result[i].title, payout_val );
+      var tooltip = 'votes : '+ result[i].net_votes;
+      tooltip += '<br />comment : '+ result[i].children;
+      tooltip += '<br />created : '+ result[i].created;
+      data.postList.push({
+          title : result[i].title
+          , url : result[i].url
+          , created : result[i].created
+          , payout_val : payout_val
+          , tooltip : tooltip
+      });
+    }
+    Vue.nextTick(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+  }catch(err){
+    console.error("inqryPostInfo",err);
+  }finally{
+
+  }
 }
 
 function inqryMuteInfo(){
@@ -762,6 +815,7 @@ var data = {
   , post_count : 0
   , created : ''
   , muterList : []
+  , postList : []
 };
 //var data2 = data.clone();
 var home = module.exports = {
@@ -842,12 +896,10 @@ var home = module.exports = {
     var steem_id = localStorage.getItem('steem.id');
     if( steem_id ){
         data.acct_nm = steem_id;
-        inqryAccountInfo();
-        inqryMuteInfo();
+        homeSubmit();
     }else{
       $("#acct_info").addClass("hidden");
     }
-
   }
 }
 
