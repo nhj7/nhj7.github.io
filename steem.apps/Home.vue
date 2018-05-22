@@ -143,8 +143,42 @@
                           </table>
 
                         </div>
-                        <div class="tab-pane fade" id="tab_comments">comments</div>
-                        <div class="tab-pane fade" id="tab_replies">replies</div>
+                        <div class="tab-pane fade" id="tab_comments">
+                          <div id="tab_comments_spinner" class="text-center"><span class="text-info glyphicon glyphicon-repeat fast-right-spinner"></span></div>
+                          <table id="tab_comments_table" class="table table-striped table-hover hidden">
+
+                            <tbody>
+                              <tr v-for="(item, idx) in data.commentsList" v-on:click="" data-html = "true" >
+                                <td>
+                                  <b><a :href="`https://steemit.com${item.url}`" target="_blank">RE : {{ item.root_title }}</a>
+                                  <a :href="`https://steemit.com/@${item.root_author}`" target="_blank">- @{{item.root_author}}</a></b>
+                                  <br />
+                                  <span v-text="item.body"></span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="tab-pane fade" id="tab_replies">
+                          <div id="tab_replies_spinner" class="text-center"><span class="text-info glyphicon glyphicon-repeat fast-right-spinner"></span></div>
+                          <table id="tab_replies_table" class="table table-striped table-hover table_fixed hidden">
+                            <!--thead class="alert alert-success">
+                              <tr>
+                                <td>NO</td>
+                              </tr>
+                            </thead-->
+                            <tbody>
+                              <tr v-for="(item, idx) in data.repliesList" v-on:click="" >
+                                <td>
+                                  <b><a :href="`https://steemit.com${item.url}`" target="_blank">RE : {{ item.root_title }}</a>
+                                  <a :href="`https://steemit.com/@${item.author}`" target="_blank">- @{{item.author}}</a></b>
+                                  <br />
+                                  <span v-text="item.body"></span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
                         <div class="tab-pane fade" id="tab5">Default 5</div>
                     </div>
                 </div>
@@ -179,7 +213,9 @@
 
 <style>
 
-
+.table_fixed {
+    table-layout:fixed;
+}
 
 .glyphicon.fast-right-spinner {
     -webkit-animation: glyphicon-spin-r 1s infinite linear;
@@ -662,10 +698,64 @@ function homeSubmit(){
 
   data.muterList = [];
   data.postList = [];
-
+  data.commentsList = [];
+  data.repliesList = [];
   inqryAccountInfo();
   inqryMuteInfo();
   inqryPostInfo();
+  inqryCommentsInfo();
+  inqryRepliesInfo();
+}
+
+
+async function inqryRepliesInfo(){
+  try{
+    if( !data.acct_nm ){
+      return;
+    }
+    var tab_spinner_id = "tab_replies_spinner";
+    var tab_table_id = "tab_replies_table";
+    $("#"+tab_spinner_id).removeClass("hidden");
+    $("#"+tab_table_id).addClass("hidden");
+
+    var author = data.acct_nm;
+    var result = await steem.api.getRepliesByLastUpdateAsync( author, '', 30);
+    //console.log(result);
+    for(var i = 0; i < result.length;i++){
+      data.repliesList.push(result[i]);
+    }
+    $("#"+tab_spinner_id).addClass("hidden");
+    $("#"+tab_table_id).removeClass("hidden");
+  }catch(err){
+    console.error("inqryCommentsInfo",err);
+  }finally{
+
+  }
+}
+
+async function inqryCommentsInfo(){
+  try{
+    if( !data.acct_nm ){
+      return;
+    }
+    var tab_spinner_id = "tab_comments_spinner";
+    var tab_table_id = "tab_comments_table";
+    $("#"+tab_spinner_id).removeClass("hidden");
+    $("#"+tab_table_id).addClass("hidden");
+
+    var author = data.acct_nm;
+    var result = await steem.api.getDiscussionsByCommentsAsync({ start_author : author, limit: 30});
+    //console.log(result);
+    for(var i = 0; i < result.length;i++){
+      data.commentsList.push(result[i]);
+    }
+    $("#"+tab_spinner_id).addClass("hidden");
+    $("#"+tab_table_id).removeClass("hidden");
+  }catch(err){
+    console.error("inqryCommentsInfo",err);
+  }finally{
+
+  }
 }
 
 async function inqryPostInfo(){
@@ -856,6 +946,8 @@ var data = {
   , created : ''
   , muterList : []
   , postList : []
+  , commentsList : []
+  , repliesList : []
 };
 //var data2 = data.clone();
 var home = module.exports = {
