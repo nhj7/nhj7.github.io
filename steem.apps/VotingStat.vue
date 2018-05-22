@@ -408,7 +408,7 @@ var home = module.exports = {
   },
   mounted: function() {
     data.acct_nm = localStorage.getItem('steem.id');
-    inqryVotingStatistics();
+    //inqryVotingStatistics();
     //drawChart();
   }
 }

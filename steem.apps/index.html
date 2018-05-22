@@ -132,7 +132,7 @@
 					<li name="AppCenter" id="AppCenter"><a href="#AppCenter">App Center</a></li>
 					<!--li><a href="#RemindYou " @click="setCurrentView('RemindYou')">Remind You </a></li-->
 					<li name="AccountCreator" id="AccountCreator"><a href="#AccountCreator">Account Creator</a></li>
-					<li class="dropdown"><a class="dropdown-toggle"
+					<li class="dropdown" id="dropdown_family"><a class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false">Family Site <span class="caret"></span></a>
 						<ul class="dropdown-menu">
@@ -251,7 +251,7 @@
 		    routes: []
 		});
 
-		var updateVersion = "2018.05.22.10";
+		var updateVersion = "2018.05.22.11";
 
 		function loadVue(path){
 			return httpVueLoader(path + '.vue?v='+updateVersion);
@@ -312,7 +312,12 @@
 						);
 					}
 				);
+
+				$("#dropdown_family").on('touchmove touchend', function(event){
+					event.stopPropagation();
+				});
 				$(document).on('touchmove touchend', function(event) {
+					if( "dropdown_family" == event.target.id) return;
 					if( "true"==$("#navButton").attr('aria-expanded') ){
 						$("#navButton").click();
 					}
