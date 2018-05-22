@@ -246,13 +246,12 @@
 				$("#navButton").click();
 			}
 		}
-
 		var router = new VueRouter({
 		    mode: 'history',
 		    routes: []
 		});
 
-		var updateVersion = "2018.05.22.03";
+		var updateVersion = "2018.05.22.04";
 
 		function loadVue(path){
 			return httpVueLoader(path + '.vue?v='+updateVersion);
@@ -313,7 +312,13 @@
 						);
 					}
 				);
-			}
+				$(document).on('touchend', function(event) {
+					if( "true"==$("#navButton").attr('aria-expanded') ){
+						$("#navButton").click();
+					}
+				});
+
+		 } // end mounted
 		});
 
 		/**
