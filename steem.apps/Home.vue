@@ -659,7 +659,7 @@ function inqryAccountInfo(){
     if( !data.acct_nm ){
       return;
     }
-    waitingDialog.show('Please wait...', { progressType: 'primary'});
+    waitingDialog.show('Collecting steem infomation...', { progressType: 'info'});
     var combinedPromise = $.when(
       getCurrentMedianHistoryPrice()
       , getRewardFund("poste")
