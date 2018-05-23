@@ -89,14 +89,16 @@
                             <li><a href="#tab_comments" data-toggle="tab"><span class="text-info glyphicon glyphicon-share-alt"></span> Comments</a></li>
                             <li><a href="#tab_replies" data-toggle="tab"><span class="text-info glyphicon glyphicon glyphicon-circle-arrow-left"></span> Replies</a></li>
                             <li><a href="#tab_mute" data-toggle="tab"><span class="text-info glyphicon glyphicon-remove"></span> Mute</a></li>
+                            <li><a href="#tab_delegate" data-toggle="tab"><span class="text-info glyphicon glyphicon-gift"></span> Delegate</a></li>
                             <!--li class="dropdown">
                                 <a href="#" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="#tab4" data-toggle="tab">Default 4</a></li>
                                     <li><a href="#tab5" data-toggle="tab">Default 5</a></li>
                                 </ul>
-                            </li>
-                        </ul-->
+                            </li-->
+                        </ul>
+
                 </div>
                 <div class="panel-body padding-xs">
                     <div class="tab-content">
@@ -150,8 +152,13 @@
                             <tbody>
                               <tr v-for="(item, idx) in data.commentsList" v-on:click="" data-html = "true" >
                                 <td>
-                                  <b><a :href="`https://steemit.com${item.url}`" target="_blank">RE : {{ item.root_title }}</a>
-                                  <a :href="`https://steemit.com/@${item.root_author}`" target="_blank">- @{{item.root_author}}</a></b>
+                                  <b>
+                                    <a :href="`https://steemit.com/@${item.parent_author}`" target="_blank">
+                                      <img :src="`https://steemitimages.com/32x32/https://steemitimages.com/u/${item.parent_author}/avatar`" class="img-circle" alt="avatar">
+                                      &nbsp;{{item.parent_author}}
+                                    </a><br />
+                                    <a :href="`https://steemit.com${item.url}`" target="_blank">RE : {{ item.root_title }}</a>
+                                  </b>
                                   <br />
                                   <span v-html="markdown_filter(item.body)" v-on:click="window.open('https://steemit.com'+item.url)"></span>
                                 </td>
@@ -170,8 +177,13 @@
                             <tbody>
                               <tr v-for="(item, idx) in data.repliesList" v-on:click="" >
                                 <td>
-                                  <b><a :href="`https://steemit.com${item.url}`" target="_blank">RE : {{ item.root_title }}</a>
-                                  <a :href="`https://steemit.com/@${item.author}`" target="_blank">- @{{item.author}}</a></b>
+                                  <b>
+                                    <a :href="`https://steemit.com/@${item.author}`" target="_blank">
+                                      <img :src="`https://steemitimages.com/32x32/https://steemitimages.com/u/${item.author}/avatar`" class="img-circle" alt="avatar">
+                                      &nbsp;{{item.author}}
+                                    </a><br />
+                                    <a :href="`https://steemit.com${item.url}`" target="_blank">RE : {{ item.root_title }}</a>
+                                  </b>
                                   <br />
                                   <span v-html="markdown_filter(item.body)" v-on:click="window.open('https://steemit.com'+item.url)"></span>
                                 </td>
@@ -179,7 +191,9 @@
                             </tbody>
                           </table>
                         </div>
-                        <div class="tab-pane fade" id="tab5">Default 5</div>
+                        <div class="tab-pane fade" id="tab_delegate">
+                          delegate
+                        </div>
                     </div>
                 </div>
             </div>
