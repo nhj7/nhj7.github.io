@@ -120,6 +120,11 @@
                                 </td>
                                 <td >{{ item.payout_val }}</td>
                               </tr>
+                              <tr>
+                                <td colspan="3">
+                                  <button type="submit" class="btn btn-info " v-on:click="inqryPostMoreInfo">Read More <span id="tab_post_more_spinner" class="text-info glyphicon glyphicon-repeat fast-right-spinner hidden"></span></button>
+                                </td>
+                              </tr>
                             </tbody>
                           </table>
                         </div>
@@ -776,6 +781,38 @@ async function inqryCommentsInfo(){
   }
 }
 
+async function inqryPostMoreInfo(){
+  try{
+    if( !data.acct_nm ){
+      return;
+    }
+
+    $("#tab_post_more_spinner").removeClass("hidden");
+
+    var author = data.acct_nm;
+    var result = await steem.api.getDiscussionsByAuthorBeforeDateAsync(author, data.postList[data.postList.length-1].permlink, '2100-01-01T00:00:00', 100);
+    for(var i = 1; i < result.length;i++){
+      var payout_val = (parseFloat(result[i].total_payout_value.replace(" SBD","")) + parseFloat(result[i].curator_payout_value.replace(" SBD","")) + parseFloat(result[i].pending_payout_value.replace(" SBD",""))).toFixed(2);
+      //console.log(result[i].title, payout_val );
+      var tooltip = 'votes : '+ result[i].net_votes;
+      tooltip += '<br />comment : '+ result[i].children;
+      tooltip += '<br />created : '+ result[i].created;
+      result[i].tooltip = tooltip;
+      result[i].payout_val = payout_val;
+      data.postList.push(result[i]);
+    }
+    $("#tab_post_more_spinner").addClass("hidden");
+
+    Vue.nextTick(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+  }catch(err){
+    console.error("inqryPostMoreInfo",err);
+  }finally{
+
+  }
+}
+
 async function inqryPostInfo(){
   try{
     if( !data.acct_nm ){
@@ -793,13 +830,9 @@ async function inqryPostInfo(){
       var tooltip = 'votes : '+ result[i].net_votes;
       tooltip += '<br />comment : '+ result[i].children;
       tooltip += '<br />created : '+ result[i].created;
-      data.postList.push({
-          title : result[i].title
-          , url : result[i].url
-          , created : result[i].created
-          , payout_val : payout_val
-          , tooltip : tooltip
-      });
+      result[i].tooltip = tooltip;
+      result[i].payout_val = payout_val;
+      data.postList.push(result[i]);
     }
     $("#tab_post_spinner").addClass("hidden");
     $("#tab_post_table").removeClass("hidden");
@@ -990,6 +1023,7 @@ var home = module.exports = {
     , markdown_filter : function( body ){
       return marked(body);
     }
+    , inqryPostMoreInfo : function(){inqryPostMoreInfo();}
   }
   , created : function(){
     var steem_id = localStorage.getItem('steem.id');
