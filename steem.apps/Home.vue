@@ -315,7 +315,7 @@
 </template>
 
 <style>
-.post-preview {}
+
 
 .image {
   position: relative;
@@ -330,6 +330,7 @@
 .modal-body {
   max-height: calc(100vh - 210px);
   overflow-y: auto;
+  font-size:1.15em;
 }
 
 .modal-body>p {
