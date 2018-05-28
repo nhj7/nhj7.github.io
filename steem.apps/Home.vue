@@ -927,7 +927,7 @@ function homeSubmit() {
   inqryPostInfo();
   inqryCommentsInfo();
   inqryRepliesInfo();
-  
+
 
 }
 
@@ -1323,6 +1323,13 @@ function getExternalApi(url, fromNames, toNames) {
 function viewPost(item) {
   console.log("scrollTop!!!");
   data.post = item;
+  app.$nextTick(function(){
+    $(".modal-body").find("a").each(
+      function(){
+        $(this).attr("target","_blank");
+      }
+    );
+  });
 }
 
 var data = {
