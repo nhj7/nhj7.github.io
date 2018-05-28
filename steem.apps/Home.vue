@@ -1322,7 +1322,7 @@ function getExternalApi(url, fromNames, toNames) {
 }
 
 function viewPost(item) {
-  console.log("scrollTop!!!");
+  //console.log("scrollTop!!!");
   data.post = item;
   app.$nextTick(function(){
     $(".modal-body").find("a").each(
@@ -1330,16 +1330,15 @@ function viewPost(item) {
         $(this).attr("target","_blank");
       }
     );
-
     $('.modal-body>*>img').waitForImages(function() {
-      console.error('All images have loaded.');
+      //console.error('All images have loaded.');
       $("#tab_modal_post_spinner").removeClass("hidden");
     }, function(loaded, count, success) {
       console.error(loaded + ' of ' + count + ' images has ' + (success ? 'loaded' : 'failed to load') +  '.');
     });
 
     $('.modal-body>*>img').waitForImages(true).done(function() {
-      console.error('All images have loaded222.');
+      //console.error('All images have loaded222.');
       $("#tab_modal_post_spinner").addClass("hidden");
     });
 
