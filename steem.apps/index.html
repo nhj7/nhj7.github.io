@@ -61,6 +61,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.4.0/marked.min.js" integrity="sha256-JaznSM5IwXQK1AyjtxCTklRL05ar/8zo+oty8fS+AMc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js" integrity="sha256-dwhppIrxD8qC6lNulndZgtIm4XBU9zoMd9OUoXzIDAE=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autolinker/1.6.2/Autolinker.min.js" integrity="sha256-xM7yXMX5B/Fo0V/Z8EJzzawX4BRlSLi7CUEO3Gz7i8s=" crossorigin="anonymous"></script>
 <script src="./js/Chart.PieceLabel.min.js"></script>
 <script src="./js/util.js"></script>
 
@@ -128,14 +130,14 @@
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li class="active" name="Home" id="Home"><a href="#Home"><span class="text-info glyphicon glyphicon-home"></span> Home</a></li>
-					<li name="VotingStat" id="VotingStat"><a href="#VotingStat"><span class="text-info glyphicon glyphicon-stats"></span> Voting Stat</a></li>
-					<li name="AppCenter" id="AppCenter"><a href="#AppCenter"><span class="text-info glyphicon glyphicon-th"></span> App Center</a></li>
+					<li class="active" name="Home" id="Home"><a href="#Home"><i class="text-info glyphicon glyphicon-home"></i> Home</a></li>
+					<li name="VotingStat" id="VotingStat"><a href="#VotingStat"><i class="text-info glyphicon glyphicon-stats"></i> Voting Stat</a></li>
+					<li name="AppCenter" id="AppCenter"><a href="#AppCenter"><i class="text-info glyphicon glyphicon-th"></i> App Center</a></li>
 					<!--li><a href="#RemindYou " @click="setCurrentView('RemindYou')">Remind You </a></li-->
-					<li name="AccountCreator" id="AccountCreator"><a href="#AccountCreator"><span class="text-info glyphicon glyphicon-user"></span> Account Creator</a></li>
+					<li name="AccountCreator" id="AccountCreator"><a href="#AccountCreator"><i class="text-info glyphicon glyphicon-user"></i> Account Creator</a></li>
 					<li class="dropdown" id="dropdown_family"><a class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
-						aria-expanded="false"><span class="text-info glyphicon glyphicon-link"></span> Family Site <span class="caret"></span></a>
+						aria-expanded="false"><i class="text-info glyphicon glyphicon-link"></i> Family Site <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="https://ianpark.github.io/steeme/"
 								target="_blank">Steeme - @asbear</a></li>
@@ -147,8 +149,8 @@
 							<li><a href="http://cobot.co.kr" target="_blank">cobot - All Coin Ticker @nhj12311</a></li>
 							<li role="separator" class="divider"></li>
 							<li class="dropdown-header">Steem Platform</li>
-							<li><a href="https://steemkr.com/created/kr" target="_blank">Steemkr</a></li>
-							<li><a href="https://steemit.com/created/kr" target="_blank">Steemit</a></li>
+							<li><a href="https://steemkr.com/created/kr" target="_blank">steemkr</a></li>
+							<li><a href="https://steemit.com/created/kr" target="_blank">steemit</a></li>
 							<li><a href="https://busy.org/created/kr" target="_blank">Busy</a></li>
 							<li><a href="https://utopian.io" target="_blank">Utopian-io</a></li>
 
