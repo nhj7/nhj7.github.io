@@ -63,6 +63,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.4.0/marked.min.js" integrity="sha256-JaznSM5IwXQK1AyjtxCTklRL05ar/8zo+oty8fS+AMc=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js" integrity="sha256-dwhppIrxD8qC6lNulndZgtIm4XBU9zoMd9OUoXzIDAE=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/autolinker/1.6.2/Autolinker.min.js" integrity="sha256-xM7yXMX5B/Fo0V/Z8EJzzawX4BRlSLi7CUEO3Gz7i8s=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.waitforimages/2.4.0/jquery.waitforimages.min.js" integrity="sha256-CwlQTm2skjExaYac03IIyHmgqDi0XNaEgmTiemZC668=" crossorigin="anonymous"></script>
 <script src="./js/Chart.PieceLabel.min.js"></script>
 <script src="./js/util.js"></script>
 
@@ -255,7 +256,7 @@
 		    routes: []
 		});
 
-		var updateVersion = "2018.05.28.02";
+		var updateVersion = "2018.05.28.03";
 
 		function loadVue(path){
 			return httpVueLoader(path + '.vue?v='+updateVersion);

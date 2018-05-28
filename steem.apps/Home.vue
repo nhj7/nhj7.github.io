@@ -277,6 +277,7 @@
         <div class="panel panel-success">
           <div class="panel-heading">
             <h4>{{data.post.title}}</h4>
+            <span id="tab_modal_post_spinner" class="text-info glyphicon glyphicon-repeat fast-right-spinner"></span>
           </div>
         </div>
       </div>
@@ -1329,6 +1330,25 @@ function viewPost(item) {
         $(this).attr("target","_blank");
       }
     );
+
+    $('.modal-body>*>img').waitForImages(function() {
+      console.error('All images have loaded.');
+      $("#tab_modal_post_spinner").removeClass("hidden");
+    }, function(loaded, count, success) {
+      console.error(loaded + ' of ' + count + ' images has ' + (success ? 'loaded' : 'failed to load') +  '.');
+    });
+
+    $('.modal-body>*>img').waitForImages(true).done(function() {
+      console.error('All images have loaded222.');
+      $("#tab_modal_post_spinner").addClass("hidden");
+    });
+
+    $('.modal-body>*>img').waitForImages().progress(function(loaded, count, success) {
+      console.error(loaded + ' of ' + count + ' images has ' + (success ? 'loaded' : 'failed to load') +  '.');
+    });
+
+
+
   });
 }
 
