@@ -922,12 +922,12 @@ function homeSubmit() {
   inqryFeedInfo();
   inqryAccountInfo();
 
-  /*
+
   inqryMuteInfo();
   inqryPostInfo();
   inqryCommentsInfo();
   inqryRepliesInfo();
-  */
+  
 
 }
 
