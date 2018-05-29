@@ -1,3 +1,9 @@
+a {
+  display: block;
+  
+}
+i{ top : 2px !important}
+
 .padding-xs { padding: .25em; }
 .padding-sm { padding: .5em; }
 .padding-md { padding: 1em; }
@@ -40,6 +46,7 @@
 .padding-left-lg { padding-left: 1.5em; }
 .padding-left-xl { padding-left: 3em; }
 
+.margin-zero { margin: 0em; }
 .margin-xs { margin: .25em; }
 .margin-sm { margin: .5em; }
 .margin-md { margin: 1em; }
@@ -81,5 +88,3 @@
 .margin-left-md { margin-left: 1em; }
 .margin-left-lg { margin-left: 1.5em; }
 .margin-left-xl { margin-left: 3em; }
-
-i{ top : 2px !important}

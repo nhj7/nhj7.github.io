@@ -82,7 +82,7 @@
 <hr class="margin-top-xs margin-bottom-xs" />
 
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-12 padding-xs">
     <div class="panel with-nav-tabs panel-info">
       <div class="panel-heading">
         <ul class="nav nav-tabs">
@@ -267,8 +267,8 @@
 </div>
 
 <!-- Modal -->
-<div id="postModal" class="modal fade " role="dialog">
-  <div class="modal-dialog modal-lg">
+<div id="postModal" class="modal fade padding-xs" role="dialog">
+  <div class="modal-dialog modal-lg margin-zero">
 
     <!-- Modal content-->
     <div class="modal-content ">
@@ -315,51 +315,32 @@
 </template>
 
 <style>
-
-
 .image {
   position: relative;
 }
-
 .image .text {
   position: absolute;
   top: -1px;
   left: -1px;
 }
-
 .modal-body {
   max-height: calc(100vh - 210px);
   overflow-y: auto;
   font-size:1.15em;
 }
-
 .modal-body>p {
   margin: 0px auto;
   max-width: none;
   text-align: justify;
   margin-bottom: 1em;
 }
-
-.modal-body>*>img {
+.modal-body>img, .modal-body>*>img, .modal-body>*>*>img, .modal-body>*>*>*>img {
   width: auto;
   max-width: 100%;
   height: auto;
   max-height: none;
 }
 
-.modal-body>*>*>img {
-  width: auto;
-  max-width: 100%;
-  height: auto;
-  max-height: none;
-}
-
-.modal-body>*>*>*>img {
-  width: auto;
-  max-width: 100%;
-  height: auto;
-  max-height: none;
-}
 
 /* irrelevant styling */
 
@@ -1093,7 +1074,7 @@ function setContentMore(obj) {
     obj.doorImg = $( obj.images[0] ).src;
   }
   */
-  console.log(obj);
+  //console.log(obj);
   return obj;
 }
 
@@ -1157,7 +1138,7 @@ async function inqryFeedInfo() {
       tag: author,
       limit: 30
     });
-    console.log("inqryFeedInfo", result);
+    //console.log("inqryFeedInfo", result);
     for (let i = 0; i < result.length; i++) {
       setContentMore(result[i]);
       data.feedList.push(result[i]);
@@ -1167,8 +1148,8 @@ async function inqryFeedInfo() {
   } catch (err) {
     console.error("inqryFeedInfo", err);
   } finally {
-    console.error("home", home);
-    app.$forceUpdate();
+    //console.error("home", home);
+    //app.$forceUpdate();
   }
 }
 
@@ -1208,7 +1189,7 @@ function inqryMuteInfo() {
     var limit = 999;
 
     steem.api.getFollowing(follower, startFollowing, followType, limit, function(err, result) {
-      console.log(err, result);
+      //console.log(err, result);
       if (!err) {
 
       } else {
@@ -1219,7 +1200,7 @@ function inqryMuteInfo() {
     var startFollower = '';
     followType = 'ignore';
     steem.api.getFollowers(following, startFollower, followType, limit, function(err, result) {
-      console.log(err, result);
+      //console.log(err, result);
       if (!err) {
         for (var i = 0; i < result.length; i++) {
           data.muterList.push({
