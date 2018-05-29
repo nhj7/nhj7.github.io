@@ -1,6 +1,6 @@
 a {
   display: block;
-  
+
 }
 i{ top : 2px !important}
 
@@ -46,7 +46,7 @@ i{ top : 2px !important}
 .padding-left-lg { padding-left: 1.5em; }
 .padding-left-xl { padding-left: 3em; }
 
-.margin-zero { margin: 0em; }
+.margin-zero { margin: 0em auto; }
 .margin-xs { margin: .25em; }
 .margin-sm { margin: .5em; }
 .margin-md { margin: 1em; }

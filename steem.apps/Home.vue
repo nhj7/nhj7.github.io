@@ -124,7 +124,7 @@
                   <td class="text-left padding-xs">
                     <div class="col-md-2 padding-xs margin-bottom-xs" v-if="item.images && item.images.length > 0">
                       <div class="image">
-                        <img class="col-xs-12 padding-xs" :src="`${item.images[1]}`" alt="door">
+                        <img class="padding-xs doorImg" :src="`https://steemitimages.com/600x800/${item.images[1]}`" alt="door">
                         <div class="text">
                           <img :src="`https://steemitimages.com/32x32/https://steemitimages.com/u/${item.author}/avatar`" class="img-circle" alt="avatar">
                         </div>
@@ -137,8 +137,8 @@
                       <div class="margin-bottom-xs">
                         <a href="javascript:;" target="_blank"><b>{{ item.title }}</b></a>
                       </div>
-                      <div class="text-left margin-bottom-xs post-preview">
-
+                      <div class="text-left margin-bottom-sm post-preview">
+                        {{ item.text.length > 90 ? item.text.substring(0, 90)+'...' :item.text }}
                       </div>
                       <div>
                         <i class="text-warning glyphicon glyphicon-upload"></i> $ {{item.payout_val}} <i class="margin-left-md margin-right-md">|</i>
@@ -171,7 +171,7 @@
                     </div>
                     <div class="col-md-9 padding-xs">
                       <div class="margin-bottom-xs">
-                        <a :href="`https://steemit.com${item.url}`" target="_blank"><b>{{ item.title }}</b></a>
+                        <a href="javascript:;" ><b>{{ item.title }}</b></a>
                       </div>
                       <div class="margin-bottom-xs">
                         {{ item.text.length > 90 ? item.text.substring(0, 90)+'...' :item.text }}
@@ -268,7 +268,7 @@
 
 <!-- Modal -->
 <div id="postModal" class="modal fade padding-xs" role="dialog">
-  <div class="modal-dialog modal-lg margin-zero">
+  <div class="modal-dialog modal-lg margin-zero center">
 
     <!-- Modal content-->
     <div class="modal-content ">
@@ -315,8 +315,27 @@
 </template>
 
 <style>
+.youtube_div{
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%;
+}
+.youtube_iframe{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 .image {
   position: relative;
+}
+.doorImg{
+  display: block;
+  max-width: 100%;
+  max-height: 400px;
+  margin:auto;
 }
 .image .text {
   position: absolute;
@@ -972,7 +991,8 @@ var converter = new showdown.Converter({
 });
 
 function changeYouTubeTag(html) {
-  return html.replace(/https:\/\/youtu.be\/([\w]*)/gi, '<p><iframe wdith="90%" src="https:\/\/www.youtube.com\/embed\/$1"><\/iframe><\/p\>');
+  html = html.replace(/https:\/\/www.youtube.com\/([\w]*)/gi, '<p><div class="youtube_div"><iframe class="youtube_iframe" wdith="100%" src="https:\/\/www.youtube.com\/embed\/$1"><\/iframe></div><\/p\>');
+  return html.replace(/https:\/\/youtu.be\/([\w]*)/gi, '<p><div class="youtube_div"><iframe class="youtube_iframe" wdith="100%" src="https:\/\/www.youtube.com\/embed\/$1"><\/iframe></div><\/p\>');
 }
 
 function imageSetting(html) {
@@ -1066,6 +1086,8 @@ function setContentMore(obj) {
   //obj.html2 = marked(obj.body).replace(/\n/, "<br />");
   obj.html = converter.makeHtml(obj.body);
   obj.html = changeYouTubeTag(imageSetting(obj.html));
+  //var html = $.parseHTML( obj.html );
+  //console.error(html, $(html).find("iframe"));
   obj.text = obj.html.replace(/<\/?[^>]+(>|$)/g, "");
   var pattern = new RegExp(/<img\s[^>]*?src\s*=\s*['\"]([^'\"]*?)['\"][^>]*?>/);
   obj.images = obj.html.match(pattern);
