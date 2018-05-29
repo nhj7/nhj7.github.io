@@ -276,7 +276,7 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <div class="panel panel-success">
           <div class="panel-heading">
-            <h4>{{data.post.title}}</h4>
+            <h4>{{data.post.title}} - @{{data.post.author}}</h4>
             <span id="tab_modal_post_spinner" class="text-info glyphicon glyphicon-repeat fast-right-spinner"></span>
           </div>
         </div>
@@ -348,7 +348,9 @@
 .modal-body {
   max-height: calc(100vh - 210px);
   overflow-y: auto;
-  font-size:1.15em;
+  font-size:1.1em;
+  word-break: break-all;
+  padding:5px;
 }
 .modal-body>p {
   margin: 0px auto;
@@ -999,13 +1001,63 @@ function changeYouTubeTag(html) {
   return html.replace(/https:\/\/youtu.be\/([\w]*)/gi, '<p><div class="youtube_div"><iframe class="youtube_iframe" wdith="100%" src="https:\/\/www.youtube.com\/embed\/$1"><\/iframe></div><\/p\>');
 }
 
+var urlRegex = /(\(.*?)?\b(?![^<]*>|[^<>]*<\/(?!(?:p|pre)>))((?:https?|ftp|file):\/\/[-a-z0-9+&@#\/%?=~_()|!:,.;]*[-a-z0-9+&@#\/%=~_()|])/ig;
+function replaceURLWithHTMLLinks(text) {
+    return text.replace(urlRegex, function(match, lParens, url) {
+        var rParens = '';
+        lParens = lParens || '';
+        var lParenCounter = /\(/g;
+        while (lParenCounter.exec(lParens)) {
+            var m;
+            if (m = /(.*)(\.\).*)/.exec(url) ||
+                    /(.*)(\).*)/.exec(url)) {
+                url = m[1];
+                rParens = m[2] + rParens;
+            }
+        }
+        return lParens + "<a href='" + url + "'>" + url + "</a>" + rParens;
+    });
+}
+
+function replaceAtMentionsWithLinks ( text ) {
+    return text.replace(/(?![^<a]*>|[^<a>]*<\/(?!(?:p|pre)>))@([a-z\d_]+)/ig, '<a href="https://steemit.com/@$1">@$1</a>');
+}
+
+function replaceTagLink ( html ) {
+  html = html.replace(/(^|\s)(#[-a-z\d]+)/gi, tag => {
+      if (/#[\d]+$/.test(tag)) return tag; // Don't allow numbers to be tags
+      const space = /^\s/.test(tag) ? tag[0] : '';
+      const tag2 = tag.trim().substring(1);
+      const tagLower = tag2.toLowerCase();
+      console.log(tag);
+      //if (!true) return tag;
+      return space + "<a href='https://steemit.com/created/"+tagLower+"'>" + tag + "</a>";
+  });
+  return html;
+}
+
+function replaceMentionLink ( html ) {
+  html = html.replace(
+          /(^|[^a-zA-Z0-9_!#$%&*@＠\/]|(^|[^a-zA-Z0-9_+~.-\/#]))[@＠]([a-z][-\.a-z\d]+[a-z\d])/gi,
+          (match, preceeding1, preceeding2, user) => {
+              const userLower = user.toLowerCase();
+              //const valid = validate_account_name(userLower) == null;
+              const valid = true;
+              //if (valid && usertags) usertags.add(userLower);
+              const preceedings = (preceeding1 || '') + (preceeding2 || ''); // include the preceeding matches if they exist
+              //if (!mutate) return `${preceedings}${user}`;
+              return preceedings + '<a href="https://steemi.com/@' + userLower + '">@' + user + '</a>';
+          }
+      );
+    return html;
+}
+
 function imageSetting(html) {
   var html_change = html;
   html_change = html_change.replace(/<em>/ig,"").replace(/<\/em>/ig,"");
   var regex = /(<([^>]+)>)/ig
   var result = html_change.replace(regex, "");
-
-  regex = /(https?:\/\/.*\.(?:png|jpg|jpeg))/ig;
+  regex = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/ig;
   var arrMatch = result.match(regex);
   //console.log(arrMatch);
   if (arrMatch != null) {
@@ -1021,7 +1073,6 @@ function imageSetting(html) {
       }
     }
   }
-
   regex = /(https?:\/\/.steemitimages)/ig;
   arrMatch = result.match(regex);
   if (arrMatch != null) {
@@ -1037,7 +1088,6 @@ function imageSetting(html) {
       }
     }
   }
-
   return html_change;
 }
 
@@ -1092,6 +1142,9 @@ function setContentMore(obj) {
   //obj.html2 = marked(obj.body).replace(/\n/, "<br />");
   obj.html = converter.makeHtml(obj.body);
   obj.html = changeYouTubeTag(imageSetting(obj.html));
+  obj.html = replaceURLWithHTMLLinks(obj.html);
+  obj.html = replaceTagLink(obj.html);
+  obj.html = replaceMentionLink(obj.html);
   //var html = $.parseHTML( obj.html );
   //console.error(html, $(html).find("iframe"));
   obj.text = obj.html.replace(/<\/?[^>]+(>|$)/g, "");
