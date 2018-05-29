@@ -137,8 +137,8 @@
                       <div class="margin-bottom-xs">
                         <a href="javascript:;" target="_blank"><b>{{ item.title }}</b></a>
                       </div>
-                      <div class="text-left margin-bottom-sm post-preview">
-                        {{ item.text.length > 90 ? item.text.substring(0, 90)+'...' :item.text }}
+                      <div class="text-left margin-bottom-sm text-justify post-preview" v-html="item.text.length > 88 ? item.text.substring(0, 88)+'...' :item.text">
+
                       </div>
                       <div>
                         <i class="text-warning glyphicon glyphicon-upload"></i> $ {{item.payout_val}} <i class="margin-left-md margin-right-md">|</i>
@@ -315,6 +315,9 @@
 </template>
 
 <style>
+.post-preview{
+  word-break: break-all;
+}
 .youtube_div{
   position: relative;
   width: 100%;
@@ -997,8 +1000,10 @@ function changeYouTubeTag(html) {
 
 function imageSetting(html) {
   var html_change = html;
+  html_change = html_change.replace(/<em>/ig,"").replace(/<\/em>/ig,"");
   var regex = /(<([^>]+)>)/ig
   var result = html_change.replace(regex, "");
+
   regex = /(https?:\/\/.*\.(?:png|jpg|jpeg))/ig;
   var arrMatch = result.match(regex);
   //console.log(arrMatch);
