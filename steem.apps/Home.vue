@@ -101,8 +101,8 @@
           <li class="dropdown">
             <a href="#" data-toggle="dropdown"><i class="text-info glyphicon glyphicon-link"></i> Links <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="#tab4" data-toggle="tab">Steemd.com</a></li>
-              <li><a href="#tab5" data-toggle="tab">SteemDB.com</a></li>
+              <li><a :href="`https://steemd.com/@${data.acct_nm}`" target="_blank">Steemd.com</a></li>
+              <li><a href="#tab5" >SteemDB.com</a></li>
               <li><a href="#tab5" data-toggle="tab">Steem Tracked</a></li>
               <li><a href="#tab5" data-toggle="tab">Steem Followers</a></li>
               <li><a href="#tab5" data-toggle="tab">Potential Reward</a></li>
@@ -345,12 +345,17 @@
   top: -1px;
   left: -1px;
 }
-.modal-body {
+#postModal > .modal-header { padding:0.25em; }
+#postModal > .modal-body {
   max-height: calc(100vh - 210px);
   overflow-y: auto;
   font-size:1.1em;
   word-break: break-all;
-  padding:5px;
+  padding:0.25em;
+}
+@media(min-width:768px){
+  .modal-body { padding:1.2em; }
+  .modal-header { padding:1.2em; }
 }
 .modal-body>p {
   margin: 0px auto;
@@ -1482,6 +1487,9 @@ var home = module.exports = {
     },
     inqryFeedMoreInfo: function() {
       inqryFeedMoreInfo();
+    },
+    backFunc : function(){
+      alert("backFunc!!");
     }
   },
   created: function() {
@@ -1490,6 +1498,7 @@ var home = module.exports = {
       $("#acct_info").addClass("hidden");
       //console.log("eeeeeeeeeeeeee");
     }
+    document.addEventListener("backbutton", this.backFunc, false);
   },
   filters: {
     comma: function(value) {
