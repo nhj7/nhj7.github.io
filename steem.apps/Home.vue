@@ -355,6 +355,7 @@
   max-width: none;
   text-align: justify;
   margin-bottom: 1em;
+  word-break: break-all;
 }
 .modal-body>img, .modal-body>*>img, .modal-body>*>*>img, .modal-body>*>*>*>img {
   width: auto;
