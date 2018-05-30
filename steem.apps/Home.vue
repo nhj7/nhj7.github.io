@@ -1049,7 +1049,7 @@ function replaceMentionLink ( html ) {
               //if (valid && usertags) usertags.add(userLower);
               const preceedings = (preceeding1 || '') + (preceeding2 || ''); // include the preceeding matches if they exist
               //if (!mutate) return `${preceedings}${user}`;
-              return preceedings + '<a href="https://steemi.com/@' + userLower + '">@' + user + '</a>';
+              return preceedings + '<a href="https://steemit.com/@' + userLower + '">@' + user + '</a>';
           }
       );
     return html;
