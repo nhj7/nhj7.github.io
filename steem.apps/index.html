@@ -110,6 +110,15 @@
 	  background-color: white;
 	  border-color: white;
 	}
+	@font-face {
+	  font-family: 'Godo';
+	  font-style: normal;
+	  font-weight: 400;
+	  src: url('//cdn.jsdelivr.net/korean-webfonts/1/corps/godo/Godo/GodoM.woff2') format('woff2'), url('//cdn.jsdelivr.net/korean-webfonts/1/corps/godo/Godo/GodoM.woff') format('woff'); } @font-face { font-family: 'Godo'; font-style: normal; font-weight: 700; src: url('//cdn.jsdelivr.net/korean-webfonts/1/corps/godo/Godo/GodoB.woff2') format('woff2'), url('//cdn.jsdelivr.net/korean-webfonts/1/corps/godo/Godo/GodoB.woff') format('woff');
+	}
+	body{
+		font-family: 'Godo';
+	}
 </style>
 
 </head>
@@ -168,6 +177,14 @@
 
 		</div>
 	</nav>
+
+	<template>
+		<div>
+		<!-- 여기에 라우터가 컴포넌트를 그린다 -->
+			<router-view></router-view>
+		</div>
+	</template>
+
 	<div class="container theme-showcase">
 		<component :is="currentView"></component>
 		<br /><br />
@@ -251,12 +268,22 @@
 				$("#navButton").click();
 			}
 		}
+		const Home = { template: '<div>Home</div>'}
 		var router = new VueRouter({
 		    mode: 'history',
-		    routes: []
+		    routes: [
+					{ path : '/', component : Home }
+					, { path : '/Home', component : Home }
+					, { path : '/AppCenter', component : AppCenter }
+				]
 		});
+		Vue.use(router);
 
-		var updateVersion = "2018.05.29.06";
+		var routes = {
+		  '/': 'Home',
+		  '/about': 'About'
+		}
+		var updateVersion = "2018.05.30.01";
 
 		function loadVue(path){
 			return httpVueLoader(path + '.vue?v='+updateVersion);
@@ -270,7 +297,9 @@
 				,myAccount : '@nhj12311'
 				, mySteemitBlog : 'https://steemit.com/@nhj12311'
 				, img_src : './asset/img/new_steem_apps_sm_1.png'
+				, currentRoute: window.location.pathname
 			}
+
 			, components : {
 				'AccountCreator' : loadVue('./AccountCreator')
 				, 'AppCenter' : loadVue('./AppCenter')
@@ -292,7 +321,6 @@
 				var rani = Math.floor(Math.random() * 3 + 1) ;
 				this.$data.img_src = "./asset/img/new_steem_apps_sm_" + rani + ".png";
 			  $("#logo").addClass("logo" + rani);
-
 				//console.error($("#logo").text());
 
 			}
@@ -330,6 +358,11 @@
 
 		 } // end mounted
 		});
+
+		window.addEventListener('popstate', () => {
+		  app.currentRoute = window.location.pathname
+		})
+
 
 		/**
 	 * Module for displaying "Waiting for..." dialog using Bootstrap

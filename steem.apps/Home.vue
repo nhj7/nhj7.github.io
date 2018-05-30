@@ -126,12 +126,12 @@
                       <div class="image">
                         <img class="padding-xs doorImg" :src="`https://steemitimages.com/600x800/${item.images[1]}`" alt="door">
                         <div class="text">
-                          <img :src="`https://steemitimages.com/32x32/https://steemitimages.com/u/${item.author}/avatar`" class="img-circle" alt="avatar">
+                          <img :src="`https://cdn.steemitimages.com/u/${item.author}/avatar/small`" class="Userpic user" alt="avatar">
                         </div>
                       </div>
                     </div>
                     <div class="text-center col-md-2 padding-xs" v-else>
-                      <img :src="`https://steemitimages.com/64x64/https://steemitimages.com/u/${item.author}/avatar`" class="img-circle" alt="avatar">
+                      <img :src="`https://cdn.steemitimages.com/u/${item.author}/avatar/big`" class="Userpic" alt="avatar">
                     </div>
                     <div class="col-md-10 padding-xs">
                       <div class="margin-bottom-xs">
@@ -224,7 +224,7 @@
                   <td>
                     <b>
                       <a :href="`https://steemit.com/@${item.parent_author}`" target="_blank">
-                        <img :src="`https://steemitimages.com/32x32/https://steemitimages.com/u/${item.parent_author}/avatar`" class="img-circle" alt="avatar">
+                        <img :src="`https://cdn.steemitimages.com/u/${item.parent_author}/avatar/small`" class="Userpic user" alt="avatar">
                         &nbsp;{{item.parent_author}}
                       </a><br />
                       <a :href="`https://steemit.com${item.url}`" target="_blank">RE : {{ item.root_title }}</a>
@@ -244,7 +244,7 @@
                   <td>
                     <b>
                       <a :href="`https://steemit.com/@${item.author}`" target="_blank">
-                        <img :src="`https://steemitimages.com/32x32/https://steemitimages.com/u/${item.author}/avatar`" class="img-circle" alt="avatar">
+                        <img :src="`https://cdn.steemitimages.com/u/${item.author}/avatar/small`" class="Userpic user" alt="avatar">
                         &nbsp;{{item.author}}
                       </a><br />
                       <a :href="`https://steemit.com${item.url}`" target="_blank">RE : {{ item.root_title }}</a>
@@ -274,7 +274,7 @@
     <div class="modal-content ">
       <div class="modal-header fixed" data-dismiss="modal" v-on:click="closePostModal">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <div class="panel panel-success">
+        <div class="panel panel-success margin-bottom-xs">
           <div class="panel-heading">
             <h4>{{data.post.title}} - @{{data.post.author}}</h4>
             <span id="tab_modal_post_spinner" class="text-info glyphicon glyphicon-repeat fast-right-spinner"></span>
@@ -345,34 +345,32 @@
   top: -1px;
   left: -1px;
 }
-#postModal > .modal-header { padding:0.25em; }
-#postModal > .modal-body {
-  max-height: calc(100vh - 210px);
+#postModal .modal-header { padding:0.25em; }
+#postModal .modal-body {
+  max-height: calc(100vh - 180px);
   overflow-y: auto;
   font-size:1.1em;
   word-break: break-all;
   padding:0.25em;
+  font-family: 'Godo';
 }
 @media(min-width:768px){
-  .modal-body { padding:1.2em; }
-  .modal-header { padding:1.2em; }
+  #postModal .modal-header { padding:1.2em; }
+  #postModal .modal-body { padding:1.2em; }
 }
-.modal-body>p {
+.modal-body p {
   margin: 0px auto;
   max-width: none;
   text-align: justify;
   margin-bottom: 1em;
   word-break: break-all;
 }
-.modal-body>img, .modal-body>*>img, .modal-body>*>*>img, .modal-body>*>*>*>img {
+.modal-body img{
   width: auto;
   max-width: 100%;
   height: auto;
   max-height: none;
 }
-
-
-/* irrelevant styling */
 
 .table>tbody>tr>td {
   padding: 2px;
@@ -1078,21 +1076,7 @@ function imageSetting(html) {
       }
     }
   }
-  regex = /(https?:\/\/.steemitimages)/ig;
-  arrMatch = result.match(regex);
-  if (arrMatch != null) {
-    for (var i = 0; i < arrMatch.length; i++) {
-      re = new RegExp(arrMatch[i], "g");
-      html_change = html_change.replace(re, "<img src='" + arrMatch[i] + "'/>");
-      if (i != arrMatch.lenght - 1) {
-        for (var j = i + 1; j < arrMatch.length; j++) {
-          if (arrMatch[j] == arrMatch[i]) {
-            arrMatch.splice(j, 1);
-          }
-        }
-      }
-    }
-  }
+  
   return html_change;
 }
 

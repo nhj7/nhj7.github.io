@@ -1,5 +1,18 @@
 i{ top : 2px !important}
-
+.Userpic{
+  display: inline-block;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+}
+.user{
+  width: 32px !important;
+  height: 32px !important;
+  margin-right: 8px;
+}
 .padding-xs { padding: .25em; }
 .padding-sm { padding: .5em; }
 .padding-md { padding: 1em; }
