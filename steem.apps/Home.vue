@@ -275,7 +275,7 @@
       <div class="modal-header fixed" data-dismiss="modal" v-on:click="closePostModal">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <div class="panel panel-success margin-bottom-xs">
-          <div class="panel-heading">
+          <div class="panel-heading padding-xs">
             <h4>{{data.post.title}} - @{{data.post.author}}</h4>
             <span id="tab_modal_post_spinner" class="text-info glyphicon glyphicon-repeat fast-right-spinner"></span>
           </div>
@@ -1000,7 +1000,7 @@ var converter = new showdown.Converter({
 });
 
 function changeYouTubeTag(html) {
-  html = html.replace(/https:\/\/www.youtube.com\/([\w]*)/gi, '<p><div class="youtube_div"><iframe class="youtube_iframe" wdith="100%" src="https:\/\/www.youtube.com\/embed\/$1"><\/iframe></div><\/p\>');
+  html = html.replace(/https:\/\/www.youtube.com\/watch\?[a-zA-Z]\=([a-zA-Z0-9]*)/gi, '<p><div class="youtube_div"><iframe class="youtube_iframe" wdith="100%" src="https:\/\/www.youtube.com\/embed\/$1"><\/iframe></div><\/p\>');
   return html.replace(/https:\/\/youtu.be\/([\w]*)/gi, '<p><div class="youtube_div"><iframe class="youtube_iframe" wdith="100%" src="https:\/\/www.youtube.com\/embed\/$1"><\/iframe></div><\/p\>');
 }
 
@@ -1076,7 +1076,7 @@ function imageSetting(html) {
       }
     }
   }
-  
+
   return html_change;
 }
 
@@ -1374,7 +1374,7 @@ function getExternalApi(url, fromNames, toNames) {
 }
 
 function viewPost(item) {
-  //console.log("scrollTop!!!");
+  console.log(item);
   data.post = item;
   app.$nextTick(function(){
     $(".modal-body").find("a").each(
@@ -1382,24 +1382,10 @@ function viewPost(item) {
         $(this).attr("target","_blank");
       }
     );
-    $('.modal-body>*>img').waitForImages(function() {
-      //console.error('All images have loaded.');
-      $("#tab_modal_post_spinner").removeClass("hidden");
-    }, function(loaded, count, success) {
-      console.error(loaded + ' of ' + count + ' images has ' + (success ? 'loaded' : 'failed to load') +  '.');
-    });
-
-    $('.modal-body>*>img').waitForImages(true).done(function() {
+    $('.modal-body .img').waitForImages(true).done(function() {
       //console.error('All images have loaded222.');
       $("#tab_modal_post_spinner").addClass("hidden");
     });
-
-    $('.modal-body>*>img').waitForImages().progress(function(loaded, count, success) {
-      console.error(loaded + ' of ' + count + ' images has ' + (success ? 'loaded' : 'failed to load') +  '.');
-    });
-
-
-
   });
 }
 
