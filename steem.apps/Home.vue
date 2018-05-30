@@ -1377,6 +1377,7 @@ function viewPost(item) {
   console.log(item);
   data.post = item;
   app.$nextTick(function(){
+    $("#tab_modal_post_spinner").removeClass("hidden");
     $(".modal-body").find("a").each(
       function(){
         $(this).attr("target","_blank");
