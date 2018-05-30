@@ -1382,8 +1382,8 @@ function viewPost(item) {
         $(this).attr("target","_blank");
       }
     );
-    $('.modal-body .img').waitForImages(true).done(function() {
-      //console.error('All images have loaded222.');
+    $('.modal-body img').waitForImages(true).done(function() {
+      console.error('All images have loaded222.');
       $("#tab_modal_post_spinner").addClass("hidden");
     });
   });
