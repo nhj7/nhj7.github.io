@@ -351,7 +351,7 @@
   overflow-y: auto;
   font-size:1.1em;
   word-break: break-all;
-  padding:0.25em;
+  padding:0.5em;
   font-family: 'Godo';
 }
 @media(min-width:768px){
