@@ -1129,6 +1129,9 @@ function setContentMore(obj) {
   */
   //console.error(converter);
   //obj.html2 = marked(obj.body).replace(/\n/, "<br />");
+  if( obj.json_metadata ){
+    obj.metadata = JSON.parse(obj.json_metadata);
+  }
   obj.html = converter.makeHtml(obj.body);
   obj.html = changeYouTubeTag(imageSetting(obj.html));
   obj.html = replaceURLWithHTMLLinks(obj.html);
@@ -1387,6 +1390,23 @@ function viewPost(item) {
       console.error('All images have loaded222.');
       $("#tab_modal_post_spinner").addClass("hidden");
     });
+
+    console.log("viewPost", item);
+    if( item.metadata.tags.includes("kr-dev")
+      || item.metadata.tags.includes("dev")
+      || item.metadata.tags.includes("steemdev")
+      || item.metadata.tags.includes("java")
+      || item.metadata.tags.includes("c")
+      || item.metadata.tags.includes("python")
+      || item.metadata.tags.includes("javascript")
+      || item.metadata.tags.includes("programming")
+    ){
+      $('pre code').each(function(i, block) {
+        hljs.highlightBlock(block);
+      });
+    }
+
+
   });
 }
 

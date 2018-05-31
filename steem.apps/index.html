@@ -66,7 +66,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.waitforimages/2.4.0/jquery.waitforimages.min.js" integrity="sha256-CwlQTm2skjExaYac03IIyHmgqDi0XNaEgmTiemZC668=" crossorigin="anonymous"></script>
 <script src="./js/Chart.PieceLabel.min.js"></script>
 <script src="./js/util.js"></script>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 <style>
 	a {
 		cursor : hand;
@@ -278,12 +280,11 @@
 		  '/': 'Home',
 		  '/about': 'About'
 		}
-		var updateVersion = "2018.05.30.06";
+		var updateVersion = "2018.05.31.01";
 
 		function loadVue(path){
 			return httpVueLoader(path + '.vue?v='+updateVersion);
 		}
-
 		var app = new Vue({
 			router
 			, 'el' : '#app'
