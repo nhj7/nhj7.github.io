@@ -95,8 +95,43 @@
                 </a>
               </li>
               <li v-on:click="inqryTagInfo('kr-dev', 'blackboard')">
-                <a href="#tab_kr-dev" data-toggle="tab">
+                <a href="#tab_feed" data-toggle="tab">
                   <i class="text-info glyphicon glyphicon-blackboard"></i> kr-dev
+                </a>
+              </li>
+              <li v-on:click="inqryTagInfo('coinkorea', 'usd')">
+                <a href="#tab_feed" data-toggle="tab">
+                  <i class="text-info glyphicon glyphicon-usd"></i> coinkorea
+                </a>
+              </li>
+              <li v-on:click="inqryTagInfo('kr-webtoon', 'picture')">
+                <a href="#tab_feed" data-toggle="tab">
+                  <i class="text-info glyphicon glyphicon-picture"></i> kr-webtoon
+                </a>
+              </li>
+              <li v-on:click="inqryTagInfo('kr-pen', 'pencil')">
+                <a href="#tab_feed" data-toggle="tab">
+                  <i class="text-info glyphicon glyphicon-pencil"></i> kr-pen
+                </a>
+              </li>
+              <li v-on:click="inqryTagInfo('kr-photo', 'camera')">
+                <a href="#tab_feed" data-toggle="tab">
+                  <i class="text-info glyphicon glyphicon-camera"></i> kr-photo
+                </a>
+              </li>
+              <li v-on:click="inqryTagInfo('kr-travel', 'plane')">
+                <a href="#tab_feed" data-toggle="tab">
+                  <i class="text-info glyphicon glyphicon-plane"></i> kr-travel
+                </a>
+              </li>
+              <li v-on:click="inqryTagInfo('muksteem', 'cutlery')">
+                <a href="#tab_feed" data-toggle="tab">
+                  <i class="text-info glyphicon glyphicon-cutlery"></i> muksteem
+                </a>
+              </li>
+              <li v-on:click="inqryTagInfo('tasteem', 'cutlery')">
+                <a href="#tab_feed" data-toggle="tab">
+                  <i class="text-info glyphicon glyphicon-cutlery"></i> tasteem
                 </a>
               </li>
             </ul>
@@ -172,7 +207,7 @@
                 </tr>
                 <tr>
                   <td colspan="3">
-                    <button type="submit" class="btn btn-info " v-on:click="inqryFeedMoreInfo">Read More <span id="tab_feed_more_spinner" class="text-info glyphicon glyphicon-repeat fast-right-spinner hidden"></span></button>
+                    <button type="submit" class="btn btn-info " v-on:click="if($('#category_nm').text() == 'Feed') {inqryFeedMoreInfo()} else { inqryTagMoreInfo($('#category_nm').text()); }">Read More <span id="tab_feed_more_spinner" class="text-info glyphicon glyphicon-repeat fast-right-spinner hidden"></span></button>
                   </td>
                 </tr>
               </tbody>
@@ -1262,11 +1297,11 @@ async function inqryTagMoreInfo(tag) {
       return;
     }
     $("#tab_feed_more_spinner").removeClass("hidden");
-    var result = await steem.api.getDiscussionsByFeedAsync({
+    var result = await steem.api.getDiscussionsByCreatedAsync({
       tag: tag,
       start_author: data.feedList[data.feedList.length - 1].author,
       start_permlink: data.feedList[data.feedList.length - 1].permlink,
-      limit: 31
+      limit: 51
     });
     console.error("inqryTagMoreInfo", result);
     for (var i = 1; i < result.length; i++) {
@@ -1573,6 +1608,7 @@ var home = module.exports = {
     },
     inqryFeedInfo : function(){inqryFeedInfo();}
     , inqryTagInfo : function(tag, glyphicon){inqryTagInfo(tag, glyphicon);}
+    , inqryTagMoreInfo : function(tag){inqryTagMoreInfo(tag);}
   },
   created: function() {
     var steem_id = localStorage.getItem('steem.id');
