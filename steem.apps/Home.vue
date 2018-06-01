@@ -86,7 +86,21 @@
     <div class="panel with-nav-tabs panel-info">
       <div class="panel-heading">
         <ul class="nav nav-tabs">
-          <li class="active"><a href="#tab_feed" data-toggle="tab"><i class="text-info glyphicon glyphicon-home"></i> Feed</a></li>
+          <li class="dropdown active">
+            <a href="#" data-toggle="dropdown"><i id="category_glyphicon" class="text-info glyphicon glyphicon-home"></i> <span id="category_nm">Feed</span> <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li v-on:click="inqryFeedInfo">
+                <a href="#tab_feed" data-toggle="tab">
+                  <i class="text-info glyphicon glyphicon-home"></i> Feed
+                </a>
+              </li>
+              <li v-on:click="inqryTagInfo('kr-dev', 'blackboard')">
+                <a href="#tab_kr-dev" data-toggle="tab">
+                  <i class="text-info glyphicon glyphicon-blackboard"></i> kr-dev
+                </a>
+              </li>
+            </ul>
+          </li>
           <li><a href="#tab_post" data-toggle="tab"><i class="text-info glyphicon glyphicon-list-alt"></i> Post</a></li>
           <li><a href="#tab_comments" data-toggle="tab"><i class="text-info glyphicon glyphicon-share-alt"></i> Comments</a></li>
           <li><a href="#tab_replies" data-toggle="tab"><i class="text-info glyphicon glyphicon glyphicon-circle-arrow-left"></i> Replies</a></li>
@@ -101,14 +115,21 @@
           <li class="dropdown">
             <a href="#" data-toggle="dropdown"><i class="text-info glyphicon glyphicon-link"></i> Links <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
+              <li><a :href="`https://steempay.co/`" target="_blank">Steem Pay</a></li>
+              <li><a :href="`https://tool.steem.world/Post/Mentioned`" target="_blank">Steem Tool</a></li>
+              <li><a :href="`https://ianpark.github.io/steeme/`" target="_blank">Steeme</a></li>
+              <li><a :href="`https://www.steemus.com/`" target="_blank">steemus</a></li>
+              <li><a :href="`https://asinayo.github.io/jobsteem/`" target="_blank">jobsteem</a></li>
+              <li><a :href="`http://www.steemreports.com/top-voters/@${data.acct_nm}`" target="_blank">Steem Reports</a></li>
+              <li><a :href="`http://www.steemreports.com/top-voters/@${data.acct_nm}`" target="_blank">Steem Reports</a></li>
               <li><a :href="`https://steemd.com/@${data.acct_nm}`" target="_blank">Steemd.com</a></li>
-              <li><a href="#tab5" >SteemDB.com</a></li>
-              <li><a href="#tab5" data-toggle="tab">Steem Tracked</a></li>
-              <li><a href="#tab5" data-toggle="tab">Steem Followers</a></li>
-              <li><a href="#tab5" data-toggle="tab">Potential Reward</a></li>
-              <li><a href="#tab5" data-toggle="tab">Steem Whale</a></li>
-              <li><a href="#tab5" data-toggle="tab">Steemit Board</a></li>
-              <li><a href="#tab5" data-toggle="tab">Steem Reports</a></li>
+              <li><a :href="`https://steemdb.com/@${data.acct_nm}`" target="_blank">SteemDB.com</a></li>
+              <li><a :href="`https://steemtracked.com/@${data.acct_nm}`" target="_blank">Steem Tracked</a></li>
+              <li><a :href="`https://steem.makerwannabe.com/@${data.acct_nm}/followers/4`" target="_blank">Steem Followers</a></li>
+              <li><a :href="`http://http://steem.supply/@${data.acct_nm}`" target="_blank">Potential Reward</a></li>
+              <li><a :href="`https://steemworld.org/@${data.acct_nm}`" target="_blank">Steem World</a></li>
+              <li><a :href="`https://steemwhales.com/@${data.acct_nm}`" target="_blank">Steem Whale</a></li>
+              <li><a :href="`http://steemitboard.com/board.html?user=${data.acct_nm}`" target="_blank">Steemit Board</a></li>
             </ul>
           </li>
         </ul>
@@ -315,6 +336,9 @@
 </template>
 
 <style>
+#tab_feed_table *{
+  word-break: break-all;
+}
 .post-preview{
   word-break: break-all;
 }
@@ -929,11 +953,8 @@ function homeSubmit() {
   data.postList = [];
   data.commentsList = [];
   data.repliesList = [];
-  data.feedList = [];
   inqryFeedInfo();
   inqryAccountInfo();
-
-
   inqryMuteInfo();
   inqryPostInfo();
   inqryCommentsInfo();
@@ -1061,6 +1082,7 @@ function imageSetting(html) {
   var regex = /(<([^>]+)>)/ig
   var result = html_change.replace(regex, "");
   regex = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/ig;
+  //regex = /(?:(?:\\.(?:tiff?|jpe?g|gif|png|svg|ico)|ipfs/[a-z\\d]{40,}))/ig;
   var arrMatch = result.match(regex);
   //console.log(arrMatch);
   if (arrMatch != null) {
@@ -1202,10 +1224,18 @@ async function inqryFeedInfo() {
     if (!data.acct_nm) {
       return;
     }
+    data.feedList = [];
     var tab_spinner_id = "tab_feed_spinner";
     var tab_table_id = "tab_feed_table";
     $("#" + tab_spinner_id).removeClass("hidden");
     $("#" + tab_table_id).addClass("hidden");
+
+    $("#category_glyphicon").removeClass (function (index, className) {
+        return (className.match (/(^|\s)glyphicon-\S+/g) || []).join(' ');
+    });
+    $("#category_nm").text("Feed");
+    $("#category_glyphicon").addClass("glyphicon-home");
+
     var author = data.acct_nm;
     var result = await steem.api.getDiscussionsByFeedAsync({
       tag: author,
@@ -1225,6 +1255,65 @@ async function inqryFeedInfo() {
     //app.$forceUpdate();
   }
 }
+
+async function inqryTagMoreInfo(tag) {
+  try {
+    if (!data.acct_nm) {
+      return;
+    }
+    $("#tab_feed_more_spinner").removeClass("hidden");
+    var result = await steem.api.getDiscussionsByFeedAsync({
+      tag: tag,
+      start_author: data.feedList[data.feedList.length - 1].author,
+      start_permlink: data.feedList[data.feedList.length - 1].permlink,
+      limit: 31
+    });
+    console.error("inqryTagMoreInfo", result);
+    for (var i = 1; i < result.length; i++) {
+      setContentMore(result[i]);
+      data.feedList.push(result[i]);
+    }
+    $("#tab_feed_more_spinner").addClass("hidden");
+  } catch (err) {
+    console.error("inqryTagMoreInfo", err);
+  } finally {
+    $("#tab_feed_more_spinner").addClass("hidden");
+  }
+}
+
+async function inqryTagInfo(tag, glyphicon) {
+  try {
+
+    data.feedList = [];
+    var tab_spinner_id = "tab_feed_spinner";
+    var tab_table_id = "tab_feed_table";
+    $("#" + tab_spinner_id).removeClass("hidden");
+    $("#" + tab_table_id).addClass("hidden");
+    $("#category_glyphicon").removeClass (function (index, className) {
+        return (className.match (/(^|\s)glyphicon-\S+/g) || []).join(' ');
+    });
+    $("#category_nm").text(tag);
+    $("#category_glyphicon").addClass("glyphicon-"+glyphicon);
+
+    var result = await steem.api.getDiscussionsByCreatedAsync({
+      tag: tag,
+      limit: 50
+    });
+    //console.log("inqryFeedInfo", result);
+    for (let i = 0; i < result.length; i++) {
+      setContentMore(result[i]);
+      data.feedList.push(result[i]);
+    }
+    $("#" + tab_spinner_id).addClass("hidden");
+    $("#" + tab_table_id).removeClass("hidden");
+  } catch (err) {
+    console.error("inqryTagInfo", err);
+  } finally {
+    //console.error("home", home);
+    //app.$forceUpdate();
+  }
+}
+
 
 async function inqryPostInfo() {
   try {
@@ -1481,7 +1570,9 @@ var home = module.exports = {
     },
     backFunc : function(){
       alert("backFunc!!");
-    }
+    },
+    inqryFeedInfo : function(){inqryFeedInfo();}
+    , inqryTagInfo : function(tag, glyphicon){inqryTagInfo(tag, glyphicon);}
   },
   created: function() {
     var steem_id = localStorage.getItem('steem.id');

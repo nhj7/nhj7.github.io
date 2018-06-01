@@ -239,7 +239,7 @@ function isEmail(email) {
 			//var fee = dsteem.Asset.from(chainProps.account_creation_fee).multiply(ratio);
       var fee = chainProps.account_creation_fee.split(" ")[0] * (ratio);
 
-			var feeString = fee.toFixed(3) + chainProps.account_creation_fee.split(" ")[1];
+			var feeString = fee.toFixed(3) + " "+ chainProps.account_creation_fee.split(" ")[1];
 			var jsonMetadata = '';
 
 			steem.broadcast.accountCreate(creatorWif, feeString, creator,
