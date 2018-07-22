@@ -321,7 +321,9 @@
 
 			}
 			, mounted: function () {
-				steem.api.setOptions({url: 'https://api.steemit.com'});
+				//steem.api.setOptions({url: 'https://api.steemit.com'});
+				steem.api.setOptions({url: 'https://api.steemitstage.com/'});
+
 				console.log(this.$route) // outputs 'yay'
 				if( this.$route.hash != "" ){
 					var vueName = this.$route.hash.substring(1);

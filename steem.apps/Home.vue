@@ -143,7 +143,7 @@
             <a href="#" data-toggle="dropdown"><i class="text-info glyphicon glyphicon-th"></i> ETC <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="#tab_mute" data-toggle="tab"><i class="text-info glyphicon glyphicon-remove"></i> Mute</a></li>
-              <li><a href="#tab_delegate" data-toggle="tab"><i class="text-info glyphicon glyphicon-gift"></i> Delegate</a></li>
+              <li v-on:click="inqryDelegateInfo"><a href="#tab_delegate" data-toggle="tab"><i class="text-info glyphicon glyphicon-gift"></i> Delegate</a></li>
             </ul>
           </li>
 
@@ -313,7 +313,36 @@
             </table>
           </div>
           <div class="tab-pane fade" id="tab_delegate">
-            delegate
+            <table class="table table-striped table-hover text-center">
+              <thead class="alert alert-success">
+                <tr>
+                  <td>NO</td>
+                  <td>Delegator</td>
+                  <td>Delegatee</td>
+                  <td>STEEM</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, idx) in data.delegateList" v-on:click="clickVotingRateRow(item.account)">
+                  <td>{{ idx+1 }}</td>
+                  <td>
+                    {{ item.delegator }}
+                    <a :href="`https://steemit.com/@${item.delegator}`" target="_blank">
+                      <span class="glyphicon glyphicon-share"></span>
+                    </a>
+                  </td>
+                  <td>
+                    {{ item.delegatee }}
+                    <a :href="`https://steemit.com/@${item.delegatee}`" target="_blank">
+                      <span class="glyphicon glyphicon-share"></span>
+                    </a>
+                  </td>
+                  <td>
+                    {{ item.steemPower }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -1529,9 +1558,26 @@ function viewPost(item) {
         hljs.highlightBlock(block);
       });
     }
-
-
   });
+}
+
+async function inqryDelegateInfo(){
+  waitingDialog.show('Getting infomation on steem node...');
+  try{
+    data.delegateList = [];
+    var result = await steem.api.getVestingDelegationsAsync(data.acct_nm, -1, 1000);
+    var gprops = await steem.api.getDynamicGlobalPropertiesAsync();
+    var steemPower = gprops.total_vesting_fund_steem.replace(" STEEM", "") / gprops.total_vesting_shares.replace(" VESTS", "");
+    for(var i = 0; i < result.length;i++){
+      result[i].steemPower = parseInt(parseFloat(result[i].vesting_shares.replace(" VESTS", "")) * steemPower);
+    }
+    console.log(result);
+    data.delegateList = result;
+  }catch(err){
+    alert(err.message);
+  }finally{
+    waitingDialog.hide();
+  }
 }
 
 var data = {
@@ -1565,8 +1611,8 @@ var data = {
   feedList: [],
   commentsList: [],
   repliesList: [],
-  post: {}
-
+  post: {},
+  delegateList : []
 };
 //var data2 = data.clone();
 var home = module.exports = {
@@ -1576,39 +1622,20 @@ var home = module.exports = {
     }
   },
   methods: {
-    getBusyVotingPower: function() {
-      getBusyVotingPower();
-    },
-    inqryAccountInfo: function() {
-      inqryAccountInfo();
-    },
-    getCurrentMedianHistoryPriceAsync: function() {
-      getCurrentMedianHistoryPriceAsync();
-    },
-    homeSubmit: function() {
-      homeSubmit();
-    },
-    markdown_filter: function(body) {
-      return marked(body);
-    },
-    inqryPostMoreInfo: function() {
-      inqryPostMoreInfo();
-    },
-    viewPost: function(item) {
-      viewPost(item);
-    },
-    closePostModal: function() {
-      $(".modal-body").scrollTop(0);
-    },
-    inqryFeedMoreInfo: function() {
-      inqryFeedMoreInfo();
-    },
-    backFunc : function(){
-      alert("backFunc!!");
-    },
+    getBusyVotingPower: function() { getBusyVotingPower(); },
+    inqryAccountInfo: function() { inqryAccountInfo(); },
+    getCurrentMedianHistoryPriceAsync: function() { getCurrentMedianHistoryPriceAsync(); },
+    homeSubmit: function() { homeSubmit(); },
+    markdown_filter: function(body) { return marked(body); },
+    inqryPostMoreInfo: function() { inqryPostMoreInfo(); },
+    viewPost: function(item) { viewPost(item); },
+    closePostModal: function() { $(".modal-body").scrollTop(0); },
+    inqryFeedMoreInfo: function() { inqryFeedMoreInfo(); },
+    backFunc : function(){ alert("backFunc!!"); },
     inqryFeedInfo : function(){inqryFeedInfo();}
     , inqryTagInfo : function(tag, glyphicon){inqryTagInfo(tag, glyphicon);}
     , inqryTagMoreInfo : function(tag){inqryTagMoreInfo(tag);}
+    , inqryDelegateInfo : function(){ inqryDelegateInfo(); }
   },
   created: function() {
     var steem_id = localStorage.getItem('steem.id');
