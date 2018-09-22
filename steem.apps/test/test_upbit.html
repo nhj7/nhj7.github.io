@@ -46,7 +46,7 @@
             rowHtml += "<td>" + arr_korean_name[i] +"</td>"
             rowHtml += "<td>" + comma(tickers[i].trade_price)+"</td>"
             rowHtml += "<td>" + comma((tickers[i].signed_change_rate*100).toFixed(2))+"</td>"
-            rowHtml += "<td>" + comma((tickers[i].acc_trade_price_24h / 1000000).toFixed(0)) +"백만</td>"
+            rowHtml += "<td>" + comma((     tickers[i].acc_trade_price_24h>1000000 ? ( tickers[i].acc_trade_price_24h / 1000000 ) : tickers[i].acc_trade_price_24h ).toFixed(0)) + (tickers[i].acc_trade_price_24h>1000000 ? "백만" : "") + "</td>"
             rowHtml += "</tr>";
             $("#table_ticker > tbody:last").append(rowHtml);
             //markets[i].korean_name
@@ -72,7 +72,7 @@
   		gtag('config', 'UA-109501118-1');
   	</script>
 
-    
+
   </head>
   <body>
     <div id='tmp'>
