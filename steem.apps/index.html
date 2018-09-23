@@ -69,7 +69,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
-
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109501118-1"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'UA-109501118-1');
+</script>
 <style>
 	a {
 		cursor : hand;
@@ -283,9 +290,13 @@
 		  '/': 'Home',
 		  '/about': 'About'
 		}
-		var updateVersion = "2018.09.24.05";
+		var updateVersion = "2018.09.24.06";
 
 		function loadVue(path){
+			//gtag('page', {page:path, title:'', location:path});
+			//gtag('config', 'UA-109501118-1');
+
+
 			return httpVueLoader('./vue/'+path + '.vue?v='+updateVersion);
 		}
 		var app = new Vue({
@@ -313,6 +324,7 @@
 					if(!name) return;
 
 					app.currentView = name.trim();
+					gtag('config', 'UA-109501118-1', {'page_path': name });
 					setToggle( li );
 				}
 			}
@@ -433,14 +445,7 @@
 	})(jQuery);
 
 	</script>
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109501118-1"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
-		gtag('config', 'UA-109501118-1');
-	</script>
+
 
 	<script>
 
