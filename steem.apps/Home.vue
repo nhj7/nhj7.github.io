@@ -20,7 +20,7 @@
             </a>
 
           </span>
-      </div>
+        </div>
       </div>
     </div>
     <!-- row -->
@@ -28,7 +28,7 @@
   <!-- form-group -->
 
   <div id="acct_info" class="form-group collapse in" >
-    <div class="row " >
+    <div class="row">
       <div class="col-sm-3">
         <div class="input-group">
           <span class="input-group-addon white">
@@ -358,7 +358,7 @@
     </div>
   </div>
 </div>
-</div>
+
 
 <!-- Modal -->
 <div id="postModal" class="modal fade padding-xs" role="dialog">
@@ -1716,10 +1716,7 @@ var home = module.exports = {
     $('#postModal').on('hidden.bs.modal', function(e) {
       $(".modal-body").scrollTop(0);
     })
-
-
-
-  }// end mounted
+  }
 }
 
 getSteemPrice = () => {
