@@ -1,6 +1,6 @@
 <template>
   <div>
-    <iframe id="iframeUpbit" width="100%" frameborder="0" scrolling="no" v-on:load="resizeIframe()" src="./test/test_upbit.html"></iframe>
+    <iframe id="iframeUpbit" width="100%" frameborder="0" scrolling="no" v-on:load="resizeIframe()" src="./test/test_upbit.html?v=1"></iframe>
   </div>
 </template>
 <script>
