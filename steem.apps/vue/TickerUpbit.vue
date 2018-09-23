@@ -4,7 +4,7 @@
 
     </div>
     <div class="frameWrapper">
-      <iframe id="iframeUpbit" name="iframeUpbit" width="100%" frameborder="0" scrolling="no" v-on:load="resizeIframe()" src="./test/test_upbit.html?v=1"></iframe>
+      <iframe id="iframeUpbit" name="iframeUpbit" width="100%" frameborder="0" v-on:load="resizeIframe()" src="./test/test_upbit.html?v=1"></iframe>
     </div>
   </div>
 
