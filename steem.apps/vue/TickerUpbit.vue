@@ -12,7 +12,7 @@
         <thead>
         <tr>
           <td>NO</td>
-          <td v-on:click="data.isEn = !data.isEn; localStorage.setItem('Ticker.isEn', data.isEn) " >
+          <td v-on:click="data.isEn = !data.isEn;  localStorage.setItem('Ticker.isEn', data.isEn) " >
             {{ data.isEn?"영문명":"한글명"}}
           </td>
           <td v-on:click="setTickerOrder('curPrice')" >
@@ -185,7 +185,9 @@ module.exports = {
     if( tickerOrder ){
       data.tickerOrder = JSON.parse(tickerOrder);
     }
-    data.isEn = localStorage.getItem('Ticker.isEn');
+
+    //console.log(localStorage.getItem('Ticker.isEn'))
+    data.isEn = localStorage.getItem('Ticker.isEn')=="true";
     setUpbitData();
   }
   /*
