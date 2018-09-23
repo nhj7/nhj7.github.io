@@ -5,11 +5,15 @@
 </template>
 <script>
 function resizeIframe() {
+
+  $('#iframeUpbit').iFrameResize({log:true, checkOrigin:false, inPageLinks:true, sizeWidth:true});
+  /*
   var obj = document.getElementById("iframeUpbit");
   console.log(obj, obj.contentWindow.document.body.scrollHeight)
   //obj.style.height = 0;
   obj.style.height = obj.contentWindow.document.body.scrollHeight+'px';
-
+  */
+  
 }
 
 
