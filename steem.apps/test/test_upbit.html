@@ -62,12 +62,15 @@
       setTimeout(setUpbitData, 13000);
     }
     $(function() {
+      var color = localStorage.getItem("test_upbit_color");
+      if( color ) $("body").css("color", color);
       setUpbitData();
     });
-
-
+    function setColor(color){
+      localStorage.setItem("test_upbit_color", color);
+      $("body").css("color", color);
+    }
     </script>
-
     <!-- Global site tag (gtag.js) - Google Analytics -->
   	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109501118-1"></script>
   	<script>
@@ -76,13 +79,17 @@
   		gtag('js', new Date());
   		gtag('config', 'UA-109501118-1');
   	</script>
-
-
   </head>
   <body>
+    <div id="" style="padding:1em;">
+        <button onclick="setColor('black')">Black</button>
+        <button onclick="setColor('gray')">Gray</button>
+        <button onclick="setColor('silver')">Silver</button>
+    </div>
+
     <div id='tmp'>
     </div>
-    <br /><br /><br />
+    <br />
     <table id="table_ticker" class="table table-hover text-center">
       <thead>
       <tr>
@@ -98,9 +105,6 @@
     </table>
     <br /><br /><br />
     <div id='tmp2'>
-
     </div>
-
-
   </body>
 </html>
