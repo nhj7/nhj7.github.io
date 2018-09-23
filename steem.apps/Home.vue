@@ -425,7 +425,8 @@
 .doorImg{
   display: block;
   max-width: 100%;
-  max-height: 400px;
+  max-height: 300px;
+  overflow: hidden;
   margin:auto;
 }
 .image .text {
