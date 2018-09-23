@@ -13,15 +13,22 @@
           <span class="input-group-btn">
             <button type="submit" class="btn btn-info " v-on:click="homeSubmit">Submit</button>
           </span>
-        </div>
+          <span class="input-group-addon">
+            <a v-on:click='data.is_toggle_acct_info = !data.is_toggle_acct_info' id="toggle_acct_info" href="#acct_info" data-toggle="collapse">
+              <span v-show="!data.is_toggle_acct_info">hidden details</span>
+              <span v-show="data.is_toggle_acct_info">show details</span>
+            </a>
+
+          </span>
+      </div>
       </div>
     </div>
     <!-- row -->
   </div>
   <!-- form-group -->
 
-  <div id="acct_info" class="form-group">
-    <div class="row">
+  <div id="acct_info" class="form-group collapse in" >
+    <div class="row " >
       <div class="col-sm-3">
         <div class="input-group">
           <span class="input-group-addon white">
@@ -78,6 +85,8 @@
   <!-- col -->
 </div>
 <!-- row -->
+</div>
+
 
 <hr class="margin-top-xs margin-bottom-xs" />
 
@@ -1613,7 +1622,7 @@ var data = {
   commentsList: [],
   repliesList: [],
   post: {},
-  delegateList : []
+  delegateList : [], is_toggle_acct_info : false
 };
 //var data2 = data.clone();
 var home = module.exports = {
@@ -1707,7 +1716,10 @@ var home = module.exports = {
     $('#postModal').on('hidden.bs.modal', function(e) {
       $(".modal-body").scrollTop(0);
     })
-  }
+
+
+
+  }// end mounted
 }
 
 getSteemPrice = () => {
