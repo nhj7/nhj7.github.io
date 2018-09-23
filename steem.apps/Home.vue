@@ -180,7 +180,7 @@
                   <td class="text-left padding-xs">
                     <div class="col-md-2 padding-xs margin-bottom-xs" v-if="item.images && item.images.length > 0">
                       <div class="image">
-                        <img class="padding-xs doorImg" :src="`https://steemitimages.com/600x300/${item.images[1]}`" alt="door">
+                        <img class="padding-xs doorImg" :src="`https://steemitimages.com/300x150/${item.images[1]}`" alt="door">
                         <div class="text">
                           <img :src="`https://cdn.steemitimages.com/u/${item.author}/avatar/small`" class="Userpic user" alt="avatar">
                         </div>
@@ -425,7 +425,7 @@
 .doorImg{
   display: block;
   max-width: 100%;
-  max-height: 300px;
+  max-height: 150px;
   overflow: hidden;
   margin:auto;
 }
