@@ -434,13 +434,13 @@
   top: -1px;
   left: -1px;
 }
-#postModal .modal-header { padding:0.25em; }
+#postModal .modal-header { padding:1em; }
 #postModal .modal-body {
   max-height: calc(100vh - 180px);
   overflow-y: auto;
   font-size:1.1em;
   word-break: break-all;
-  padding:1em;
+  padding:1.15em;
   font-family: 'Godo';
 }
 @media(min-width:768px){
