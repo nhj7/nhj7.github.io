@@ -33,7 +33,7 @@
         </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, idx) in data.tickerList" >
+          <tr v-for="(item, idx) in data.tickerList" v-bind:class="item.korean_name=='스팀'?'classSTEEM':''" >
             <td>{{ idx+1 }}</td>
             <td>{{ data.isEn?item.en_name:item.korean_name }}</td>
             <td>{{ item.curPrice | comma }}</td>
@@ -212,5 +212,9 @@ function setColor(color){
 <style>
 #coinTickerDiv{
   color:silver;
+}
+.classSTEEM{
+  /*background-color: #EFFBFB;*/
+  
 }
 </style>
