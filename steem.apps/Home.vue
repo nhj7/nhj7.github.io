@@ -13,6 +13,13 @@
           <span class="input-group-btn">
             <button type="submit" class="btn btn-info " v-on:click="homeSubmit">Submit</button>
           </span>
+          <span class="input-group-addon">
+            <a v-on:click='data.is_toggle_acct_info = !data.is_toggle_acct_info' id="toggle_acct_info" href="#acct_info" data-toggle="collapse">
+              <span v-show="!data.is_toggle_acct_info">hidden details</span>
+              <span v-show="data.is_toggle_acct_info">show details</span>
+            </a>
+
+          </span>
         </div>
       </div>
     </div>
@@ -20,7 +27,7 @@
   </div>
   <!-- form-group -->
 
-  <div id="acct_info" class="form-group">
+  <div id="acct_info" class="form-group collapse in" >
     <div class="row">
       <div class="col-sm-3">
         <div class="input-group">
@@ -78,6 +85,8 @@
   <!-- col -->
 </div>
 <!-- row -->
+</div>
+
 
 <hr class="margin-top-xs margin-bottom-xs" />
 
@@ -180,7 +189,7 @@
                   <td class="text-left padding-xs">
                     <div class="col-md-2 padding-xs margin-bottom-xs" v-if="item.images && item.images.length > 0">
                       <div class="image">
-                        <img class="padding-xs doorImg" :src="`https://steemitimages.com/600x800/${item.images[1]}`" alt="door">
+                        <img class="padding-xs doorImg" :src="`https://steemitimages.com/300x150/${item.images[1]}`" alt="door">
                         <div class="text">
                           <img :src="`https://cdn.steemitimages.com/u/${item.author}/avatar/small`" class="Userpic user" alt="avatar">
                         </div>
@@ -349,7 +358,7 @@
     </div>
   </div>
 </div>
-</div>
+
 
 <!-- Modal -->
 <div id="postModal" class="modal fade padding-xs" role="dialog">
@@ -425,7 +434,8 @@
 .doorImg{
   display: block;
   max-width: 100%;
-  max-height: 400px;
+  max-height: 150px;
+  overflow: hidden;
   margin:auto;
 }
 .image .text {
@@ -433,13 +443,13 @@
   top: -1px;
   left: -1px;
 }
-#postModal .modal-header { padding:0.25em; }
+#postModal .modal-header { padding:1em; }
 #postModal .modal-body {
   max-height: calc(100vh - 180px);
   overflow-y: auto;
   font-size:1.1em;
   word-break: break-all;
-  padding:0.5em;
+  padding:1.15em;
   font-family: 'Godo';
 }
 @media(min-width:768px){
@@ -1612,7 +1622,7 @@ var data = {
   commentsList: [],
   repliesList: [],
   post: {},
-  delegateList : []
+  delegateList : [], is_toggle_acct_info : false
 };
 //var data2 = data.clone();
 var home = module.exports = {

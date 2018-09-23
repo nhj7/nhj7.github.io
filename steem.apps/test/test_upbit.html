@@ -58,7 +58,11 @@
           } // end for...
           $("#table_ticker").fadeIn("slow");
         })  //done(function(tickers){
-      }); // end done(function(markets){
+      }) // end done(function(markets){
+      .fail(function(){
+        //alert("업비트 API 접근 중 에러.")}
+        $("#tmp").text( "API 접근 중 에러." );
+      })
       setTimeout(setUpbitData, 13000);
     }
     $(function() {
