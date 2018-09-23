@@ -1,6 +1,7 @@
 <template>
   <div id="coinTickerDiv">
     <div id="divButton">
+      <!--span class="glyphicon glyphicon-text-color"></span-->
       <button v-on:click="setColor('black')">Black</button>
       <button v-on:click="setColor('gray')">Gray</button>
       <button v-on:click="setColor('silver')">Silver</button>
@@ -215,6 +216,6 @@ function setColor(color){
 }
 .classSTEEM{
   /*background-color: #EFFBFB;*/
-  
+
 }
 </style>
