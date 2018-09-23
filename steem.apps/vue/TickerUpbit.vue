@@ -83,7 +83,7 @@ function setUpbitData(){
       if( markets[i].market.indexOf("KRW") > -1 ){
         arr_krw_markets += markets[i].market+(",");
         arr_korean_name.push(markets[i].korean_name.replace("코인",""));
-        arr_en_name.push(markets[i].english_name.replace("코인",""))
+        arr_en_name.push(markets[i].english_name.replace("코인","").replace("토큰",""))
       }
     }
     arr_krw_markets = arr_krw_markets.substring(0, arr_krw_markets.length-1);
