@@ -50,7 +50,7 @@
 
           for(let i = 0;i < tickers.length;i++){
             let rowHtml = "<tr><td>"+(i+1)+"</td>";
-            rowHtml += "<td>" + arr_korean_name[i] +"</td>"
+            //rowHtml += "<td>" + arr_korean_name[i] +"</td>"
             rowHtml += "<td>" + comma(tickers[i].trade_price)+"</td>"
             rowHtml += "<td>" + comma((tickers[i].signed_change_rate*100).toFixed(2))+"</td>"
             rowHtml += "<td>" + comma((     tickers[i].acc_trade_price_24h>1000000 ? ( tickers[i].acc_trade_price_24h / 1000000 ) : tickers[i].acc_trade_price_24h ).toFixed(0)) + (tickers[i].acc_trade_price_24h>1000000 ? "백만" : "") + "</td>"
@@ -99,7 +99,7 @@
     <table id="table_ticker" class="table table-hover text-center">
       <thead>
       <tr>
-        <td>NO</td>
+        <!--td>NO</td-->
         <td>한글명</td>
         <td>현재가</td>
         <td>전일대비</td>

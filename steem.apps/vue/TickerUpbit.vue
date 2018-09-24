@@ -12,7 +12,7 @@
       <table id="table_ticker" class="table table-hover text-center">
         <thead>
         <tr>
-          <td>NO</td>
+          <!--td>NO</td-->
           <td v-on:click="data.isEn = !data.isEn;  localStorage.setItem('Ticker.isEn', data.isEn) " >
             {{ data.isEn?"영문명":"한글명"}}
           </td>
@@ -35,7 +35,7 @@
         </thead>
         <tbody>
           <tr v-for="(item, idx) in data.tickerList" v-bind:class="item.korean_name=='스팀'?'classSTEEM':''" >
-            <td>{{ idx+1 }}</td>
+            <!--td>{{ idx+1 }}</td-->
             <td>{{ data.isEn?item.en_name:item.korean_name }}</td>
             <td>{{ item.curPrice | comma }}</td>
             <td>{{ item.chRate | comma }}</td>
