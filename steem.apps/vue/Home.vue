@@ -44,8 +44,7 @@
         <div class="input-group">
           <span class="input-group-addon white">
           <div class="text-info margin-top-md">
-            VP ( $ {{data.voting_value}} / {{data.voting_full_value}} )
-            Full in {{data.full_in_hour}} hours
+            VP ( $ {{data.voting_value}} / {{data.voting_full_value}} , Full in {{data.full_in_hour}} hours )
           </div>
           <div class="text-info">
             <input id="vp_slider" data-slider-id='data_vp_slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-popup-enabled="true" />
@@ -57,10 +56,10 @@
               </span>
         </div>
       </div>
-      <div class="text-success">Bandwidth Remaining</div>
+      <div class="text-success">Resource Credits ({{data.rc_fullin}})</div>
       <div class="progress margin-bottom-sm">
-        <div id="bandwidth_remaining" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width: 0%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-          <span>{{data.bandwidth_remaining}}%</span>
+        <div id="resource_credits" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width: 0%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+          <span>{{data.resource_credits}}%</span>
         </div>
       </div>
       </span>
@@ -896,7 +895,29 @@ function getAccounts(arr_acct_nm) {
   return deferred.promise();
 }
 
-function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo) {
+function getResourceCredits(arr_acct_nm) {
+  var deferred = $.Deferred();
+  //console.error(deferred);
+  //steem.api.getRewardFundAsync("post")
+  let name = 'nhj12311';
+  let param={"jsonrpc":"2.0","id":1,"method":"rc_api.find_rc_accounts","params":{"accounts":arr_acct_nm}};
+  $.ajax({
+      url: "https://api.steemit.com",
+      type: "POST",
+      data: JSON.stringify(param),
+      success: function(res){
+        deferred.resolve(res);
+        console.log(res);
+      },
+      error:function(e){
+        console.log(e);
+        deferred.reject(err);
+      }
+    });
+  return deferred.promise();
+}
+
+function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo, rcInfo) {
 
   try {
 
@@ -941,13 +962,28 @@ function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo) {
     new_bandwidth = Math.round(new_bandwidth / 1000000);
     let bandwidth_remaining = 100 - (100 * new_bandwidth / bandwidthAllocated);
     bandwidth_remaining = bandwidth_remaining.toFixed(2);
-    //console.log("current bandwidth used", new_bandwidth);
-    //console.log("current bandwidth allocated", bandwidthAllocated);
-    //console.log("bandwidth % used", 100 * new_bandwidth / bandwidthAllocated);
-    //console.log("bandwidth % remaining", bandwidth_remaining);
-
 
     data.bandwidth_remaining = bandwidth_remaining;
+
+    // start rc calc.
+    console.log(rcInfo);
+    const STEEM_RC_MANA_REGENERATION_SECONDS =432000;
+    const estimated_max = parseFloat(rcInfo.result.rc_accounts["0"].max_rc);
+    const current_mana = parseFloat(rcInfo.result.rc_accounts["0"].rc_manabar.current_mana);
+    const last_update_time = parseFloat(rcInfo.result.rc_accounts["0"].rc_manabar.last_update_time);
+    const diff_in_seconds = Math.round(Date.now()/1000-last_update_time);
+    let estimated_mana = (current_mana + diff_in_seconds * estimated_max / STEEM_RC_MANA_REGENERATION_SECONDS);
+    if (estimated_mana > estimated_max)
+        estimated_mana = estimated_max;
+
+    const estimated_pct = estimated_mana / estimated_max * 100;
+    const calcRC = {"current_mana": current_mana, "last_update_time": last_update_time,
+            "estimated_mana": estimated_mana, "estimated_max": estimated_max, "estimated_pct": estimated_pct.toFixed(2),"fullin":getTimeBeforeFull(estimated_pct*100)};
+    console.log(calcRC);
+    data.resource_credits = calcRC.estimated_pct;
+    data.rc_fullin = calcRC.fullin
+    // end resource_credits
+
     // max(log10(abs(reputation))-9,0)*((reputation>= 0)?1:-1)*9+25
     var reputation = Math.max(Math.log10(Math.abs(acctInfo[0].reputation)) - 9, 0) * ((acctInfo[0].reputation >= 0) ? 1 : -1) * 9 + 25;
 
@@ -967,7 +1003,8 @@ function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo) {
     $("#voting_power").css("width", vpow + "%");
     data.voting_power = vpow;
     //setVpSlider( parseInt(vpow)  );
-    $("#bandwidth_remaining").css("width", bandwidth_remaining + "%");
+    //$("#bandwidth_remaining").css("width", bandwidth_remaining + "%");
+    $("#resource_credits").css("width", data.resource_credits + "%");
     //var rewardFund = await steem.api.getRewardFundAsync("post");
 
     data.reward_balance = rewardFund.reward_balance.replace(" STEEM", "");
@@ -1465,18 +1502,19 @@ function inqryAccountInfo() {
     });
     var combinedPromise = $.when(
       getCurrentMedianHistoryPrice(), getRewardFund("poste"), getDynamicGlobalProperties(), getAccounts([data.acct_nm])
+      , getResourceCredits([data.acct_nm])
     );
-    combinedPromise.fail(function(f1Val, f2Val, f3Val, f4Val) {
+    combinedPromise.fail(function(f1Val, f2Val, f3Val, f4Val, f5Val) {
       waitingDialog.hide();
       alert('Steem Node Error!');
-      console.error('fail!', f1Val, f2Val, f3Val, f4Val);
+      console.error('fail!', f1Val, f2Val, f3Val, f4Val, f5Val);
     });
     localStorage.setItem('steem.id', data.acct_nm);
     data.inqry_acct = data.acct_nm;
     // 함수는 getData와 getLocation이 둘 다 해결됐을 때 호출될 것이다.
-    combinedPromise.done(function(marketInfo, rewardFund, gprops, acctInfo) {
-      console.log("We get data: ", marketInfo, rewardFund, gprops, acctInfo);
-      _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo);
+    combinedPromise.done(function(marketInfo, rewardFund, gprops, acctInfo, rcInfo) {
+      console.log("We get data: ", marketInfo, rewardFund, gprops, acctInfo, rcInfo);
+      _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo, rcInfo);
     });
   } catch (err) {
     console.error("error!", err);
@@ -1623,6 +1661,8 @@ var data = {
   repliesList: [],
   post: {},
   delegateList : [], is_toggle_acct_info : false
+  , resource_credits : 0 , rc_fullin : ''
+
 };
 //var data2 = data.clone();
 var home = module.exports = {
@@ -1716,7 +1756,7 @@ var home = module.exports = {
     $('#postModal').on('hidden.bs.modal', function(e) {
       $(".modal-body").scrollTop(0);
     })
-  }
+  } // end mounted
 }
 
 getSteemPrice = () => {

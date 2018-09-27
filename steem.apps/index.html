@@ -152,6 +152,9 @@
 					<!--li><a href="#RemindYou " @click="setCurrentView('RemindYou')">Remind You </a></li-->
 					<li name="AccountCreator" id="AccountCreator"><a href="#AccountCreator"><i class="text-info glyphicon glyphicon-user"></i> Account Creator</a></li>
 					<li name="TickerUpbit" id="TickerUpbit"><a href="#TickerUpbit"><i class="text-info glyphicon glyphicon-bitcoin"></i> Ticker(Upbit)</a></li>
+
+					<li name="RecoveryMana" id="RecoveryMana"><a href="#RecoveryMana"><i class="text-info glyphicon glyphicon-bitcoin"></i> RecoveryMana</a></li>
+
 					<li class="dropdown" id="dropdown_family"><a class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false"><i class="text-info glyphicon glyphicon-link"></i> Family Site <span class="caret"></span></a>
@@ -317,6 +320,7 @@
 				, 'Home' : loadVue('./Home')
 				, 'VotingStat' : loadVue('./VotingStat')
 				, 'TickerUpbit' : loadVue('./TickerUpbit')
+				, 'RecoveryMana' : loadVue('./RecoveryMana')
 			}
 			, methods : {
 				setCurrentView : function(li){
