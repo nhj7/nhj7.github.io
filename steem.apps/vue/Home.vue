@@ -44,7 +44,7 @@
         <div class="input-group">
           <span class="input-group-addon white">
           <div class="text-info margin-top-md">
-            VP ( $ {{data.voting_value}} / {{data.voting_full_value}} , Full in {{data.full_in_hour}} hours )
+            Voting Mana ( $ {{data.voting_value}} / {{data.voting_full_value}} , Full in {{data.full_in_hour}} hours )
           </div>
           <div class="text-info">
             <input id="vp_slider" data-slider-id='data_vp_slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-popup-enabled="true" />
