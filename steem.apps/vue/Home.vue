@@ -897,12 +897,9 @@ function getAccounts(arr_acct_nm) {
 
 function getResourceCredits(arr_acct_nm) {
   var deferred = $.Deferred();
-  //console.error(deferred);
-  //steem.api.getRewardFundAsync("post")
-  let name = 'nhj12311';
   let param={"jsonrpc":"2.0","id":1,"method":"rc_api.find_rc_accounts","params":{"accounts":arr_acct_nm}};
   $.ajax({
-      url: "https://api.steemit.com",
+      url: "https://api.steemitstage.com/",
       type: "POST",
       data: JSON.stringify(param),
       success: function(res){
