@@ -185,23 +185,27 @@
             <table id="tab_feed_table" class="table table-hover text-center hidden">
               <tbody>
                 <tr v-for="(item, idx) in data.feedList" v-on:click="viewPost(item)" data-html="true" data-toggle="modal" data-target="#postModal">
-                  <td class="text-left padding-xs">
+                  <td class="text-left padding-lg">
+
+                    <div class="margin-zero" >
+                      <h5 class="margin-zero" ><b>
+                        <img :src="`https://cdn.steemitimages.com/u/${item.author}/avatar/small`" class="Userpic user" alt="avatar">
+                        @{{item.author}} </b> <span class="color-gray">in {{item.category}}</span>
+                      </h5>
+                    </div>
                     <div class="col-md-2 padding-xs margin-bottom-xs" v-if="item.images && item.images.length > 0">
                       <div class="image">
                         <img class="padding-xs doorImg" :src="`https://steemitimages.com/300x150/${item.images[1]}`" alt="door">
-                        <div class="text">
-                          <img :src="`https://cdn.steemitimages.com/u/${item.author}/avatar/small`" class="Userpic user" alt="avatar">
-                        </div>
                       </div>
                     </div>
                     <div class="text-center col-md-2 padding-xs" v-else>
                       <img :src="`https://cdn.steemitimages.com/u/${item.author}/avatar/big`" class="Userpic" alt="avatar">
                     </div>
                     <div class="col-md-10 padding-xs">
-                      <div class="margin-bottom-xs">
-                        <a href="javascript:;" target="_blank"><b>{{ item.title }}</b></a>
+                      <div class="margin-bottom-xs ">
+                        <h4><b>{{ item.title }}</b></h4>
                       </div>
-                      <div class="text-left margin-bottom-sm text-justify post-preview" v-html="item.text.length > 88 ? item.text.substring(0, 88)+'...' :item.text">
+                      <div class="text-left margin-bottom-sm text-justify post-preview" v-html="item.text.length > 188 ? item.text.substring(0, 188)+'...' :item.text">
 
                       </div>
                       <div>
@@ -454,6 +458,7 @@
 @media(min-width:768px){
   #postModal .modal-header { padding:1.2em; }
   #postModal .modal-body { padding:1.2em; }
+  #tab_feed_table>tbody>tr>td { padding-top : 10px; padding-left:30px;padding-right:30px;padding-bottom: 10px;}
 }
 .modal-body p {
   margin: 0px auto;
@@ -913,6 +918,18 @@ function getResourceCredits(arr_acct_nm) {
     });
   return deferred.promise();
 }
+var STEEMIT_100_PERCENT = 10000;
+var STEEMIT_VOTE_REGENERATION_SECONDS = (5 * 60 * 60 * 24); // 5 day
+
+var getVotingPowerPerAccount = function(account) {
+    var voting_power = account.voting_power;
+    var last_vote_time = new Date((account.last_vote_time) + 'Z');
+    var elapsed_seconds = (new Date() - last_vote_time) / 1000;
+    var regenerated_power = Math.round((STEEMIT_100_PERCENT * elapsed_seconds) / STEEMIT_VOTE_REGENERATION_SECONDS);
+    var current_power = Math.min(voting_power + regenerated_power, STEEMIT_100_PERCENT);
+    return current_power;
+};
+
 
 function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo, rcInfo) {
 
@@ -936,9 +953,13 @@ function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo, rcInfo) {
     data.acct_sp_delegate = Math.floor(parseInt(acctInfo[0].delegated_vesting_shares.replace(" VESTS", "")) * steemPower);
     data.acct_sp_received = Math.floor(parseInt(acctInfo[0].received_vesting_shares.replace(" VESTS", "")) * steemPower);
 
+    var vpow = getVotingPowerPerAccount(acctInfo[0]);
+    vpow = Math.min(vpow / 100, 100).toFixed(2);
+    /*
     var secondsago = (new Date - new Date(acctInfo[0].last_vote_time + "Z")) / 1000;
     var vpow = acctInfo[0].voting_power + (10000 * secondsago / 432000);
-    vpow = Math.min(vpow / 100, 100).toFixed(2);
+
+    */
 
     const STEEMIT_BANDWIDTH_AVERAGE_WINDOW_SECONDS = 60 * 60 * 24 * 7;
     let vestingShares = parseFloat(acctInfo[0].vesting_shares.replace(" VESTS", ""))
