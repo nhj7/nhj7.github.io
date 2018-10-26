@@ -49,7 +49,7 @@
           $("#table_ticker").fadeOut("slow");
 
           for(let i = 0;i < tickers.length;i++){
-            let rowHtml = "<tr><td>"+tickers[i].korean_name.replace("코인","").replace("토큰","")+"</td>";
+            let rowHtml = "<tr><td>"+arr_korean_name[i].replace("코인","").replace("토큰","")+"</td>";
             //rowHtml += "<td>" + arr_korean_name[i] +"</td>"
             rowHtml += "<td>" + comma(tickers[i].trade_price)+"</td>"
             rowHtml += "<td>" + comma((tickers[i].signed_change_rate*100).toFixed(2))+"</td>"
