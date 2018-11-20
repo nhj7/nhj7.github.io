@@ -227,7 +227,7 @@
                     </div>
                     <div class="col-md-9 padding-xs">
                       <div class="margin-bottom-xs">
-                        <a href="javascript:;" ><b>{{ item.title }}</b></a>
+                        <a href="javascript:;"><b>{{ item.title }}</b></a>
                       </div>
                       <div class="margin-bottom-xs">
                         {{ item.text.length > 90 ? item.text.substring(0, 90)+'...' :item.text }}
@@ -400,52 +400,68 @@
 </template>
 
 <style>
-#tab_feed_table *{
+#tab_feed_table * {
   word-break: break-all;
 }
-.post-preview{
+
+.post-preview {
   word-break: break-all;
 }
-.youtube_div{
+
+.youtube_div {
   position: relative;
   width: 100%;
   height: 0;
   padding-bottom: 56.25%;
 }
-.youtube_iframe{
+
+.youtube_iframe {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
 }
+
 .image {
   position: relative;
 }
-.doorImg{
+
+.doorImg {
   display: block;
   max-width: 100%;
   max-height: 400px;
-  margin:auto;
+  margin: auto;
 }
+
 .image .text {
   position: absolute;
   top: -1px;
   left: -1px;
 }
-#postModal .modal-header { padding:0.25em; }
+
+#postModal .modal-header {
+  padding: 0.25em;
+}
+
 #postModal .modal-body {
   max-height: calc(100vh - 180px);
   overflow-y: auto;
-  font-size:1.1em;
+  font-size: 1.1em;
   word-break: break-all;
-  padding:0.5em;
+  padding: 0.5em;
   font-family: 'Godo';
 }
-@media(min-width:768px){
-  #postModal .modal-header { padding:1.2em; }
-  #postModal .modal-body { padding:1.2em; }
+
+@media(min-width:768px) {
+  #postModal .modal-header {
+    padding: 1.2em;
+  }
+  #postModal .modal-body {
+    padding: 1.2em;
+  }
 }
+
 .modal-body p {
   margin: 0px auto;
   max-width: none;
@@ -453,7 +469,8 @@
   margin-bottom: 1em;
   word-break: break-all;
 }
-.modal-body img{
+
+.modal-body img {
   width: auto;
   max-width: 100%;
   height: auto;
@@ -1085,68 +1102,71 @@ var converter = new showdown.Converter({
 });
 
 function changeYouTubeTag(html) {
-  html = html.replace(/https:\/\/www.youtube.com\/watch\?[a-zA-Z]\=([a-zA-Z0-9]*)/gi, '<p><div class="youtube_div"><iframe class="youtube_iframe" wdith="100%" src="https:\/\/www.youtube.com\/embed\/$1"><\/iframe></div><\/p\>');
-  return html.replace(/https:\/\/youtu.be\/([\w]*)/gi, '<p><div class="youtube_div"><iframe class="youtube_iframe" wdith="100%" src="https:\/\/www.youtube.com\/embed\/$1"><\/iframe></div><\/p\>');
+  //html = html.replace(/https:\/\/www.youtube.com\/watch\?[a-zA-Z]\=([a-zA-Z0-9]*)/gi, '<p><div class="youtube_div"><iframe class="youtube_iframe" wdith="100%" src="https:\/\/www.youtube.com\/embed\/$1"><\/iframe></div><\/p\>');
+  //return html.replace(/https:\/\/youtu.be\/([\w]*)/gi, '<p><div class="youtube_div"><iframe class="youtube_iframe" wdith="100%" src="https:\/\/www.youtube.com\/embed\/$1"><\/iframe></div><\/p\>');
+  return html.replace(/(?:(?:youtube.com\/watch\?v=)|(?:youtu.be\/)|(?:youtube.com\/embed\/))([A-Za-z0-9\_\-]+)/gi,
+    '<p><div class="youtube_div"><iframe class="youtube_iframe" wdith="100%" src="https:\/\/www.youtube.com\/embed\/$1"><\/iframe></div><\/p\>');
 }
 
 var urlRegex = /(\(.*?)?\b(?![^<]*>|[^<>]*<\/(?!(?:p|pre)>))((?:https?|ftp|file):\/\/[-a-z0-9+&@#\/%?=~_()|!:,.;]*[-a-z0-9+&@#\/%=~_()|])/ig;
+
 function replaceURLWithHTMLLinks(text) {
-    return text.replace(urlRegex, function(match, lParens, url) {
-        var rParens = '';
-        lParens = lParens || '';
-        var lParenCounter = /\(/g;
-        while (lParenCounter.exec(lParens)) {
-            var m;
-            if (m = /(.*)(\.\).*)/.exec(url) ||
-                    /(.*)(\).*)/.exec(url)) {
-                url = m[1];
-                rParens = m[2] + rParens;
-            }
-        }
-        return lParens + "<a href='" + url + "'>" + url + "</a>" + rParens;
-    });
+  return text.replace(urlRegex, function(match, lParens, url) {
+    var rParens = '';
+    lParens = lParens || '';
+    var lParenCounter = /\(/g;
+    while (lParenCounter.exec(lParens)) {
+      var m;
+      if (m = /(.*)(\.\).*)/.exec(url) ||
+        /(.*)(\).*)/.exec(url)) {
+        url = m[1];
+        rParens = m[2] + rParens;
+      }
+    }
+    return lParens + "<a href='" + url + "'>" + url + "</a>" + rParens;
+  });
 }
 
-function replaceAtMentionsWithLinks ( text ) {
-    return text.replace(/(?![^<a]*>|[^<a>]*<\/(?!(?:p|pre)>))@([a-z\d_]+)/ig, '<a href="https://steemit.com/@$1">@$1</a>');
+function replaceAtMentionsWithLinks(text) {
+  return text.replace(/(?![^<a]*>|[^<a>]*<\/(?!(?:p|pre)>))@([a-z\d_]+)/ig, '<a href="https://steemit.com/@$1">@$1</a>');
 }
 
-function replaceTagLink ( html ) {
+function replaceTagLink(html) {
   html = html.replace(/(^|\s)(#[-a-z\d]+)/gi, tag => {
-      if (/#[\d]+$/.test(tag)) return tag; // Don't allow numbers to be tags
-      const space = /^\s/.test(tag) ? tag[0] : '';
-      const tag2 = tag.trim().substring(1);
-      const tagLower = tag2.toLowerCase();
-      console.log(tag);
-      //if (!true) return tag;
-      return space + "<a href='https://steemit.com/created/"+tagLower+"'>" + tag + "</a>";
+    if (/#[\d]+$/.test(tag)) return tag; // Don't allow numbers to be tags
+    const space = /^\s/.test(tag) ? tag[0] : '';
+    const tag2 = tag.trim().substring(1);
+    const tagLower = tag2.toLowerCase();
+    console.log(tag);
+    //if (!true) return tag;
+    return space + "<a href='https://steemit.com/created/" + tagLower + "'>" + tag + "</a>";
   });
   return html;
 }
 
-function replaceMentionLink ( html ) {
+function replaceMentionLink(html) {
   html = html.replace(
-          /(^|[^a-zA-Z0-9_!#$%&*@＠\/]|(^|[^a-zA-Z0-9_+~.-\/#]))[@＠]([a-z][-\.a-z\d]+[a-z\d])/gi,
-          (match, preceeding1, preceeding2, user) => {
-              const userLower = user.toLowerCase();
-              //const valid = validate_account_name(userLower) == null;
-              const valid = true;
-              //if (valid && usertags) usertags.add(userLower);
-              const preceedings = (preceeding1 || '') + (preceeding2 || ''); // include the preceeding matches if they exist
-              //if (!mutate) return `${preceedings}${user}`;
-              return preceedings + '<a href="https://steemit.com/@' + userLower + '">@' + user + '</a>';
-          }
-      );
-    return html;
+    /(^|[^a-zA-Z0-9_!#$%&*@＠\/]|(^|[^a-zA-Z0-9_+~.-\/#]))[@＠]([a-z][-\.a-z\d]+[a-z\d])/gi,
+    (match, preceeding1, preceeding2, user) => {
+      const userLower = user.toLowerCase();
+      //const valid = validate_account_name(userLower) == null;
+      const valid = true;
+      //if (valid && usertags) usertags.add(userLower);
+      const preceedings = (preceeding1 || '') + (preceeding2 || ''); // include the preceeding matches if they exist
+      //if (!mutate) return `${preceedings}${user}`;
+      return preceedings + '<a href="https://steemit.com/@' + userLower + '">@' + user + '</a>';
+    }
+  );
+  return html;
 }
 
 function imageSetting(html) {
   var html_change = html;
-  html_change = html_change.replace(/<em>/ig,"").replace(/<\/em>/ig,"");
+  html_change = html_change.replace(/<em>/ig, "").replace(/<\/em>/ig, "");
   var regex = /(<([^>]+)>)/ig
   var result = html_change.replace(regex, "");
-  regex = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/ig;
-  //regex = /(?:(?:\\.(?:tiff?|jpe?g|gif|png|svg|ico)|ipfs/[a-z\\d]{40,}))/ig;
+  //regex = /(https?:\/\/.*[^!]\.(?:png|jpg|jpeg|gif))/ig;
+  regex = /(?:(?:\\.(?:tiff?|jpe?g|gif|png|svg|ico)|ipfs\/[a-z\\d]{40,}))/ig;
   var arrMatch = result.match(regex);
   //console.log(arrMatch);
   if (arrMatch != null) {
@@ -1215,11 +1235,13 @@ function setContentMore(obj) {
   */
   //console.error(converter);
   //obj.html2 = marked(obj.body).replace(/\n/, "<br />");
-  if( obj.json_metadata ){
+  if (obj.json_metadata) {
     obj.metadata = JSON.parse(obj.json_metadata);
   }
   obj.html = converter.makeHtml(obj.body);
-  obj.html = changeYouTubeTag(imageSetting(obj.html));
+  obj.html = imageSetting(obj.html);
+  obj.html = changeYouTubeTag(obj.html);
+
   obj.html = replaceURLWithHTMLLinks(obj.html);
   obj.html = replaceTagLink(obj.html);
   obj.html = replaceMentionLink(obj.html);
@@ -1238,6 +1260,7 @@ function setContentMore(obj) {
 }
 
 async function inqryPostMoreInfo() {
+  var item;
   try {
     if (!data.acct_nm) {
       return;
@@ -1246,12 +1269,13 @@ async function inqryPostMoreInfo() {
     var author = data.acct_nm;
     var result = await steem.api.getDiscussionsByAuthorBeforeDateAsync(author, data.postList[data.postList.length - 1].permlink, '2100-01-01T00:00:00', 100);
     for (var i = 1; i < result.length; i++) {
+      item = result[i];
       setContentMore(result[i]);
       data.postList.push(result[i]);
     }
     $("#tab_post_more_spinner").addClass("hidden");
   } catch (err) {
-    console.error("inqryPostMoreInfo", err);
+    console.error("inqryPostMoreInfo", item, err);
   } finally {
     $("#tab_post_more_spinner").addClass("hidden");
   }
@@ -1284,6 +1308,7 @@ async function inqryFeedMoreInfo() {
 }
 
 async function inqryFeedInfo() {
+  var item;
   try {
     if (!data.acct_nm) {
       return;
@@ -1294,8 +1319,8 @@ async function inqryFeedInfo() {
     $("#" + tab_spinner_id).removeClass("hidden");
     $("#" + tab_table_id).addClass("hidden");
 
-    $("#category_glyphicon").removeClass (function (index, className) {
-        return (className.match (/(^|\s)glyphicon-\S+/g) || []).join(' ');
+    $("#category_glyphicon").removeClass(function(index, className) {
+      return (className.match(/(^|\s)glyphicon-\S+/g) || []).join(' ');
     });
     $("#category_nm").text("Feed");
     $("#category_glyphicon").addClass("glyphicon-home");
@@ -1307,13 +1332,14 @@ async function inqryFeedInfo() {
     });
     //console.log("inqryFeedInfo", result);
     for (let i = 0; i < result.length; i++) {
+      item = result[i];
       setContentMore(result[i]);
       data.feedList.push(result[i]);
     }
     $("#" + tab_spinner_id).addClass("hidden");
     $("#" + tab_table_id).removeClass("hidden");
   } catch (err) {
-    console.error("inqryFeedInfo", err);
+    console.error("inqryFeedInfo", item, err);
   } finally {
     //console.error("home", home);
     //app.$forceUpdate();
@@ -1353,11 +1379,11 @@ async function inqryTagInfo(tag, glyphicon) {
     var tab_table_id = "tab_feed_table";
     $("#" + tab_spinner_id).removeClass("hidden");
     $("#" + tab_table_id).addClass("hidden");
-    $("#category_glyphicon").removeClass (function (index, className) {
-        return (className.match (/(^|\s)glyphicon-\S+/g) || []).join(' ');
+    $("#category_glyphicon").removeClass(function(index, className) {
+      return (className.match(/(^|\s)glyphicon-\S+/g) || []).join(' ');
     });
     $("#category_nm").text(tag);
-    $("#category_glyphicon").addClass("glyphicon-"+glyphicon);
+    $("#category_glyphicon").addClass("glyphicon-" + glyphicon);
 
     var result = await steem.api.getDiscussionsByCreatedAsync({
       tag: tag,
@@ -1532,11 +1558,11 @@ function getExternalApi(url, fromNames, toNames) {
 function viewPost(item) {
   console.log(item);
   data.post = item;
-  app.$nextTick(function(){
+  app.$nextTick(function() {
     $("#tab_modal_post_spinner").removeClass("hidden");
     $(".modal-body").find("a").each(
-      function(){
-        $(this).attr("target","_blank");
+      function() {
+        $(this).attr("target", "_blank");
       }
     );
     $('.modal-body img').waitForImages(true).done(function() {
@@ -1545,15 +1571,15 @@ function viewPost(item) {
     });
 
     console.log("viewPost", item);
-    if( item.metadata.tags.includes("kr-dev")
-      || item.metadata.tags.includes("dev")
-      || item.metadata.tags.includes("steemdev")
-      || item.metadata.tags.includes("java")
-      || item.metadata.tags.includes("c")
-      || item.metadata.tags.includes("python")
-      || item.metadata.tags.includes("javascript")
-      || item.metadata.tags.includes("programming")
-    ){
+    if (item.metadata.tags.includes("kr-dev") ||
+      item.metadata.tags.includes("dev") ||
+      item.metadata.tags.includes("steemdev") ||
+      item.metadata.tags.includes("java") ||
+      item.metadata.tags.includes("c") ||
+      item.metadata.tags.includes("python") ||
+      item.metadata.tags.includes("javascript") ||
+      item.metadata.tags.includes("programming")
+    ) {
       $('pre code').each(function(i, block) {
         hljs.highlightBlock(block);
       });
@@ -1561,21 +1587,21 @@ function viewPost(item) {
   });
 }
 
-async function inqryDelegateInfo(){
+async function inqryDelegateInfo() {
   waitingDialog.show('Getting infomation on steem node...');
-  try{
+  try {
     data.delegateList = [];
     var result = await steem.api.getVestingDelegationsAsync(data.acct_nm, -1, 1000);
     var gprops = await steem.api.getDynamicGlobalPropertiesAsync();
     var steemPower = gprops.total_vesting_fund_steem.replace(" STEEM", "") / gprops.total_vesting_shares.replace(" VESTS", "");
-    for(var i = 0; i < result.length;i++){
+    for (var i = 0; i < result.length; i++) {
       result[i].steemPower = parseInt(parseFloat(result[i].vesting_shares.replace(" VESTS", "")) * steemPower);
     }
     console.log(result);
     data.delegateList = result;
-  }catch(err){
+  } catch (err) {
     alert(err.message);
-  }finally{
+  } finally {
     waitingDialog.hide();
   }
 }
@@ -1612,7 +1638,7 @@ var data = {
   commentsList: [],
   repliesList: [],
   post: {},
-  delegateList : []
+  delegateList: []
 };
 //var data2 = data.clone();
 var home = module.exports = {
@@ -1622,20 +1648,48 @@ var home = module.exports = {
     }
   },
   methods: {
-    getBusyVotingPower: function() { getBusyVotingPower(); },
-    inqryAccountInfo: function() { inqryAccountInfo(); },
-    getCurrentMedianHistoryPriceAsync: function() { getCurrentMedianHistoryPriceAsync(); },
-    homeSubmit: function() { homeSubmit(); },
-    markdown_filter: function(body) { return marked(body); },
-    inqryPostMoreInfo: function() { inqryPostMoreInfo(); },
-    viewPost: function(item) { viewPost(item); },
-    closePostModal: function() { $(".modal-body").scrollTop(0); },
-    inqryFeedMoreInfo: function() { inqryFeedMoreInfo(); },
-    backFunc : function(){ alert("backFunc!!"); },
-    inqryFeedInfo : function(){inqryFeedInfo();}
-    , inqryTagInfo : function(tag, glyphicon){inqryTagInfo(tag, glyphicon);}
-    , inqryTagMoreInfo : function(tag){inqryTagMoreInfo(tag);}
-    , inqryDelegateInfo : function(){ inqryDelegateInfo(); }
+    getBusyVotingPower: function() {
+      getBusyVotingPower();
+    },
+    inqryAccountInfo: function() {
+      inqryAccountInfo();
+    },
+    getCurrentMedianHistoryPriceAsync: function() {
+      getCurrentMedianHistoryPriceAsync();
+    },
+    homeSubmit: function() {
+      homeSubmit();
+    },
+    markdown_filter: function(body) {
+      return marked(body);
+    },
+    inqryPostMoreInfo: function() {
+      inqryPostMoreInfo();
+    },
+    viewPost: function(item) {
+      viewPost(item);
+    },
+    closePostModal: function() {
+      $(".modal-body").scrollTop(0);
+    },
+    inqryFeedMoreInfo: function() {
+      inqryFeedMoreInfo();
+    },
+    backFunc: function() {
+      alert("backFunc!!");
+    },
+    inqryFeedInfo: function() {
+      inqryFeedInfo();
+    },
+    inqryTagInfo: function(tag, glyphicon) {
+      inqryTagInfo(tag, glyphicon);
+    },
+    inqryTagMoreInfo: function(tag) {
+      inqryTagMoreInfo(tag);
+    },
+    inqryDelegateInfo: function() {
+      inqryDelegateInfo();
+    }
   },
   created: function() {
     var steem_id = localStorage.getItem('steem.id');
