@@ -13,6 +13,13 @@
           <span class="input-group-btn">
             <button type="submit" class="btn btn-info " v-on:click="homeSubmit">Submit</button>
           </span>
+          <span class="input-group-addon">
+            <a v-on:click='data.is_toggle_acct_info = !data.is_toggle_acct_info' id="toggle_acct_info" href="#acct_info" data-toggle="collapse">
+              <span v-show="!data.is_toggle_acct_info">hidden details</span>
+              <span v-show="data.is_toggle_acct_info">show details</span>
+            </a>
+
+          </span>
         </div>
       </div>
     </div>
@@ -20,7 +27,7 @@
   </div>
   <!-- form-group -->
 
-  <div id="acct_info" class="form-group">
+  <div id="acct_info" class="form-group collapse in" >
     <div class="row">
       <div class="col-sm-3">
         <div class="input-group">
@@ -37,8 +44,7 @@
         <div class="input-group">
           <span class="input-group-addon white">
           <div class="text-info margin-top-md">
-            VP ( $ {{data.voting_value}} / {{data.voting_full_value}} )
-            Full in {{data.full_in_hour}} hours
+            Voting Mana ( $ {{data.voting_value}} / {{data.voting_full_value}} , Full in {{data.full_in_hour}} hours )
           </div>
           <div class="text-info">
             <input id="vp_slider" data-slider-id='data_vp_slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-popup-enabled="true" />
@@ -50,10 +56,10 @@
               </span>
         </div>
       </div>
-      <div class="text-success">Bandwidth Remaining</div>
+      <div class="text-success">Resource Credits ({{data.rc_fullin}})</div>
       <div class="progress margin-bottom-sm">
-        <div id="bandwidth_remaining" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width: 0%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-          <span>{{data.bandwidth_remaining}}%</span>
+        <div id="resource_credits" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width: 0%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+          <span>{{data.resource_credits}}%</span>
         </div>
       </div>
       </span>
@@ -78,6 +84,8 @@
   <!-- col -->
 </div>
 <!-- row -->
+</div>
+
 
 <hr class="margin-top-xs margin-bottom-xs" />
 
@@ -177,23 +185,27 @@
             <table id="tab_feed_table" class="table table-hover text-center hidden">
               <tbody>
                 <tr v-for="(item, idx) in data.feedList" v-on:click="viewPost(item)" data-html="true" data-toggle="modal" data-target="#postModal">
-                  <td class="text-left padding-xs">
+                  <td class="text-left padding-lg">
+
+                    <div class="margin-zero" >
+                      <h5 class="margin-zero" ><b>
+                        <img :src="`https://cdn.steemitimages.com/u/${item.author}/avatar/small`" class="Userpic user" alt="avatar">
+                        @{{item.author}} </b> <span class="color-gray">in {{item.category}}</span>
+                      </h5>
+                    </div>
                     <div class="col-md-2 padding-xs margin-bottom-xs" v-if="item.images && item.images.length > 0">
                       <div class="image">
-                        <img class="padding-xs doorImg" :src="`https://steemitimages.com/600x800/${item.images[1]}`" alt="door">
-                        <div class="text">
-                          <img :src="`https://cdn.steemitimages.com/u/${item.author}/avatar/small`" class="Userpic user" alt="avatar">
-                        </div>
+                        <img class="padding-xs doorImg" :src="`https://steemitimages.com/300x150/${item.images[1]}`" alt="door">
                       </div>
                     </div>
                     <div class="text-center col-md-2 padding-xs" v-else>
                       <img :src="`https://cdn.steemitimages.com/u/${item.author}/avatar/big`" class="Userpic" alt="avatar">
                     </div>
                     <div class="col-md-10 padding-xs">
-                      <div class="margin-bottom-xs">
-                        <a href="javascript:;" target="_blank"><b>{{ item.title }}</b></a>
+                      <div class="margin-bottom-xs ">
+                        <h4><b>{{ item.title }}</b></h4>
                       </div>
-                      <div class="text-left margin-bottom-sm text-justify post-preview" v-html="item.text.length > 88 ? item.text.substring(0, 88)+'...' :item.text">
+                      <div class="text-left margin-bottom-sm text-justify post-preview" v-html="item.text.length > 188 ? item.text.substring(0, 188)+'...' :item.text">
 
                       </div>
                       <div>
@@ -349,7 +361,7 @@
     </div>
   </div>
 </div>
-</div>
+
 
 <!-- Modal -->
 <div id="postModal" class="modal fade padding-xs" role="dialog">
@@ -430,8 +442,14 @@
 .doorImg {
   display: block;
   max-width: 100%;
+<<<<<<< HEAD:steem.apps/Home.vue
   max-height: 400px;
   margin: auto;
+=======
+  max-height: 150px;
+  overflow: hidden;
+  margin:auto;
+>>>>>>> de4e762e41cdd4910c55ccb69c89290c3e3392d0:steem.apps/vue/Home.vue
 }
 
 .image .text {
@@ -439,16 +457,21 @@
   top: -1px;
   left: -1px;
 }
+<<<<<<< HEAD:steem.apps/Home.vue
 
 #postModal .modal-header {
   padding: 0.25em;
 }
 
+=======
+#postModal .modal-header { padding:1em; }
+>>>>>>> de4e762e41cdd4910c55ccb69c89290c3e3392d0:steem.apps/vue/Home.vue
 #postModal .modal-body {
   max-height: calc(100vh - 180px);
   overflow-y: auto;
   font-size: 1.1em;
   word-break: break-all;
+<<<<<<< HEAD:steem.apps/Home.vue
   padding: 0.5em;
   font-family: 'Godo';
 }
@@ -460,6 +483,15 @@
   #postModal .modal-body {
     padding: 1.2em;
   }
+=======
+  padding:1.15em;
+  font-family: 'Godo';
+}
+@media(min-width:768px){
+  #postModal .modal-header { padding:1.2em; }
+  #postModal .modal-body { padding:1.2em; }
+  #tab_feed_table>tbody>tr>td { padding-top : 10px; padding-left:30px;padding-right:30px;padding-bottom: 10px;}
+>>>>>>> de4e762e41cdd4910c55ccb69c89290c3e3392d0:steem.apps/vue/Home.vue
 }
 
 .modal-body p {
@@ -903,7 +935,38 @@ function getAccounts(arr_acct_nm) {
   return deferred.promise();
 }
 
-function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo) {
+function getResourceCredits(arr_acct_nm) {
+  var deferred = $.Deferred();
+  let param={"jsonrpc":"2.0","id":1,"method":"rc_api.find_rc_accounts","params":{"accounts":arr_acct_nm}};
+  $.ajax({
+      url: "https://api.steemitstage.com/",
+      type: "POST",
+      data: JSON.stringify(param),
+      success: function(res){
+        deferred.resolve(res);
+        console.log(res);
+      },
+      error:function(e){
+        console.log(e);
+        deferred.reject(err);
+      }
+    });
+  return deferred.promise();
+}
+var STEEMIT_100_PERCENT = 10000;
+var STEEMIT_VOTE_REGENERATION_SECONDS = (5 * 60 * 60 * 24); // 5 day
+
+var getVotingPowerPerAccount = function(account) {
+    var voting_power = account.voting_power;
+    var last_vote_time = new Date((account.last_vote_time) + 'Z');
+    var elapsed_seconds = (new Date() - last_vote_time) / 1000;
+    var regenerated_power = Math.round((STEEMIT_100_PERCENT * elapsed_seconds) / STEEMIT_VOTE_REGENERATION_SECONDS);
+    var current_power = Math.min(voting_power + regenerated_power, STEEMIT_100_PERCENT);
+    return current_power;
+};
+
+
+function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo, rcInfo) {
 
   try {
 
@@ -925,9 +988,13 @@ function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo) {
     data.acct_sp_delegate = Math.floor(parseInt(acctInfo[0].delegated_vesting_shares.replace(" VESTS", "")) * steemPower);
     data.acct_sp_received = Math.floor(parseInt(acctInfo[0].received_vesting_shares.replace(" VESTS", "")) * steemPower);
 
+    var vpow = getVotingPowerPerAccount(acctInfo[0]);
+    vpow = Math.min(vpow / 100, 100).toFixed(2);
+    /*
     var secondsago = (new Date - new Date(acctInfo[0].last_vote_time + "Z")) / 1000;
     var vpow = acctInfo[0].voting_power + (10000 * secondsago / 432000);
-    vpow = Math.min(vpow / 100, 100).toFixed(2);
+
+    */
 
     const STEEMIT_BANDWIDTH_AVERAGE_WINDOW_SECONDS = 60 * 60 * 24 * 7;
     let vestingShares = parseFloat(acctInfo[0].vesting_shares.replace(" VESTS", ""))
@@ -948,13 +1015,28 @@ function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo) {
     new_bandwidth = Math.round(new_bandwidth / 1000000);
     let bandwidth_remaining = 100 - (100 * new_bandwidth / bandwidthAllocated);
     bandwidth_remaining = bandwidth_remaining.toFixed(2);
-    //console.log("current bandwidth used", new_bandwidth);
-    //console.log("current bandwidth allocated", bandwidthAllocated);
-    //console.log("bandwidth % used", 100 * new_bandwidth / bandwidthAllocated);
-    //console.log("bandwidth % remaining", bandwidth_remaining);
-
 
     data.bandwidth_remaining = bandwidth_remaining;
+
+    // start rc calc.
+    console.log(rcInfo);
+    const STEEM_RC_MANA_REGENERATION_SECONDS =432000;
+    const estimated_max = parseFloat(rcInfo.result.rc_accounts["0"].max_rc);
+    const current_mana = parseFloat(rcInfo.result.rc_accounts["0"].rc_manabar.current_mana);
+    const last_update_time = parseFloat(rcInfo.result.rc_accounts["0"].rc_manabar.last_update_time);
+    const diff_in_seconds = Math.round(Date.now()/1000-last_update_time);
+    let estimated_mana = (current_mana + diff_in_seconds * estimated_max / STEEM_RC_MANA_REGENERATION_SECONDS);
+    if (estimated_mana > estimated_max)
+        estimated_mana = estimated_max;
+
+    const estimated_pct = estimated_mana / estimated_max * 100;
+    const calcRC = {"current_mana": current_mana, "last_update_time": last_update_time,
+            "estimated_mana": estimated_mana, "estimated_max": estimated_max, "estimated_pct": estimated_pct.toFixed(2),"fullin":getTimeBeforeFull(estimated_pct*100)};
+    console.log(calcRC);
+    data.resource_credits = calcRC.estimated_pct;
+    data.rc_fullin = calcRC.fullin
+    // end resource_credits
+
     // max(log10(abs(reputation))-9,0)*((reputation>= 0)?1:-1)*9+25
     var reputation = Math.max(Math.log10(Math.abs(acctInfo[0].reputation)) - 9, 0) * ((acctInfo[0].reputation >= 0) ? 1 : -1) * 9 + 25;
 
@@ -974,7 +1056,8 @@ function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo) {
     $("#voting_power").css("width", vpow + "%");
     data.voting_power = vpow;
     //setVpSlider( parseInt(vpow)  );
-    $("#bandwidth_remaining").css("width", bandwidth_remaining + "%");
+    //$("#bandwidth_remaining").css("width", bandwidth_remaining + "%");
+    $("#resource_credits").css("width", data.resource_credits + "%");
     //var rewardFund = await steem.api.getRewardFundAsync("post");
 
     data.reward_balance = rewardFund.reward_balance.replace(" STEEM", "");
@@ -1481,18 +1564,19 @@ function inqryAccountInfo() {
     });
     var combinedPromise = $.when(
       getCurrentMedianHistoryPrice(), getRewardFund("poste"), getDynamicGlobalProperties(), getAccounts([data.acct_nm])
+      , getResourceCredits([data.acct_nm])
     );
-    combinedPromise.fail(function(f1Val, f2Val, f3Val, f4Val) {
+    combinedPromise.fail(function(f1Val, f2Val, f3Val, f4Val, f5Val) {
       waitingDialog.hide();
       alert('Steem Node Error!');
-      console.error('fail!', f1Val, f2Val, f3Val, f4Val);
+      console.error('fail!', f1Val, f2Val, f3Val, f4Val, f5Val);
     });
     localStorage.setItem('steem.id', data.acct_nm);
     data.inqry_acct = data.acct_nm;
     // 함수는 getData와 getLocation이 둘 다 해결됐을 때 호출될 것이다.
-    combinedPromise.done(function(marketInfo, rewardFund, gprops, acctInfo) {
-      console.log("We get data: ", marketInfo, rewardFund, gprops, acctInfo);
-      _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo);
+    combinedPromise.done(function(marketInfo, rewardFund, gprops, acctInfo, rcInfo) {
+      console.log("We get data: ", marketInfo, rewardFund, gprops, acctInfo, rcInfo);
+      _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo, rcInfo);
     });
   } catch (err) {
     console.error("error!", err);
@@ -1638,7 +1722,13 @@ var data = {
   commentsList: [],
   repliesList: [],
   post: {},
+<<<<<<< HEAD:steem.apps/Home.vue
   delegateList: []
+=======
+  delegateList : [], is_toggle_acct_info : false
+  , resource_credits : 0 , rc_fullin : ''
+
+>>>>>>> de4e762e41cdd4910c55ccb69c89290c3e3392d0:steem.apps/vue/Home.vue
 };
 //var data2 = data.clone();
 var home = module.exports = {
@@ -1760,7 +1850,7 @@ var home = module.exports = {
     $('#postModal').on('hidden.bs.modal', function(e) {
       $(".modal-body").scrollTop(0);
     })
-  }
+  } // end mounted
 }
 
 getSteemPrice = () => {

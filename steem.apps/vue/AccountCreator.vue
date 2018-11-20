@@ -236,6 +236,7 @@ function isEmail(email) {
 			}
 
 			var ratio = config['STEEM_CREATE_ACCOUNT_WITH_STEEM_MODIFIER'];
+      ratio = 1;
 			//var fee = dsteem.Asset.from(chainProps.account_creation_fee).multiply(ratio);
       var fee = chainProps.account_creation_fee.split(" ")[0] * (ratio);
 
@@ -285,6 +286,7 @@ function getCreateAccountFee(){
       }
       console.log(err2, chainProps);
       var ratio = config['STEEM_CREATE_ACCOUNT_WITH_STEEM_MODIFIER'];
+      ratio = 1;
       //var fee = dsteem.Asset.from(chainProps.account_creation_fee).multiply(ratio);
       var fee = (chainProps.account_creation_fee.replace(" STEEM","")) * (ratio);
 

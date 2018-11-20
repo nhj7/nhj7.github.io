@@ -69,6 +69,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109501118-1"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'UA-109501118-1');
+</script>
 <style>
 	a {
 		cursor : hand;
@@ -143,6 +151,10 @@
 					<li name="AppCenter" id="AppCenter"><a href="#AppCenter"><i class="text-info glyphicon glyphicon-th"></i> App Center</a></li>
 					<!--li><a href="#RemindYou " @click="setCurrentView('RemindYou')">Remind You </a></li-->
 					<li name="AccountCreator" id="AccountCreator"><a href="#AccountCreator"><i class="text-info glyphicon glyphicon-user"></i> Account Creator</a></li>
+					<li name="TickerUpbit" id="TickerUpbit"><a href="#TickerUpbit"><i class="text-info glyphicon glyphicon-bitcoin"></i> Ticker(Upbit)</a></li>
+
+					<!--li name="RecoveryMana" id="RecoveryMana"><a href="#RecoveryMana"><i class="text-info glyphicon glyphicon-bitcoin"></i> RecoveryMana</a></li-->
+
 					<li class="dropdown" id="dropdown_family"><a class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false"><i class="text-info glyphicon glyphicon-link"></i> Family Site <span class="caret"></span></a>
@@ -155,6 +167,7 @@
 							<li><a href="https://steemus.com" target="_blank">Steem Us - @jungs</a></li>
 							<li><a href="https://asinayo.github.io/jobsteem/" target="_blank">jobsteem - @asinayo</a></li>
 							<li><a href="http://cobot.co.kr" target="_blank">cobot - All Coin Ticker @nhj12311</a></li>
+							<li><a href="./test/test_upbit.html" target="_blank">upbit simple ticker @nhj12311</a></li>
 							<li role="separator" class="divider"></li>
 							<li class="dropdown-header">Steem Platform</li>
 							<li><a href="https://steemkr.com/created/kr" target="_blank">steemkr</a></li>
@@ -280,10 +293,18 @@
 		  '/': 'Home',
 		  '/about': 'About'
 		}
+<<<<<<< HEAD
 		var updateVersion = "2018.07.22.02";
+=======
+		var updateVersion = "2018.09.28.01";
+>>>>>>> de4e762e41cdd4910c55ccb69c89290c3e3392d0
 
 		function loadVue(path){
-			return httpVueLoader(path + '.vue?v='+updateVersion);
+			//gtag('page', {page:path, title:'', location:path});
+			//gtag('config', 'UA-109501118-1');
+
+
+			return httpVueLoader('./vue/'+path + '.vue?v='+updateVersion);
 		}
 		var app = new Vue({
 			router
@@ -302,7 +323,8 @@
 				, 'RemindYou' : loadVue('./RemindYou')
 				, 'Home' : loadVue('./Home')
 				, 'VotingStat' : loadVue('./VotingStat')
-
+				, 'TickerUpbit' : loadVue('./TickerUpbit')
+				, 'RecoveryMana' : loadVue('./RecoveryMana')
 			}
 			, methods : {
 				setCurrentView : function(li){
@@ -310,6 +332,7 @@
 					if(!name) return;
 
 					app.currentView = name.trim();
+					gtag('config', 'UA-109501118-1', {'page_path': name });
 					setToggle( li );
 				}
 			}
@@ -430,14 +453,7 @@
 	})(jQuery);
 
 	</script>
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109501118-1"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
-		gtag('config', 'UA-109501118-1');
-	</script>
+
 
 	<script>
 
@@ -522,7 +538,7 @@
 
 	var socket;
 	if( location.protocol =="https:" ){
-		initSocket();
+		//initSocket();
 	}else{
 
 	}
