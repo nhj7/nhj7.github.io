@@ -442,14 +442,11 @@
 .doorImg {
   display: block;
   max-width: 100%;
-<<<<<<< HEAD:steem.apps/Home.vue
-  max-height: 400px;
-  margin: auto;
-=======
+
   max-height: 150px;
   overflow: hidden;
   margin:auto;
->>>>>>> de4e762e41cdd4910c55ccb69c89290c3e3392d0:steem.apps/vue/Home.vue
+
 }
 
 .image .text {
@@ -457,21 +454,14 @@
   top: -1px;
   left: -1px;
 }
-<<<<<<< HEAD:steem.apps/Home.vue
 
-#postModal .modal-header {
-  padding: 0.25em;
-}
-
-=======
 #postModal .modal-header { padding:1em; }
->>>>>>> de4e762e41cdd4910c55ccb69c89290c3e3392d0:steem.apps/vue/Home.vue
+
 #postModal .modal-body {
   max-height: calc(100vh - 180px);
   overflow-y: auto;
   font-size: 1.1em;
   word-break: break-all;
-<<<<<<< HEAD:steem.apps/Home.vue
   padding: 0.5em;
   font-family: 'Godo';
 }
@@ -483,7 +473,6 @@
   #postModal .modal-body {
     padding: 1.2em;
   }
-=======
   padding:1.15em;
   font-family: 'Godo';
 }
@@ -491,7 +480,6 @@
   #postModal .modal-header { padding:1.2em; }
   #postModal .modal-body { padding:1.2em; }
   #tab_feed_table>tbody>tr>td { padding-top : 10px; padding-left:30px;padding-right:30px;padding-bottom: 10px;}
->>>>>>> de4e762e41cdd4910c55ccb69c89290c3e3392d0:steem.apps/vue/Home.vue
 }
 
 .modal-body p {
@@ -1722,13 +1710,10 @@ var data = {
   commentsList: [],
   repliesList: [],
   post: {},
-<<<<<<< HEAD:steem.apps/Home.vue
-  delegateList: []
-=======
   delegateList : [], is_toggle_acct_info : false
   , resource_credits : 0 , rc_fullin : ''
 
->>>>>>> de4e762e41cdd4910c55ccb69c89290c3e3392d0:steem.apps/vue/Home.vue
+
 };
 //var data2 = data.clone();
 var home = module.exports = {
