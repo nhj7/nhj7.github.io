@@ -16,8 +16,8 @@
           <span class="input-group-addon">
             <a v-on:click='data.is_toggle_acct_info = !data.is_toggle_acct_info' id="toggle_acct_info" href="#acct_info" data-toggle="collapse">
               <span v-show="!data.is_toggle_acct_info">hidden details</span>
-              <span v-show="data.is_toggle_acct_info">show details</span>
-            </a>
+          <span v-show="data.is_toggle_acct_info">show details</span>
+          </a>
 
           </span>
         </div>
@@ -27,7 +27,7 @@
   </div>
   <!-- form-group -->
 
-  <div id="acct_info" class="form-group collapse in" >
+  <div id="acct_info" class="form-group collapse in">
     <div class="row">
       <div class="col-sm-3">
         <div class="input-group">
@@ -187,8 +187,8 @@
                 <tr v-for="(item, idx) in data.feedList" v-on:click="viewPost(item)" data-html="true" data-toggle="modal" data-target="#postModal">
                   <td class="text-left padding-lg">
 
-                    <div class="margin-zero" >
-                      <h5 class="margin-zero" ><b>
+                    <div class="margin-zero">
+                      <h5 class="margin-zero"><b>
                         <img :src="`https://cdn.steemitimages.com/u/${item.author}/avatar/small`" class="Userpic user" alt="avatar">
                         @{{item.author}} </b> <span class="color-gray">in {{item.category}}</span>
                       </h5>
@@ -445,7 +445,7 @@
 
   max-height: 150px;
   overflow: hidden;
-  margin:auto;
+  margin: auto;
 
 }
 
@@ -455,7 +455,9 @@
   left: -1px;
 }
 
-#postModal .modal-header { padding:1em; }
+#postModal .modal-header {
+  padding: 1em;
+}
 
 #postModal .modal-body {
   max-height: calc(100vh - 180px);
@@ -476,10 +478,20 @@
   padding:1.15em;
   font-family: 'Godo';
 }
-@media(min-width:768px){
-  #postModal .modal-header { padding:1.2em; }
-  #postModal .modal-body { padding:1.2em; }
-  #tab_feed_table>tbody>tr>td { padding-top : 10px; padding-left:30px;padding-right:30px;padding-bottom: 10px;}
+
+@media(min-width:768px) {
+  #postModal .modal-header {
+    padding: 1.2em;
+  }
+  #postModal .modal-body {
+    padding: 1.2em;
+  }
+  #tab_feed_table>tbody>tr>td {
+    padding-top: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 10px;
+  }
 }
 
 .modal-body p {
@@ -925,32 +937,39 @@ function getAccounts(arr_acct_nm) {
 
 function getResourceCredits(arr_acct_nm) {
   var deferred = $.Deferred();
-  let param={"jsonrpc":"2.0","id":1,"method":"rc_api.find_rc_accounts","params":{"accounts":arr_acct_nm}};
+  let param = {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "rc_api.find_rc_accounts",
+    "params": {
+      "accounts": arr_acct_nm
+    }
+  };
   $.ajax({
-      url: "https://api.steemitstage.com/",
-      type: "POST",
-      data: JSON.stringify(param),
-      success: function(res){
-        deferred.resolve(res);
-        console.log(res);
-      },
-      error:function(e){
-        console.log(e);
-        deferred.reject(err);
-      }
-    });
+    url: "https://api.steemitstage.com/",
+    type: "POST",
+    data: JSON.stringify(param),
+    success: function(res) {
+      deferred.resolve(res);
+      console.log(res);
+    },
+    error: function(e) {
+      console.log(e);
+      deferred.reject(e);
+    }
+  });
   return deferred.promise();
 }
 var STEEMIT_100_PERCENT = 10000;
 var STEEMIT_VOTE_REGENERATION_SECONDS = (5 * 60 * 60 * 24); // 5 day
 
 var getVotingPowerPerAccount = function(account) {
-    var voting_power = account.voting_power;
-    var last_vote_time = new Date((account.last_vote_time) + 'Z');
-    var elapsed_seconds = (new Date() - last_vote_time) / 1000;
-    var regenerated_power = Math.round((STEEMIT_100_PERCENT * elapsed_seconds) / STEEMIT_VOTE_REGENERATION_SECONDS);
-    var current_power = Math.min(voting_power + regenerated_power, STEEMIT_100_PERCENT);
-    return current_power;
+  var voting_power = account.voting_power;
+  var last_vote_time = new Date((account.last_vote_time) + 'Z');
+  var elapsed_seconds = (new Date() - last_vote_time) / 1000;
+  var regenerated_power = Math.round((STEEMIT_100_PERCENT * elapsed_seconds) / STEEMIT_VOTE_REGENERATION_SECONDS);
+  var current_power = Math.min(voting_power + regenerated_power, STEEMIT_100_PERCENT);
+  return current_power;
 };
 
 
@@ -1008,18 +1027,24 @@ function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo, rcInfo) {
 
     // start rc calc.
     console.log(rcInfo);
-    const STEEM_RC_MANA_REGENERATION_SECONDS =432000;
+    const STEEM_RC_MANA_REGENERATION_SECONDS = 432000;
     const estimated_max = parseFloat(rcInfo.result.rc_accounts["0"].max_rc);
     const current_mana = parseFloat(rcInfo.result.rc_accounts["0"].rc_manabar.current_mana);
     const last_update_time = parseFloat(rcInfo.result.rc_accounts["0"].rc_manabar.last_update_time);
-    const diff_in_seconds = Math.round(Date.now()/1000-last_update_time);
+    const diff_in_seconds = Math.round(Date.now() / 1000 - last_update_time);
     let estimated_mana = (current_mana + diff_in_seconds * estimated_max / STEEM_RC_MANA_REGENERATION_SECONDS);
     if (estimated_mana > estimated_max)
-        estimated_mana = estimated_max;
+      estimated_mana = estimated_max;
 
     const estimated_pct = estimated_mana / estimated_max * 100;
-    const calcRC = {"current_mana": current_mana, "last_update_time": last_update_time,
-            "estimated_mana": estimated_mana, "estimated_max": estimated_max, "estimated_pct": estimated_pct.toFixed(2),"fullin":getTimeBeforeFull(estimated_pct*100)};
+    const calcRC = {
+      "current_mana": current_mana,
+      "last_update_time": last_update_time,
+      "estimated_mana": estimated_mana,
+      "estimated_max": estimated_max,
+      "estimated_pct": estimated_pct.toFixed(2),
+      "fullin": getTimeBeforeFull(estimated_pct * 100)
+    };
     console.log(calcRC);
     data.resource_credits = calcRC.estimated_pct;
     data.rc_fullin = calcRC.fullin
@@ -1551,8 +1576,7 @@ function inqryAccountInfo() {
       progressType: 'info'
     });
     var combinedPromise = $.when(
-      getCurrentMedianHistoryPrice(), getRewardFund("poste"), getDynamicGlobalProperties(), getAccounts([data.acct_nm])
-      , getResourceCredits([data.acct_nm])
+      getCurrentMedianHistoryPrice(), getRewardFund("poste"), getDynamicGlobalProperties(), getAccounts([data.acct_nm]), getResourceCredits([data.acct_nm])
     );
     combinedPromise.fail(function(f1Val, f2Val, f3Val, f4Val, f5Val) {
       waitingDialog.hide();
@@ -1710,8 +1734,10 @@ var data = {
   commentsList: [],
   repliesList: [],
   post: {},
-  delegateList : [], is_toggle_acct_info : false
-  , resource_credits : 0 , rc_fullin : ''
+  delegateList: [],
+  is_toggle_acct_info: false,
+  resource_credits: 0,
+  rc_fullin: ''
 
 
 };
