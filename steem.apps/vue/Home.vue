@@ -946,7 +946,7 @@ function getResourceCredits(arr_acct_nm) {
     }
   };
   $.ajax({
-    url: "https://api.steemitstage.com/",
+    url: "https://api.steemit.com/",
     type: "POST",
     data: JSON.stringify(param),
     success: function(res) {
