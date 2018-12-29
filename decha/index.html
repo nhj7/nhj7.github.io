@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="ko">
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="cache-control" content="max-age=0" />
+<meta http-equiv="cache-control" content="no-store" />
+<meta http-equiv="expires" content="-1" />
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+<meta http-equiv="pragma" content="no-cache" />
+
+<link rel="icon" type="image/x-icon" href="./favicon.ico?v=2">
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="./img/favicons/favicon-57.png" type="image/png" >
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="./img/favicons/favicon-114.png" type="image/png" >
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="./img/favicons/favicon-72.png" type="image/png" >
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="./img/favicons/favicon-144.png" type="image/png">
+<link rel="apple-touch-icon-precomposed" sizes="60x60" href="./img/favicons/favicon-60.png" type="image/png" >
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="./img/favicons/favicon-120.png" type="image/png">
+<link rel="apple-touch-icon-precomposed" sizes="76x76" href="./img/favicons/favicon-76.png" type="image/png" >
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="./img/favicons/favicon-152.png" type="image/png">
+<link rel="icon" type="image/png" href="./img/favicons/favicon_196.png" sizes="196x196">
+<link rel="icon" type="image/png" href="./img/favicons/favicon_128.png" sizes="128x128">
+<link rel="icon" type="image/png" href="./img/favicons/favicon_96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="./img/favicons/favicon_32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="./img/favicons/favicon_16.png" sizes="16x16">
+
+<meta name="msapplication-TileColor" content="#FFFFFF">
+<meta name="msapplication-TileImage" content="./img/favicons/favicon_144.png">
+<meta name="msapplication-square70x70logo" content="./img/favicons/favicon_70.png">
+<meta name="msapplication-square150x150logo" content="./img/favicons/favicon_144.png">
+<meta name="msapplication-square310x310logo" content="./img/favicons/favicon_310.png">
+
+
+<!-- bootstrap 4 init -->
+<!--link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script-->
+<!-- bootstrap 4 end -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<!-- materialize 4 init -->
+<!-- Compiled and minified CSS -->
+
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<!-- materialize 4 end -->
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/http-vue-loader/src/httpVueLoader.min.js"></script>
+<title>Destiny Child Info</title>
+<!-- Latest compiled and minified CSS -->
+<style>
+.active {
+   background:#e7e7e7; color:#555;
+}
+.float_right{
+  float:right !important;
+}
+.sidenav{
+  width : 60vw
+}
+</style>
+
+
+<script src="https://www.gstatic.com/firebasejs/5.7.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBFKXhSFnjoGNp43ilg_mLrmBDAzS2AHL4",
+    authDomain: "decha-6276f.firebaseapp.com",
+    databaseURL: "https://decha-6276f.firebaseio.com",
+    projectId: "decha-6276f",
+    storageBucket: "decha-6276f.appspot.com",
+    messagingSenderId: "500322112743"
+  };
+  firebase.initializeApp(config);
+
+  // Get a reference to the database service
+  var database = firebase.database();
+
+  database.ref('child').once('value').then(function(snapshot) {
+    //var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
+    console.log("snapshot.val()", snapshot.val());
+    // ...
+  });
+
+  var rootRef = firebase.database().ref();
+  rootRef.once('value').then(function(snapshot) {
+    //var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
+    console.log("rootRef.val()", snapshot.val());
+    // ...
+  });
+
+
+
+
+</script>
+
+<script>
+
+
+
+
+
+
+</script>
+
+</head>
+<body >
+
+<header>
+<div class="navbar-fixed">
+  <nav class="silver">
+    <div class="nav-wrapper">
+      <a href="#!" class="brand-logo">
+        Destiny Child
+      </a>
+      <a href="#" data-target="mobile-nav" class="float_right sidenav-trigger "><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="#/">Child</a></li>
+        <li><a href="#/item">Item</a></li>
+
+      </ul>
+    </div>
+  </nav>
+</div><!-- navbar-fixed -->
+
+  <ul class="sidenav" id="mobile-nav">
+    <li><a ><i class="material-icons">close</i>Close</a></li>
+    <li><a href="#/"><i class="material-icons">recent_actors</i>Child</a></li>
+    <li><a href="#/item"><i class="material-icons">gavel</i>Item</a></li>
+    <!-- Dropdown Trigger -->
+    <li><a class="dropdown-trigger show-on-large" href="#!" data-target="dropdown1">Sub Menu1<i class="material-icons right">arrow_drop_down</i></a></li>
+
+
+    <li class="no-padding">
+      <ul class="collapsible collapsible-accordion">
+        <li>
+          <a class="collapsible-header">Dropdown1<i class="material-icons">arrow_drop_down</i></a>
+          <div class="collapsible-body">
+            <ul>
+              <li><a href="#!">First</a></li>
+              <li><a href="#!">Second</a></li>
+              <li><a href="#!">Third</a></li>
+              <li><a href="#!">Fourth</a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </li>
+    <li class="no-padding">
+      <ul class="collapsible collapsible-accordion">
+        <li>
+          <a class="collapsible-header">Dropdown2<i class="material-icons">arrow_drop_down</i></a>
+          <div class="collapsible-body">
+            <ul>
+              <li><a href="#!">First</a></li>
+              <li><a href="#!">Second</a></li>
+              <li><a href="#!">Third</a></li>
+              <li><a href="#!">Fourth</a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </li>
+
+
+  </ul>
+
+  <!-- Dropdown Structure -->
+  <ul id="dropdown1" class="dropdown-content">
+    <li><a href="#!">one</a></li>
+    <li><a href="#!">two</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">three</a></li>
+  </ul>
+
+  <!-- Dropdown Structure -->
+  <ul id="dropdown2" class="dropdown-content">
+    <li><a href="#!">1</a></li>
+    <li><a href="#!">2</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">3</a></li>
+  </ul>
+
+</header>
+
+
+
+  <div id="app">
+    <router-view></router-view>
+  </div><!-- end app -->
+  <br />
+  <button  class="btn waves-effect waves-light" type="submit" name="action">Change Theme
+     <i class="material-icons right">send</i>
+  </button>
+
+  <script>
+
+  var themeColor ;
+
+    // 1. 라우트 컴포넌트를 정의하세요.
+    // 아래 내용들은 다른 파일로부터 가져올 수 있습니다.
+    var updateVersion = "2018.09.28.01";
+		function loadVue(path){
+			return httpVueLoader('./vue/'+path + '.vue?v='+updateVersion);
+		}
+
+    // 2. 라우트를 정의하세요.
+    // Each route should map to a component. The "component" can
+    // 각 라우트는 반드시 컴포넌트와 매핑되어야 합니다.
+    // "component"는 `Vue.extend()`를 통해 만들어진
+    // 실제 컴포넌트 생성자이거나 컴포넌트 옵션 객체입니다.
+    const routes = [
+      { path: '/', component: loadVue('main') },
+      { path: '/item', component: loadVue('item') },
+      { path: '/foo', component: loadVue('foo') }
+    ]
+
+
+
+    // 3. `routes` 옵션과 함께 router 인스턴스를 만드세요.
+    // 추가 옵션을 여기서 전달해야합니다.
+    // 지금은 간단하게 유지하겠습니다.
+    const router = new VueRouter({
+      routes // `routes: routes`의 줄임
+
+    })
+
+    // 4. 루트 인스턴스를 만들고 mount 하세요.
+    // router와 router 옵션을 전체 앱에 주입합니다.
+    const app = new Vue({
+      router
+      , mounted: function () {
+        console.log('mounted');
+
+        // Check browser support
+        if (typeof(Storage) !== "undefined") {
+          // Store
+          themeColor = localStorage.getItem("themeColor");
+          if(themeColor == undefined){
+            localStorage.setItem("themeColor", "blue");
+            themeColor = 'blue';
+          }
+          setThemeColor(themeColor);
+        } else {
+          Materialize.toast("Sorry, your browser does not support Web Storage...", 4000)
+        }
+
+        $("button").click(function(){
+          var themeColor = getRandomColor();
+          setThemeColor(themeColor);
+          // Update Theme Color
+           if (typeof(Storage) !== "undefined") {
+            // Store
+            localStorage.setItem("themeColor", themeColor);
+           } else {
+             Materialize.toast("Sorry, your browser does not support Web Storage...", 4000)
+           }
+
+        });
+
+
+
+        $('.sidenav').sidenav({ edge: 'right' , menuWidth: $(window).width() });
+
+        $('.collapsible').collapsible();
+
+        $(".dropdown-trigger").dropdown({
+          coverTrigger: false
+        });
+
+
+
+        $('.sidenav a').on('click', function(){
+          console.log('onclick', this.href, this.classList);
+          if( this.classList == '' ){
+            $('.sidenav').sidenav('close');
+          }
+        });
+        //$('.collapsible')
+        $('.sidenav').sidenav('open');
+
+      } // end mounted
+    }).$mount('#app')
+
+    router.beforeEach((to, from, next) => {
+      next();
+      console.log('router.beforeEach' ,to, from);
+    })
+
+
+
+    function getRandomColor() {
+       var letters = '0123456789ABCDEF'.split('');
+       var color = '#';
+       for (var i = 0; i < 6; i++ ) {
+           color += letters[Math.floor(Math.random() * 16)];
+       }
+       return color;
+    }
+
+    function setThemeColor(themeColor){
+      $(".nav-wrapper").css("background-color", themeColor);
+      $(".secondary-content>.material-icons").css("color", themeColor);
+      $(".btn").css("background-color", themeColor);
+      $(".page-footer").css("background-color", themeColor);
+      $(".input-field").css("color", themeColor);
+      $(".input-field>.material-icons").css("color", themeColor);
+      $(".input-field>label").css("color", themeColor);
+      $(".btn-floating").css("background-color", themeColor);
+      $(".dropdown-content>li>a").css("color", themeColor);
+      $(".sidenav").css("background-color", themeColor);
+      $(".sidenav>li").css("background-color", themeColor);
+      $(".sidenav a").css("color", 'white');
+      $(".sidenav a").css("background-color", themeColor);
+    }
+
+    function setToggle(obj){
+			console.log('setToggle');
+			$(".navbar").find(".active").toggleClass("active");
+			//$('.navbar-collapse').collapse('hide');
+			//console.log(obj);
+			$(obj).toggleClass("active");
+			if( $(".navbar-toggler").is(':visible') ){
+				$(".navbar-toggler").click();
+			}
+		}
+  </script>
+</body>
+</html>
