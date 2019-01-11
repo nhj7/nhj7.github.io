@@ -17,18 +17,14 @@
 <script >
 function openApp(params, app){
 				console.log('openApp');
-
 				if(app=="OKB"){
 				var android_pkg_name = 'kr.or.sbbank.banksb';
 	            var ios_scheme = 'oksavingbank';
 	            var ios_appid = '973344869';
-
 				}
         params = params || '';
         var agent = navigator.userAgent;
-
         console.log(agent);
-
         if (isMobile()){
       	 	if (agent.indexOf("Android") != -1) {
             //alert("android");
@@ -36,9 +32,6 @@ function openApp(params, app){
             window.location = "intent://" + android_pkg_name + params + "#Intent;scheme=http;package=" + android_pkg_name + ";end";
           }
       		else if(agent.indexOf("iPhone") != -1) {
-            //alert("ios122");
-            //location.href = "https://itunes.apple.com/kr/app/id567325889?mt=8";
-            //setTimeout(function(){ window.location = "https://naver.com"; }, 250);
 
           }
         }
