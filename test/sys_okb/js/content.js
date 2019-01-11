@@ -50,8 +50,8 @@ window.onload = function(){
         return mobile_iPhone;
     }
     if( isMobile_Android() ){
-        //Mobile Android link
-        $link.setAttribute('href','Android링크');
+      var android_pkg_name = 'kr.or.sbbank.banksb';
+      $link.setAttribute('href',"intent://" + android_pkg_name + "#Intent;scheme=http;package=" + android_pkg_name + ";end");
     } else if( isMobile_iPhone() ){
         //Mobile iPhone link
         $link.setAttribute('href','https://itunes.apple.com/kr/app/id567325889?mt=8');
