@@ -6,12 +6,12 @@ window.onload = function(){
         var winH = window.innerHeight;
         var headerH = document.getElementsByClassName('header')[0].clientHeight;
         var footerH = document.getElementsByClassName('footer')[0].clientHeight;
-        
+
         if( window.innerWidth > 1250 ){
             document.getElementsByClassName('wrap')[0].style.height = winH-( headerH+footerH ) - 100 + "px";
         }
     }
-    
+
     //Mobile IMG
     var checkDivTop = document.getElementsByClassName('top-img')[0];
     var checkDivFoot = document.getElementsByClassName('foot-img')[0];
@@ -54,7 +54,7 @@ window.onload = function(){
         $link.setAttribute('href','Android링크');
     } else if( isMobile_iPhone() ){
         //Mobile iPhone link
-        $link.setAttribute('href','iPhone링크');
+        $link.setAttribute('href','https://itunes.apple.com/kr/app/id567325889?mt=8');
     }else {
         //PC link
         $link.setAttribute('href','https://ok.banking.fsb.or.kr');
