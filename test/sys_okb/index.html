@@ -14,39 +14,40 @@
 	<script src="js/content.js"></script>
 </head>
 
-<script > 
+<script >
 function openApp(params, app){
 				console.log('openApp');
-				
+
 				if(app=="OKB"){
 				var android_pkg_name = 'kr.or.sbbank.banksb';
 	            var ios_scheme = 'oksavingbank';
 	            var ios_appid = '973344869';
-					
+
 				}
 	            params = params || '';
 	            var agent = navigator.userAgent;
-	            
-	            console.log(agent);	
+
+	            console.log(agent);
 
 	            if (isMobile()){
-	            		alert("앱");
+
  	            	 	if (agent.indexOf("Android") != -1) {
+                    alert("android");
 			                // var android_pkg_name = "apms.apro.rush";
 			                window.location = "intent://" + android_pkg_name + params + "#Intent;scheme=http;package=" + android_pkg_name + ";end";
-			            } 
+			            }
 	            		else if(agent.indexOf("iPhone") != -1) {
-
+                    alert("ios");
 			                window.location.href = "https://itunes.apple.com/kr/app/%EC%A0%80%EC%B6%95%EC%9D%80%ED%96%89-%EC%8A%A4%EB%A7%88%ED%8A%B8%ED%8F%B0%EB%B1%85%ED%82%B9/id567325889?mt=8";
-			            } 
- 	            	 	
+			            }
+
 	            }
 	            else{
 	            	alert("웹");
 	            	window.location.href ="https://ok.banking.fsb.or.kr"
 	            }
-	            
-	            
+
+
 	        	function isMobile() {
 	        		var mobile = false;
 	        		var mobileArry = ['iPhone','iPod','BlackBerry','Android','Windows CE','LG','MOT','SAMSUNG','SonyEricsson', 'opera min', 'webos','nokia','opera mobi','iemobile'];
@@ -58,7 +59,7 @@ function openApp(params, app){
 	        		}
 	        		return mobile;
 	        	}
-	        	
+
 	        	/* function sb_createAccount() {
 	                startApp.set({
 	                    "action":"kr.or.sbbank.banksb.view.activity.IFActivity",
@@ -70,7 +71,7 @@ function openApp(params, app){
 	                    "bank_name" : "오케이"
 	                }).start();
 	            };  */
-	        	
+
 			}
 </script>
 <body>
