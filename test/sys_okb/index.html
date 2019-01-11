@@ -24,56 +24,43 @@ function openApp(params, app){
 	            var ios_appid = '973344869';
 
 				}
-	            params = params || '';
-	            var agent = navigator.userAgent;
+        params = params || '';
+        var agent = navigator.userAgent;
 
-	            console.log(agent);
+        console.log(agent);
 
-	            if (isMobile()){
+        if (isMobile()){
 
- 	            	 	if (agent.indexOf("Android") != -1) {
-                    alert("android");
-			                // var android_pkg_name = "apms.apro.rush";
-			                window.location = "intent://" + android_pkg_name + params + "#Intent;scheme=http;package=" + android_pkg_name + ";end";
-			            }
-	            		else if(agent.indexOf("iPhone") != -1) {
-                    alert("ios66");
-			              //location.href = "https://itunes.apple.com/kr/app/id567325889?mt=8";
-                    document.location.href = "https://naver.com";
-			            }
+          	 	if (agent.indexOf("Android") != -1) {
+              alert("android");
+                // var android_pkg_name = "apms.apro.rush";
+                window.location = "intent://" + android_pkg_name + params + "#Intent;scheme=http;package=" + android_pkg_name + ";end";
+            }
+        		else if(agent.indexOf("iPhone") != -1) {
+              alert("ios77");
+              //location.href = "https://itunes.apple.com/kr/app/id567325889?mt=8";
+              document.location.href = "https://naver.com";
+            }
+        }
+        else{
+        	alert("웹");
+        	window.location.href ="https://ok.banking.fsb.or.kr"
+        }
 
-	            }
-	            else{
-	            	alert("웹");
-	            	window.location.href ="https://ok.banking.fsb.or.kr"
-	            }
-
-
-	        	function isMobile() {
-	        		var mobile = false;
-	        		var mobileArry = ['iPhone','iPod','BlackBerry','Android','Windows CE','LG','MOT','SAMSUNG','SonyEricsson', 'opera min', 'webos','nokia','opera mobi','iemobile'];
-	        		for (var div in mobileArry) {
-	                    if (navigator.userAgent.match(mobileArry[div]) != null) {
-	                    	mobile = true;
-	                    	break;
-	                    }
-	        		}
-	        		return mobile;
-	        	}
-
-	        	/* function sb_createAccount() {
-	                startApp.set({
-	                    "action":"kr.or.sbbank.banksb.view.activity.IFActivity",
-	                    "package":"kr.or.sbbank.banksb"
-	                }, {
-	                    "proc" : "exBank",
-	                    "biz_type" : "01",
-	                    "bank_code" : "064",
-	                    "bank_name" : "오케이"
-	                }).start();
-	            };  */
-
+        return true;
 			}
+
+      function isMobile() {
+        var mobile = false;
+        var mobileArry = ['iPhone','iPod','BlackBerry','Android','Windows CE','LG','MOT','SAMSUNG','SonyEricsson', 'opera min', 'webos','nokia','opera mobi','iemobile'];
+        for (var div in mobileArry) {
+                if (navigator.userAgent.match(mobileArry[div]) != null) {
+                  mobile = true;
+                  break;
+                }
+        }
+        return mobile;
+      }
 </script>
 <body>
 <div class="header">
