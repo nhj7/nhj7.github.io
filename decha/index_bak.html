@@ -32,10 +32,26 @@
 <meta name="msapplication-square150x150logo" content="./img/favicons/favicon_144.png">
 <meta name="msapplication-square310x310logo" content="./img/favicons/favicon_310.png">
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+<!-- bootstrap 4 init -->
+<!--link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script-->
+<!-- bootstrap 4 end -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<!-- materialize 4 init -->
+<!-- Compiled and minified CSS -->
+
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<!-- materialize 4 end -->
+
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/http-vue-loader/src/httpVueLoader.min.js"></script>
@@ -44,6 +60,17 @@
 <style>
 .active {
    background:#e7e7e7; color:#555;
+}
+.float_right{
+  float:right !important;
+}
+.sidenav{
+  width : 60vw
+}
+.logo-img{
+  max-width: 100%;
+  max-height: 100%;
+  position : fixed;
 }
 </style>
 
@@ -82,61 +109,112 @@
 
 </script>
 
+<script>
+
+
+
+
+
+
+</script>
+
 </head>
-<body style="padding-top: 5em;">
+<body >
 
-  <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">
-      <!--span style="background-color:white;color:black;">Destiny</span>
-      <span style="background-color:black;color:yellow;">CHILD</span-->
+<header>
+<div class="navbar-fixed">
+  <nav class="silver">
+    <div class="nav-wrapper">
+      <a href="#/" class="brand-logo">
+        <div>
+          <img src="./img/favicons/favicon.png"  />
+        </div>
+        <div>Destiny Child</div>
+      </a>
+      <a href="#" data-target="mobile-nav" class="float_right sidenav-trigger "><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="#/">Child</a></li>
+        <li><a href="#/item">Item</a></li>
 
-      <!--span style="background-color:white;color:black;">데스티니</span>
-      <span style="background-color:black;color:yellow;">차일드</span-->
-
-      <img width="180px" height="37px" src="./img/logo.png" />
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#/">Child</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#/item">Item</a>
-        </li>
-        <li id="dropdown_family" class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            이벤트
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">동광클리어 이벤트</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#/etc">ETC</a>
-        </li>
-        <!--li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
-        </li-->
       </ul>
-      <!--form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form-->
     </div>
   </nav>
+</div><!-- navbar-fixed -->
+
+  <ul class="sidenav" id="mobile-nav">
+    <li><a ><i class="material-icons">close</i>Close</a></li>
+    <li><a href="#/"><i class="material-icons">recent_actors</i>Child</a></li>
+    <li><a href="#/item"><i class="material-icons">gavel</i>Item</a></li>
+    <!-- Dropdown Trigger -->
+    <li><a class="dropdown-trigger show-on-large" href="#!" data-target="dropdown1">Sub Menu1<i class="material-icons right">arrow_drop_down</i></a></li>
+
+
+    <li class="no-padding">
+      <ul class="collapsible collapsible-accordion">
+        <li>
+          <a class="collapsible-header">Dropdown1<i class="material-icons">arrow_drop_down</i></a>
+          <div class="collapsible-body">
+            <ul>
+              <li><a href="#!">First</a></li>
+              <li><a href="#!">Second</a></li>
+              <li><a href="#!">Third</a></li>
+              <li><a href="#!">Fourth</a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </li>
+    <li class="no-padding">
+      <ul class="collapsible collapsible-accordion">
+        <li>
+          <a class="collapsible-header">Dropdown2<i class="material-icons">arrow_drop_down</i></a>
+          <div class="collapsible-body">
+            <ul>
+              <li><a href="#!">First</a></li>
+              <li><a href="#!">Second</a></li>
+              <li><a href="#!">Third</a></li>
+              <li><a href="#!">Fourth</a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </li>
+
+
+  </ul>
+
+  <!-- Dropdown Structure -->
+  <ul id="dropdown1" class="dropdown-content">
+    <li><a href="#!">one</a></li>
+    <li><a href="#!">two</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">three</a></li>
+  </ul>
+
+  <!-- Dropdown Structure -->
+  <ul id="dropdown2" class="dropdown-content">
+    <li><a href="#!">1</a></li>
+    <li><a href="#!">2</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">3</a></li>
+  </ul>
+
+</header>
+
+
 
   <div id="app">
     <router-view></router-view>
   </div><!-- end app -->
+  <br />
+  <button  class="btn waves-effect waves-light" type="submit" name="action">Change Theme
+     <i class="material-icons right">send</i>
+  </button>
 
   <script>
+
+  var themeColor ;
+
     // 1. 라우트 컴포넌트를 정의하세요.
     // 아래 내용들은 다른 파일로부터 가져올 수 있습니다.
     var updateVersion = "2018.09.28.01";
@@ -170,40 +248,89 @@
     const app = new Vue({
       router
       , mounted: function () {
-        console.log('console.log');
-        $(".nav-link").each(
-					function(idx, val){
-						//console.log(idx, val);
-            if( !$(val).hasClass('dropdown-toggle') )
-						$(val).on("click",
-							function(){
-								setToggle(val);
-							}
-						);
-					}
-				);
+        console.log('mounted');
 
-        $("#dropdown_family").on('touchmove touchend click', function(event){
-          console.log('dropdown_family');
-					//event.stopPropagation();
-				});
-				$(document).on('touchmove touchend', function(event) {
-					if( "dropdown_family" == event.target.id) return;
-					if( "true"==$("#navButton").attr('aria-expanded') ){
-						$("#navButton").click();
-					}
-				});
+        // Check browser support
+        if (typeof(Storage) !== "undefined") {
+          // Store
+          themeColor = localStorage.getItem("themeColor");
+          if(themeColor == undefined){
+            localStorage.setItem("themeColor", "blue");
+            themeColor = 'blue';
+          }
+          setThemeColor(themeColor);
+        } else {
+          Materialize.toast("Sorry, your browser does not support Web Storage...", 4000)
+        }
+
+        $("button").click(function(){
+          var themeColor = getRandomColor();
+          setThemeColor(themeColor);
+          // Update Theme Color
+           if (typeof(Storage) !== "undefined") {
+            // Store
+            localStorage.setItem("themeColor", themeColor);
+           } else {
+             Materialize.toast("Sorry, your browser does not support Web Storage...", 4000)
+           }
+
+        });
+
+
+
+        $('.sidenav').sidenav({ edge: 'right' , menuWidth: $(window).width() });
+
+        $('.collapsible').collapsible();
+
+        $(".dropdown-trigger").dropdown({
+          coverTrigger: false
+        });
+
+
+
+        $('.sidenav a').on('click', function(){
+          console.log('onclick', this.href, this.classList);
+          if( this.classList == '' ){
+            $('.sidenav').sidenav('close');
+          }
+        });
+        //$('.collapsible')
+        //$('.sidenav').sidenav('open');
 
       } // end mounted
     }).$mount('#app')
 
     router.beforeEach((to, from, next) => {
-
-      //setToggle()
       next();
-
-      console.log(to, from);
+      console.log('router.beforeEach' ,to, from);
     })
+
+
+
+    function getRandomColor() {
+       var letters = '0123456789ABCDEF'.split('');
+       var color = '#';
+       for (var i = 0; i < 6; i++ ) {
+           color += letters[Math.floor(Math.random() * 16)];
+       }
+       return color;
+    }
+
+    function setThemeColor(themeColor){
+      $(".nav-wrapper").css("background-color", themeColor);
+      $(".secondary-content>.material-icons").css("color", themeColor);
+      $(".btn").css("background-color", themeColor);
+      $(".page-footer").css("background-color", themeColor);
+      $(".input-field").css("color", themeColor);
+      $(".input-field>.material-icons").css("color", themeColor);
+      $(".input-field>label").css("color", themeColor);
+      $(".btn-floating").css("background-color", themeColor);
+      $(".dropdown-content>li>a").css("color", themeColor);
+      $(".sidenav").css("background-color", themeColor);
+      $(".sidenav>li").css("background-color", themeColor);
+      $(".sidenav a").css("color", 'white');
+      $(".sidenav a").css("background-color", themeColor);
+    }
 
     function setToggle(obj){
 			console.log('setToggle');
