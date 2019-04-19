@@ -43,10 +43,10 @@
           </div>
   	</div>
   </div>
-  <vue-frame text="VueJS" url="http://www.google.co.kr" frame="myframe" type="button" class="form-control"></vue-frame>
 
 
-</div>
+
+
 
 </template>
 <script>

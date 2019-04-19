@@ -68,7 +68,7 @@
                     <small><a href="#" title="sintret">@nhj12311</a>(62) </small>
                   </div>
                   <small>
-                      <i class="glyphicon glyphicon-time"></i> 1 days ago in kr-dev</span>
+                      <i class="glyphicon glyphicon-time"></i> 1 days ago in kr-dev
                       <br>
                       <span class="explore"><a href="#"><i class="glyphicon glyphicon-chevron-up"></i> 20 votes | <i class="glyphicon glyphicon-comment"></i> 6</a></span>
                   </small>
@@ -102,7 +102,7 @@
                     <small><a href="#" title="sintret">@nhj12311</a>(62) </small>
                   </div>
                   <small>
-                      <i class="glyphicon glyphicon-time"></i> 1 days ago in kr-dev</span>
+                      <i class="glyphicon glyphicon-time"></i> 1 days ago in kr-dev
                       <br>
                       <span class="explore"><a href="#"><i class="glyphicon glyphicon-chevron-up"></i> 20 votes | <i class="glyphicon glyphicon-comment"></i> 6</a></span>
                   </small>

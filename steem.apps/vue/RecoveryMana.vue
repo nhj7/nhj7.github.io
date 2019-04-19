@@ -8,7 +8,7 @@
               <!--i class="glyphicon glyphicon-user"></i-->
               @
             </span>
-            <input data-toggle="tooltip" title="아이디를 입력해주세요!" required @keyup.enter="" v-model="data.acct_nm" id="acct_nm" type="text" class="form-control " name="acct_nm" placeholder="account name">
+            <input data-toggle="tooltip" title="아이디를 입력해주세요!" required @keyup.enter=";" v-model="data.acct_nm" id="acct_nm" type="text" class="form-control " name="acct_nm" placeholder="account name">
 
           </div>
         </div>
@@ -22,7 +22,7 @@
               <!--i class="glyphicon glyphicon-user"></i-->
               Posting Key
             </span>
-            <input data-toggle="tooltip" title="포스팅 키를 입력해주세요!" required @keyup.enter="" v-model="data.posting_key" id="posting_key" type="text" class="form-control " name="posting_key" placeholder="private posting key">
+            <input data-toggle="tooltip" title="포스팅 키를 입력해주세요!" required v-on:keyup.enter=";" v-model="data.posting_key" id="posting_key" type="text" class="form-control " name="posting_key" placeholder="private posting key">
             <span class="input-group-btn">
               <button type="submit" class="btn btn-info " v-on:click="recoveryMana">Recovery!</button>
             </span>
