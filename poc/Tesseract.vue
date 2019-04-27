@@ -33,8 +33,13 @@
       <input class="hidden" id="capture2" type="file" accept="image/*">
       <div class="col-md-12">
         <img id="imgSrc" src="" class="" />
-        *OCR Result : <br />
-        <div id="ocrResult" >{{ data.ocrResult}}</div>
+        <br /><br />
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <h5 class="panel-title">OCR Result</h5>
+          </div>
+          <div class="panel-body" id="textDiv">{{ data.ocrResult}}</div>
+        </div>        
       </div>
     </div>
   </div><!-- end container -->
@@ -73,7 +78,7 @@ module.exports = {
 	}
   , mounted:function () {
     var input = document.querySelector('#capture1');
-    input.onchange = function () {      
+    $("input[type=file]").on('change', function () {      
       var file = this.files[0];
       $("#fileName").val(file.name);
       var sel_lang = $("#sel_lang").val();
@@ -93,7 +98,7 @@ module.exports = {
       });
 
 
-    };    
+    });
   }
 }
 
