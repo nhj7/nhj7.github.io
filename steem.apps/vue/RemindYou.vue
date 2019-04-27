@@ -350,7 +350,7 @@ body {
 
 .list-group .list-group-item .row-picture,
 .list-group .list-group-item .row-action-primary {
-  float: left;
+  
   display: inline-block;
   padding-right: 16px;
   padding-top: 8px;

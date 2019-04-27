@@ -173,20 +173,15 @@ module.exports = {
     , setTickerOrder : function(varNm){ setTickerOrder(varNm) }
   }
   , created: function() {
-
-
     console.log('created', null);
-
   }, mounted : function() {
     console.log('mounted');
     var color = localStorage.getItem("test_upbit_color");
     if( color ) $("#coinTickerDiv").css("color", color);
-
     var tickerOrder = localStorage.getItem("tickerOrder");
     if( tickerOrder ){
       data.tickerOrder = JSON.parse(tickerOrder);
     }
-
     //console.log(localStorage.getItem('Ticker.isEn'))
     data.isEn = localStorage.getItem('Ticker.isEn')=="true";
     setUpbitData();

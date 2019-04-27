@@ -49,7 +49,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, idx) in data.votingRateList" v-on:click="clickVotingRateRow(item.account)">
+                <tr :key="idx" v-for="(item, idx) in data.votingRateList" v-on:click="clickVotingRateRow(item.account)">
                   <td>{{ idx+1 }}</td>
                   <td>
                     {{ item.account.substring(1) }}
@@ -82,28 +82,11 @@
         <hr />
       </div>
     </div> <!-- col -->
-
   </div><!-- row -->
-
 </div><!-- form-group -->
-
-
-
-
-</div>
-
-
-
-
-
 </template>
-
 <style>
-
 </style>
-
-
-
 <script>
 var data = {
   nm: 'VoteRating'

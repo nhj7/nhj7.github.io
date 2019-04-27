@@ -301,8 +301,6 @@
 		function loadVue(path){
 			//gtag('page', {page:path, title:'', location:path});
 			//gtag('config', 'UA-109501118-1');
-
-
 			return httpVueLoader('./vue/'+path + '.vue?v='+updateVersion);
 		}
 		var app = new Vue({
@@ -377,6 +375,7 @@
 				});
 
 		 } // end mounted
+
 		});
 
 		window.addEventListener('popstate', () => {
@@ -384,7 +383,7 @@
 		})
 
 
-		/**
+	/**
 	 * Module for displaying "Waiting for..." dialog using Bootstrap
 	 * @author Eugene Maslovich <ehpc@em42.ru>
 	 */

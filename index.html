@@ -10,7 +10,7 @@
 <link rel="shortcut icon" href="/favicon.ico?v=2">
 <link rel="icon" sizes="16x16 32x32" href="/favicon.ico?v=2">
 <link rel="icon" href="/favicon-128.png?v=1" sizes="128x128">
-<title>나형</title>
+<title>NSpace</title>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -21,6 +21,7 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
 	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
 	crossorigin="anonymous">
+<link rel="stylesheet" href="./asset/css/bootstrap_my.css">	
 <style>
 	.steemit-logo{
 		color:#028523 !important;font-weight:bold;
@@ -32,6 +33,7 @@
 <script src="https://unpkg.com/vue"></script>
 <script src="https://unpkg.com/vuex"></script>
 <script src="https://unpkg.com/http-vue-loader"></script>
+<script src="https://unpkg.com//vue-router"></script>
 </head>
 <body style="padding-top: 4em;">
 <div id="app">
@@ -45,12 +47,21 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand steemit-logo" href="#">Liet</a>
+				<a class="navbar-brand steemit-logo" href="/">NSpace</a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
+					<li class="dropdown"><a href="javascript:;" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">Library POC <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li name="Tesseract"><a href="/#/Tesseract">Tesseract.js</a></li>
+							<li role="separator" class="divider"></li>
+							<!--li class="dropdown-header">GitHub</li-->
+						</ul>
+					</li>
 					<li><a href="./steem.apps/" @click="">steem.apps</a></li>
-					<li><a href="./gib/" @click="">OKBank.Indonesia</a></li>
+					<li><a href="./gib/" target="_blank">OKBank.Indonesia</a></li>
 					<!--li><a href="./decha/" @click="">Destiny Child</a></li-->
 					<li class="dropdown"><a href="javascript:;" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -59,11 +70,12 @@
 							<li><a href="https://blog.naver.com/nhj7"
 								target="_blank">Naver Blog</a></li>
 							<li><a href="https://nhj12311.tistory.com/" target="_blank">My Tistory</a></li>
+							<li><a href="https://github.com/nhj7" target="_blank">Github</a></li>
 							<li role="separator" class="divider"></li>
-							<li class="dropdown-header">GitHub</li>
-							<li><a href="https://github.com/nhj12311" target="_blank">Steem Bot</a></li>
-							<li><a href="https://github.com/nhj7" target="_blank">nhj7.github.io</a></li>
-						</ul></li>
+							<!--li class="dropdown-header">GitHub</li-->
+
+						</ul>
+					</li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right hidden">
 					<li><a href="../navbar/">Default</a></li>
@@ -75,36 +87,177 @@
 
 		</div>
 	</nav>
+
+	<div class="spinner-grow" role="status">
+		<span class="sr-only">Loading...</span>
+	</div>
+
+	<div class="d-flex justify-content-center">
+		<div class="spinner-border" role="status">
+			<span class="sr-only">Loading...</span>
+		</div>
+	</div>
+
+
 	<div class="container theme-showcase">
 		<component :is="currentView"></component>
 	</div>
+
+	
 </div>
 	<script>
 		//$(".nav a").attr("href",'javascript:setToggle(this);');
 
 		function setToggle(obj){
-			$(".nav").find(".active").removeClass("active");
+			//console.error( $(".nav").find(".active").length );
+			$(".nav").find(".active").toggleClass("active");
+			//$('.navbar-collapse').collapse('hide');
 			//console.log(obj);
-			$(obj).parent().addClass("active");
-			$("#navButton").click();
+			$(obj).toggleClass("active");
+			if( $("#navButton").is(':visible') ){
+				$("#navButton").click();
+			}
 		}
 
+		const Home = { template: '<div>Home</div>'}
+		const Home1 = { template: '<div>Home11</div>'}
+		var router = new VueRouter({
+		    mode: 'history',
+		    routes: [
+					{ path : '/', component : Home }
+					, { path : '/Home', component : Home1 }					
+				]
+		});
+		Vue.use(router);
+
+		var updateVersion = "2019.04.27.01";
 		var app = new Vue({
 			'el' : '#app'
+			, router
 			, data:{
-				currentView : ''
+				currentView : Home
 			}
 			, components : {
-				'creatorAccount' : httpVueLoader('/creatorAccount.vue?v=1')
+				'Tesseract' : httpVueLoader('./poc/Tesseract.vue?v='+updateVersion)
+				, 'Home' : Home
 			}
 			, methods : {
-				setCurrentView : function(name){
-					//console.log(name);
-					app.currentView = name;
-					setToggle(event.target);
+				setCurrentView : function(li){
+					var name = $(li).attr('name');
+					console.log("setCurrentView name : ",name);
+					if(!name) return;
+
+					app.currentView = name.trim();
+					//gtag('config', 'UA-109501118-1', {'page_path': name });
+					setToggle( li );
 				}
-			}
+			} // end methods
+			,created: function() {
+
+			}		
+			
+			, mounted: function () {
+				console.log(this.$route) // outputs 'yay'
+				if( this.$route.hash != "" ){
+					var vueName = this.$route.hash.substring(2);
+					this.$data.currentView = vueName;
+					$(".nav").find(".active").toggleClass("active");
+					$("#"+vueName).toggleClass("active");
+				}else{
+					this.$data.currentView = "Home";
+				}
+				$("#navbar li").each(
+					function(idx, val){
+						//console.log(idx, val);
+						$(val).on("click",
+							function(){
+								app.setCurrentView(val);
+							}
+						);
+					}
+				);
+
+				$(".dropdown").on('touchmove touchend', function(event){
+					event.stopPropagation();
+				});
+				$(document).on('touchmove touchend', function(event) {
+					if( $(event.target).hasClass("dropdown") ) return;
+					if( "true"==$("#navButton").attr('aria-expanded') ){
+						$("#navButton").click();
+					}
+				});
+
+		 } // end mounted
 		});
+	</script>
+
+	<script>
+		/**
+		 * Module for displaying "Waiting for..." dialog using Bootstrap
+		 * @author Eugene Maslovich <ehpc@em42.ru>
+		 */
+
+		var waitingDialog = waitingDialog || (function ($) {
+			'use strict';
+
+			// Creating modal dialog's DOM
+			var $dialog = $(
+				'<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
+				'<div class="modal-dialog modal-m">' +
+				'<div class="modal-content">' +
+					'<div class="modal-header"><h4 style="margin:0;"></h4></div>' +
+					'<div class="modal-body">' +
+						'<div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div>' +
+					'</div>' +
+				'</div></div></div>');
+
+			return {
+				/**
+				 * Opens our dialog
+				 * @param message Custom message
+				 * @param options Custom options:
+				 * 				  options.dialogSize - bootstrap postfix for dialog size, e.g. "sm", "m";
+				 * 				  options.progressType - bootstrap postfix for progress bar type, e.g. "success", "warning".
+				 */
+				show: function (message, options) {
+					// Assigning defaults
+					if (typeof options === 'undefined') {
+						options = {};
+					}
+					if (typeof message === 'undefined') {
+						message = 'Loading';
+					}
+					var settings = $.extend({
+						dialogSize: 'm',
+						progressType: '',
+						onHide: null // This callback runs after the dialog was hidden
+					}, options);
+
+					// Configuring dialog
+					$dialog.find('.modal-dialog').attr('class', 'modal-dialog').addClass('modal-' + settings.dialogSize);
+					$dialog.find('.progress-bar').attr('class', 'progress-bar');
+					if (settings.progressType) {
+						$dialog.find('.progress-bar').addClass('progress-bar-' + settings.progressType);
+					}
+					$dialog.find('h4').text(message);
+					// Adding callbacks
+					if (typeof settings.onHide === 'function') {
+						$dialog.off('hidden.bs.modal').on('hidden.bs.modal', function (e) {
+							settings.onHide.call($dialog);
+						});
+					}
+					// Opening dialog
+					$dialog.modal();
+				},
+				/**
+				 * Closes dialog
+				 */
+				hide: function () {
+					$dialog.modal('hide');
+				}
+			};
+
+		})(jQuery);
 	</script>
 </body>
 </html>
