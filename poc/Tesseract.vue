@@ -19,8 +19,9 @@
 
             <div class="input-group-btn ">
                 <div class="btn-group" role="group">
-                  <button type="button" class="btn btn-success" v-on:click="capture1_click"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span></button>                          
-                  <button type="button" class="btn btn-success" v-on:click="searchTerm"><span class="glyphicon glyphicon-camera" aria-hidden="true"></span></button>                          
+                  <button type="button" class="btn btn-success" v-on:click="capture1_click"><span class="glyphicon glyphicon-camera" aria-hidden="true"></span></button>                          
+                  <button type="button" class="btn btn-success" v-on:click="capture2_click"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span></button>                          
+                  
                 </div>
             </div>
         </div>
@@ -29,6 +30,7 @@
     <div class="row"><br /></div>
     <div class="row">
       <input class="hidden" id="capture1" type="file" accept="image/*" capture>
+      <input class="hidden" id="capture2" type="file" accept="image/*">
       <div class="col-md-12">
         <img id="imgSrc" src="" class="" />
         *OCR Result : <br />
@@ -102,6 +104,9 @@ function displayAsImage(file, img) {
 }
 function capture1_click(){
   $("#capture1").click();
+}
+function capture2_click(){
+  $("#capture2").click();
 }
 </script>
 <style>
