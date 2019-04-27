@@ -64,7 +64,9 @@ module.exports = {
         console.log(result)
         this.posts = result.data
       })
-    }, capture1_click : function(){ capture1_click(); }
+    }
+    , capture1_click : function(){ capture1_click(); }
+    , capture2_click : function(){ capture2_click(); }
   }
   ,created: function() {
 		$.getScript("https://cdn.jsdelivr.net/gh/naptha/tesseract.js@v1.0.14/dist/tesseract.min.js");		
