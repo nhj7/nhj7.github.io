@@ -23,9 +23,7 @@
 	crossorigin="anonymous">
 <link rel="stylesheet" href="./asset/css/bootstrap_my.css">	
 <style>
-	.steemit-logo{
-		color:#028523 !important;font-weight:bold;
-	}
+	
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
@@ -56,6 +54,8 @@
 						aria-expanded="false">Library POC <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li name="Tesseract"><a href="/#/Tesseract">Tesseract.js</a></li>
+							<li name="KakaoLink"><a href="/#/KakaoLink">KakaoLink</a></li>
+
 							<li role="separator" class="divider"></li>
 							<!--li class="dropdown-header">GitHub</li-->
 						</ul>
@@ -139,6 +139,7 @@
 			}
 			, components : {
 				'Tesseract' : httpVueLoader('./poc/Tesseract.vue?v='+updateVersion)
+				, 'KakaoLink' : httpVueLoader('./poc/KakaoLink.vue?v='+updateVersion)
 				, 'Home' : Home
 			}
 			, methods : {

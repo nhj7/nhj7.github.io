@@ -2,7 +2,7 @@
   <div  class="container">
     <div class="row"><br /></div>
     <div class="row">
-      Mobile Web OCR with Tesseract.js
+      KakaoLink
     </div>
     <div class="row"><br /></div>
   	<div class="row">
@@ -74,7 +74,7 @@ module.exports = {
     , capture2_click : function(){ capture2_click(); }
   }
   ,created: function() {
-		$.getScript("https://cdn.jsdelivr.net/gh/naptha/tesseract.js@v1.0.14/dist/tesseract.min.js");		
+		$.getScript("//developers.kakao.com/sdk/js/kakao.min.js");
 	}
   , mounted:function () {
     var input = document.querySelector('#capture1');
@@ -101,8 +101,7 @@ module.exports = {
           console.log(result);
           data.ocrResult = result.text;
           waitingDialog.hide();
-      })
-      .finally( function(resultOrError){ waitingDialog.hide(); console.error(resultOrError); })
+      });
 
 
     });
