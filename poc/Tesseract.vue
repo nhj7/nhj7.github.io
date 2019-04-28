@@ -82,21 +82,24 @@ module.exports = {
       var file = this.files[0];
       $("#fileName").val(file.name);
       var sel_lang = $("#sel_lang").val();
-      console.log("input.onchange", file, sel_lang);
+      //console.log("input.onchange", file, sel_lang);
       displayAsImage(file, $("#imgSrc"));
       
       waitingDialog.show('Processing Tesseract', { progressType: 'success' });
-
+      data.ocrResult = "";
       Tesseract.recognize(file, {
           lang: sel_lang,
           tessedit_char_blacklist: ''
       })
       .progress(function(message){ 
-        console.log(message, parseInt(message.progress * 100)); 
+        //console.log(message, parseInt(message.progress * 100)); 
         waitingDialog.setMessage(message.status+"......");
         waitingDialog.setProgressWidth( parseInt(message.progress * 100) ) 
       })
-      .catch(function(err){ console.error(err); alert(err);})
+      .catch(function(err){ 
+        console.error(err); 
+        alert(err);
+      })
       .then(function(result){
           console.log(result);
           data.ocrResult = result.text;
