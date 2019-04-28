@@ -91,6 +91,12 @@ module.exports = {
           lang: sel_lang,
           tessedit_char_blacklist: ''
       })
+      .progress(function(message){ 
+        console.log(message, parseInt(message.progress * 100)); 
+        waitingDialog.setMessage(message.status+"......");
+        waitingDialog.setProgressWidth( parseInt(message.progress * 100) ) 
+      })
+      .catch(function(err){ console.error(err); alert(err);})
       .then(function(result){
           console.log(result);
           data.ocrResult = result.text;

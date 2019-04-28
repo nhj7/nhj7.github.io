@@ -210,7 +210,7 @@
 						'<div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div>' +
 					'</div>' +
 				'</div></div></div>');
-
+			var progressbar = $dialog.find('.progress-bar');
 			return {
 				/**
 				 * Opens our dialog
@@ -239,6 +239,9 @@
 					if (settings.progressType) {
 						$dialog.find('.progress-bar').addClass('progress-bar-' + settings.progressType);
 					}
+					if( settings.progressWidth ){
+						$dialog.find('.progress-bar').css('width' , settings.progressWidth);
+					}
 					$dialog.find('h4').text(message);
 					// Adding callbacks
 					if (typeof settings.onHide === 'function') {
@@ -254,6 +257,12 @@
 				 */
 				hide: function () {
 					$dialog.modal('hide');
+				}
+				, setProgressWidth : function(percentage){
+					progressbar.css("width",percentage+"%");
+				}
+				, setMessage : function(message){
+					$dialog.find('h4').text(message);
 				}
 			};
 
