@@ -6,26 +6,9 @@
     </div>
     <div class="row"><br /></div>
   	<div class="row">
-  		<div class="col-md-12">
-        <div class="input-group" id="adv-search">
-            <input id="fileName" type="text" class="form-control width_70" placeholder="Tesseract.js" readOnly />
-
-            <select class="form-control width_30" id="sel_lang">
-              <option value="eng">eng</option>
-              <option value="kor">kor</option>
-              <option value="jpn">jpn</option>
-              <option value="fra">fra</option>
-            </select>
-
-            <div class="input-group-btn ">
-                <div class="btn-group" role="group">
-                  <button type="button" class="btn btn-success" v-on:click="capture1_click"><span class="glyphicon glyphicon-camera" aria-hidden="true"></span></button>                          
-                  <button type="button" class="btn btn-success" v-on:click="capture2_click"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span></button>                          
-                  
-                </div>
-            </div>
-        </div>
-      </div>
+  		<a id="kakao-link-btn" href="javascript:;" v-on:click="sendLink">
+            <img src="//developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"/>
+        </a>
     </div><!-- end row. -->
     <div class="row"><br /></div>
     <div class="row">
@@ -36,9 +19,11 @@
         <br /><br />
         <div class="panel panel-success">
           <div class="panel-heading">
-            <h5 class="panel-title">OCR Result</h5>
+            <h5 class="panel-title">KakaoLink Form</h5>
           </div>
-          <div class="panel-body" id="textDiv">{{ data.ocrResult}}</div>
+          <div class="panel-body">
+            {{ data.ocrResult}}
+          </div>
         </div>        
       </div>
     </div>
@@ -61,66 +46,52 @@ module.exports = {
     }
   }
   ,methods: {
-    searchTerm: function () {
-      // using JSONPlaceholder
-      var baseURI = 'https://www.google.co.kr/search?newwindow=1&ei=iKgGWuPSB4nq8AXVyryYBg&q=site%3Asteemit.com+%EC%8B%AC%EC%8B%AC%ED%92%80%EC%9D%B4&oq=site%3A&gs_l=mobile-gws-serp.3.2.35i39k1l3j0l2.1976.6230.0.8334.13.10.2.0.0.0.134.994.1j8.9.0....0...1.1.64.mobile-gws-serp..3.8.686.3..0i131k1.91.6K4jmL9FzBg.js';
-      this.$http.get(`${baseURI}`)
-      .then((result) => {
-        console.log(result)
-        this.posts = result.data
-      })
-    }
-    , capture1_click : function(){ capture1_click(); }
-    , capture2_click : function(){ capture2_click(); }
+    sendLink : function(){ sendLink(); }
   }
   ,created: function() {
-		$.getScript("//developers.kakao.com/sdk/js/kakao.min.js");
+        $.getScript("//developers.kakao.com/sdk/js/kakao.min.js", function(){ Kakao.init('e5c0b17c11fe384ef67a30368cbe297d'); });        
 	}
   , mounted:function () {
-    var input = document.querySelector('#capture1');
-    $("input[type=file]").on('change', function () {      
-      var file = this.files[0];
-      $("#fileName").val(file.name);
-      var sel_lang = $("#sel_lang").val();
-      console.log("input.onchange", file, sel_lang);
-      displayAsImage(file, $("#imgSrc"));
-      
-      waitingDialog.show('Processing Tesseract', { progressType: 'success' });
-
-      Tesseract.recognize(file, {
-          lang: sel_lang,
-          tessedit_char_blacklist: ''
-      })
-      .progress(function(message){ 
-        console.log(message, parseInt(message.progress * 100)); 
-        waitingDialog.setMessage(message.status+"......");
-        waitingDialog.setProgressWidth( parseInt(message.progress * 100) ) 
-      })
-      .catch(function(err){ console.error(err); alert(err);})
-      .then(function(result){
-          console.log(result);
-          data.ocrResult = result.text;
-          waitingDialog.hide();
-      });
-
-
-    });
   }
 }
 
-function displayAsImage(file, img) {
-  var imgURL = URL.createObjectURL(file);
-  img.on("load", function() {
-    URL.revokeObjectURL(imgURL);
-  });
-  img.attr("src", imgURL);
-}
-function capture1_click(){
-  $("#capture1").click();
-}
-function capture2_click(){
-  $("#capture2").click();
-}
+
+function sendLink() {
+      Kakao.Link.sendDefault({
+        objectType: 'feed',
+        content: {
+          title: '딸기 치즈 케익',
+          description: '#케익 #딸기 #삼평동 #카페 #분위기 #소개팅',
+          imageUrl: 'http://mud-kage.kakao.co.kr/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png',
+          link: {
+            mobileWebUrl: 'https://developers.kakao.com',
+            webUrl: 'https://developers.kakao.com'
+          }
+        },
+        social: {
+          likeCount: 286,
+          commentCount: 45,
+          sharedCount: 845
+        },
+        buttons: [
+          {
+            title: '웹으로 보기',
+            link: {
+              mobileWebUrl: 'https://developers.kakao.com',
+              webUrl: 'https://developers.kakao.com'
+            }
+          },
+          {
+            title: '앱으로 보기',
+            link: {
+              mobileWebUrl: 'https://developers.kakao.com',
+              webUrl: 'https://developers.kakao.com'
+            }
+          }
+        ]
+      });
+    }
+
 </script>
 <style>
 
