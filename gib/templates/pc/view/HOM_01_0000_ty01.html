@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, minimum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+    <meta name="apple-mobile-web-app-title" content="원캐싱">
+    <title>OK BANK Indonesia</title>
+    <meta name="robots" content="all" />
+    <meta name="description" content="OK BANK Indonesia">
+
+    <!-- css -->
+    <link rel="shortcut icon" type="image/x-icon" href="../../../static/pc/images/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../static/pc/images/favicon_128.ico" />
+    <link rel="icon" sizes="16x16" href="../../../static/pc/images/favicon-16.png" />
+    <link rel="stylesheet" href="../../../static/pc/css/ui_body.css" />
+    
+    <!-- js -->  
+    
+    <!--[if lt IE 9]>
+    <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <![endif]-->
+    <!--[if gte IE 9]>
+    <script src="../../../static/pc/js/jquery.min.js"></script>
+    <![endif]-->
+    <!--[if !IE]>-->
+    <script src="../../../static/pc/js/jquery.min.js"></script>
+    <!--<![endif]-->
+
+    <script src="../../../static/pc/js/ui_script.js"></script>
+
+</head>
+
+<body>
+    <!-- wrap -->
+    <div class="main-wrap">
+
+        <!-- header -->
+        <div class="header">
+            <div class="content table-lay">
+                <h1><img src="../../../static/pc/images/icon/logo-header.png" alt="OK BANK Indonesia LOGO" /></h1>
+            </div>
+        </div><!-- //header -->
+        
+        <!-- container -->
+        <div class="container">
+
+            <!-- content-wrap -->
+            <div class="content-wrap">
+                
+                <div class="content-tit">
+                    <h3 class="tc-red">Merchant Loan</h3>                  
+                </div>
+                <div class="content-body first">                   
+                    
+                    <div class="content">
+                        <div class="loan-info">
+                            <div class="layout-half">
+                                <div class="content-img layout-half-col1">
+                                    <img src="../../../static/pc/images/img-store.png" alt="Merchant Loan Online Store image" />
+                                </div>
+                                <div class="layout-half-col2">
+                                    <h4 class="title">상품 정보</h4>
+                                    <div class="list-info">
+                                        <dl>
+                                            <dt>For customer</dt>
+                                            <dd>Shop, Store, Submerchant "Biz owner" On & Offline</dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>Loan Amount</dt>
+                                            <dd>Rp3 Millions ~ Rp1 Billion</dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>Interest rate</dt>
+                                            <dd>0.89% ~ 1.79% (Bulan)</dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>Dokuments</dt>
+                                            <dd>eKtp, Biz data, SIUP, TDP</dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div><!-- //layout-half -->
+                        </div>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <div class="content">
+                        <div class="info-txt2 bor-t-gray bor-b-gray">
+                            <p>Hanya dengan memberikan data omset saja, masalah modal kerja,<br />dana pembelian, dana untuk exspansi bisnis terselesaikan!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <div class="content">
+                        <!-- <div class="step-box col3">
+                            <ul>
+                                <li class="on"><span class="number-circle">1</span>고객정보확인</li>
+                                <li><span class="number-circle">2</span>관계인정보</li>
+                                <li><span class="number-circle">3</span>대출신청정보</li>
+                            </ul>
+                        </div> -->                        
+                        <div class="check-wrap bor-b-gray pad-y-20">    
+                            <div>
+                                <input type="checkbox" id="cn">
+                                <label for="cn"><span></span>OK Bank 대출 신청 약관을 읽었으며 동의합니다.</label>
+                                <span class="hyphen"><button type="button" onclick="layerpopupOpen('popup1')">약관보기</button></span>
+                            </div>
+                        </div>
+                        <div class="template">
+                            <div class="layout-three">
+                                <div class="layout-three-col1">
+                                    <div class="sub-title on">
+                                        <span class="number-circle2">1</span>
+                                        <h4>고객정보확인</h4>
+                                    </div>
+                                    <form name="" action="">            
+                                        <fieldset class="fieldset">
+                                            <ul class="type-table line-bottom-none">
+                                                <li>
+                                                    <dl>
+                                                        <dt><label>고객명</label></dt>
+                                                        <dd>
+                                                            <input type="text" class="form-input short" value="" placeholder="">
+                                                        </dd>
+                                                    </dl>
+                                                </li>
+                                                <li>
+                                                    <dl>
+                                                        <dt><label>eKTP Number</label></dt>
+                                                        <dd>
+                                                            <input type="text" class="form-input short" value="">
+                                                        </dd>
+                                                    </dl>
+                                                </li>
+                                                <li>
+                                                    <dl>
+                                                        <dt><label>휴대폰 번호</label></dt>
+                                                        <dd>
+                                                            <input type="text" class="form-input short" value="" placeholder="">
+                                                            <span class="input-desc">&quot;-&quot;을 제외한 번호만 입력</span>
+                                                        </dd>
+                                                    </dl>
+                                                </li>
+                                                <li>
+                                                    <dl>
+                                                        <dt><label>추가 휴대폰 번호</label></dt>
+                                                        <dd>
+                                                            <input type="text" class="form-input short" value="" placeholder="">
+                                                            <span class="input-desc">&quot;-&quot;을 제외한 번호만 입력</span>
+                                                        </dd>
+                                                    </dl>
+                                                </li>
+                                                <li>
+                                                    <dl>
+                                                        <dt><label>개인 이메일 주소</label></dt>
+                                                        <dd>
+                                                            <input type="text" class="form-input short" value="" placeholder="">
+                                                        </dd>
+                                                    </dl>
+                                                </li>
+                                                <li>
+                                                    <dl>
+                                                        <dt><label>신용카드 보유수</label></dt>
+                                                        <dd>
+                                                            <input type="text" class="form-input short" value="" placeholder="">
+                                                        </dd>
+                                                    </dl>
+                                                </li>
+                                            </ul>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                                <div class="layout-three-col2">
+                                    <div class="sub-title">
+                                        <span class="number-circle2">2</span>
+                                        <h4>관계인정보</h4>
+                                    </div>
+                                    <form name="" action="">            
+                                        <fieldset class="fieldset">
+                                            <ul class="type-table line-bottom-none">
+                                                <li>
+                                                    <dl>
+                                                        <dt><label>이 름</label></dt>
+                                                        <dd>
+                                                            <input type="text" class="form-input short" value="" placeholder="">
+                                                        </dd>
+                                                    </dl>
+                                                </li>
+                                                <li>
+                                                    <dl>
+                                                        <dt><label>관 계</label></dt>
+                                                        <dd>
+                                                            <select class="form-select short">
+                                                                <option selected="" value="1">아버지</option>
+                                                                <option value="2">어머니</option>
+                                                                <option value="3">아들</option>
+                                                                <option value="4">딸</option>
+                                                            </select>
+                                                        </dd>
+                                                    </dl>
+                                                </li>
+                                                <li>
+                                                    <dl>
+                                                        <dt><label>연락처</label></dt>
+                                                        <dd>
+                                                            <input type="text" class="form-input short" value="" placeholder="">
+                                                            <span class="input-desc">&quot;-&quot;을 제외한 번호만 입력</span>
+                                                        </dd>
+                                                    </dl>
+                                                </li>
+                                                <li>
+                                                    <dl>
+                                                        <dt>동거여부</dt>
+                                                        <dd>
+                                                            <div class="radio-wrap">
+                                                                <input type="radio" class="radio" name="month" id="month1" checked>
+                                                                <label class="datelist" for="month1">동거</label>
+                                                                <input type="radio" class="radio" name="month" id="month3">
+                                                                <label class="datelist" for="month3">비동거</label>
+                                                            </div>
+                                                        </dd>
+                                                    </dl>
+                                                </li>
+                                            </ul>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                                <div class="layout-three-col3">
+                                    <div class="sub-title">
+                                        <span class="number-circle2">3</span>
+                                        <h4>대출신청정보</h4>
+                                    </div>
+                                    <form name="" action="">            
+                                        <fieldset class="fieldset">
+                                            <ul class="type-table line-bottom-none">
+                                                <li>
+                                                    <dl>
+                                                        <dt><label>대출신청금액</label></dt>
+                                                        <dd>
+                                                            <input type="text" class="form-input short" value="" placeholder="">
+                                                            <span class="input-desc">* Rp 3JT ~ Rp 1,000JT까지 1JT단위로 신청가능</span>
+                                                        </dd>
+                                                    </dl>
+                                                </li>
+                                                <li>
+                                                    <dl>
+                                                        <dt><label>대출목적</label></dt>
+                                                        <dd>
+                                                            <select class="form-select short">
+                                                                <option selected="" value="1">부채상환</option>
+                                                                <option value="2">사업자금</option>
+                                                                <option value="3">생활비</option>
+                                                                <option value="4">의료비</option>
+                                                            </select>
+                                                        </dd>
+                                                    </dl>
+                                                </li>
+                                                <li>
+                                                    <dl>
+                                                        <dt><label>대출기간</label></dt>
+                                                        <dd>
+                                                            <select class="form-select short">
+                                                                <option selected="" value="1">6 Month</option>
+                                                                <option value="2">12 Month</option>
+                                                                <option value="3">18 Month</option>
+                                                                <option value="3">24 Month</option>
+                                                            </select>
+                                                        </dd>
+                                                    </dl>
+                                                </li>
+                                            </ul>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-wrap">
+                            <button class="btn red more">대출신청</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- //content-wrap -->            
+
+        </div><!-- //container -->
+
+        </div><!-- //footer -->
+
+        <!-- popup1 -->
+        <div class="popup1 popup">
+            <div class="dim"></div>
+            <div class="inner">
+                <div class="popup-header align-r">
+                    <button class="close" type="button" onclick="layerpopupClose()">
+                        <img src="../../../static/mobile/images/icon/icon-h-close-dark.png" alt="close button">
+                    </button>
+                </div><!-- //popup-header -->
+                <div class="popup-view">
+                    <div class="wrap-require">
+                        <h3>OK BANK Parsyaratan</h3>
+                        <ol class="list---decimal-dot">
+                            <li>Pemohon akan mengikuti persyaratan dan ketentuan produk pinjaman perorangan (personal loan) OK Bank.</il>
+                            <li>Ketentuan pinjaman, termasuk jumlah pinjaman dan tingkat bunga, dapat berubah sesuai dengan hasil tinjauan pinjaman.</li>
+                            <li>Informasi pelanggan yang ditulis oleh pelanggan akan dikumpulkan dan diberikan kepada Bank OK. OK Bank dapat menggunakan untuk kemajuan pinjaman dan memberikannya kepada perusahaan yang bermitra.</li>
+                            <li>Untuk proses pengajuan pinjaman, debitur harus menyetujui agar bank dapat menggunakan informasi kredit dan informasi pribadi debitur sampai dengan proses kredit selesai. Apabila debitur tidak menyetujui, maka akan ada pembatasan dalam proses persetujuan kredit</li>
+                            <li>Berdasarkan informasi pelanggan yang diberikan, OK Bank melakukan peninjauan pinjaman, pembayaran pinjaman dapat dilakukan ketika melengkapi aplikasi (kontrak) setelah persetujuan pinjaman.</li>
+                            <li>Pinjaman akan dikirim ke rekning bank yang pelanggan pilih (termasuk bank lain), dan OK Bank akan menanggung semua biaya yang timbul dalam transfer pinjaman.</li>
+                            <li>Angsuran pinjaman harus dilakukan ke rekening pelanggan OK Bank atau rekening yang ditentukan oleh Bank pada anggal kontrak yang ditentukan oleh pelanggan setiap bulan. Namun, bahkan jika hari itu adalah hari perjanjian, pembayaran dilakukan setealh batas waktu bank akan dianggap pembayaran terlambat, itu adalah tanggung jawab pelanggan.</li>
+                            <li>Bank menarik angsuran dari rekening OK Bank yang ditunjuk oleh pelanggan pada hari komitmen. Namun, jika saldo akun pelanggan tidak mencukupi, hanya sebagian dari jumlah yang dapat ditarik, akibatnya, pelanggan yang bertanggung jawab atas keterlambatan.</li>
+                            <li>Pelunasan angsuran ikut pada jadwal pembayaran bulanan, biaya tagihan bervariasi antara bulan pertama dan terakhir karena tergantung jumlah hari yang digunakan.</li>
+                            <li>Uang pinjaman akan dikirimkan ke rekening pelanggan dengan mengurangi biaya administrasi 1% dan biaya provisi 1.5%.</li>
+                            <li>Jika pelunasan dipercepat, biaya penggantian 2 % dari total sisa pokok hutang.</li>
+                            <li>Jika terdapat keterlamabatan pembayaran angsuran, biaya tunggakan 5% per bulan dari total angsuran per bulan.</li>
+                            <li>Jika bank menentukan bahwa pelanggan tidak dapat membayar hutang secara normal, bank dapat membebankan biaya pembayaran pokok pinjaman dengan menyita pension pelangggan atau asuransi jaminan social (BPJS) dan uang pesangon.</li>
+                            <li>Bank wajib memberitahu pelanggan terlebih dahulu jika ada perubahan produk dan jasa yang digunakan oleh pelanggan.</li>
+                            <li>Pelanggan harus segera memberitahu bank jika ada perubahan dalam informasi pribadi saat menggunakan layanan.</li>
+                            <li>Selama periode pinjaman, pelanggan dapat dihubungi melalui telepon, SMS, DM, dll. Untuk menjaga produk, menawarkan layanan bisa kontak ke pelanggan.</li>
+                        </ol>
+                        <p class="fs-26 align-r pad-r-20 mgn-t-30 tc---emperor">Ver.5 (2019.4.15)</p>
+                    </div>
+                </div><!-- //popup-view -->
+                <div class="popup-footer tac bor-t-gray pad-t-20">
+                    <button type="button" class="btn red">Oke</button>
+                </div><!-- //popup-footer -->
+            </div>
+        </div><!-- //popup1 -->
+
+        <!-- popup js -->
+        <script>
+            function layerpopupOpen(target){
+                $("."+target+".popup").fadeIn(400);
+            }
+            function layerpopupClose(){
+
+                $(".popup").each(function(){
+                    if( $(this).css("display") == 'block' ){
+                        $(this).fadeOut(400);
+                    }
+                });
+            }
+            $('.popup .dim').on('click',function(){
+                layerpopupClose();
+            });    
+        </script><!-- //popup js -->
+
+    </div><!-- //wrap -->
+
+</body>
+</html>
