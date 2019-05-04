@@ -220,6 +220,7 @@
 					'</div>' +
 				'</div></div></div>');
 			var progressbar = $dialog.find('.progress-bar');
+			var h_title = $dialog.find('h4');
 			return {
 				/**
 				 * Opens our dialog
@@ -244,14 +245,14 @@
 
 					// Configuring dialog
 					$dialog.find('.modal-dialog').attr('class', 'modal-dialog').addClass('modal-' + settings.dialogSize);
-					$dialog.find('.progress-bar').attr('class', 'progress-bar');
+					progressbar.attr('class', 'progress-bar');
 					if (settings.progressType) {
-						$dialog.find('.progress-bar').addClass('progress-bar-' + settings.progressType);
+						progressbar.addClass('progress-bar-' + settings.progressType);
 					}
 					if( settings.progressWidth ){
-						$dialog.find('.progress-bar').css('width' , settings.progressWidth);
+						progressbar.css('width' , settings.progressWidth);
 					}
-					$dialog.find('h4').text(message);
+					h_title.text(message);
 					// Adding callbacks
 					if (typeof settings.onHide === 'function') {
 						$dialog.off('hidden.bs.modal').on('hidden.bs.modal', function (e) {
@@ -271,7 +272,7 @@
 					progressbar.css("width",percentage+"%");
 				}
 				, setMessage : function(message){
-					$dialog.find('h4').text(message);
+					h_title.text(message);
 				}
 			};
 

@@ -31,7 +31,7 @@
     <div class="row">
       <input class="hidden" id="capture1" type="file" accept="image/*" capture>
       <input class="hidden" id="capture2" type="file" accept="image/*">
-      <div class="col-md-12">
+      <div class="col-md-12 text-center">
         <img id="imgSrc" src="" class="" />
         <br /><br />
         <div class="panel panel-success">
