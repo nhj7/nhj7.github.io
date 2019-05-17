@@ -98,11 +98,12 @@ function inqryLiveupdateVersion(event) {
     console.log("data : ", data);
   }  
   data.lu_list = [];
+  waitingDialog.show();
   var url = "https://m."+data.luDomain+"/liveupdate/liveupdate.json";
   $.getJSON("https://jsonp.afeld.me/?callback=?&url=" + url, function(jsonData) {
     //alert('fake AJAX! ' + data);
     data.lu_list = jsonData;
-    
+    waitingDialog.hide();
   });
 }
 
