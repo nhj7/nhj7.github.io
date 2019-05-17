@@ -475,8 +475,7 @@
   #postModal .modal-body {
     padding: 1.2em;
   }
-  padding:1.15em;
-  font-family: 'Godo';
+  
 }
 
 @media(min-width:768px) {
@@ -1947,7 +1946,7 @@ async function cb_requestWS(res) {
   msg += "<br/><br/><a>@busy.org</a> 스팀파워 : " + comma(Math.floor(accountSP));
   msg += "<br/> 내 팔로워 스파 총합은? : " + comma(Math.floor(followersSP));
   //msg += "<br/> 최소 팔로우 스파 총합은? : " + Math.floor(minSP);
-  //msg += "<br/> 최대 팔로우 스파 총합은? : " + Math.floor(maxSP);
+7  //msg += "<br/> 최대 팔로우 스파 총합은? : " + Math.floor(maxSP);
 
 
   data.busy_msg = msg;
