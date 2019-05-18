@@ -3,6 +3,8 @@
     <div class="row"><br /></div>
     <div class="row">
       Mobile Web OCR with Tesseract.js
+
+      
     </div>
     <div class="row"><br /></div>
   	<div class="row">

@@ -1,7 +1,18 @@
 
 <template>
-  <div class="container">
-    <p class="text-warning"><h3>Apro Mobile Check</h3></p>
+  <div class="container text-warning">
+    <h3><p class="text-warning">
+      Apro liveupdate Check
+    </p></h3>
+
+    <!-- Default unchecked -->
+    <div class="checkbox checkbox-info" >
+      <input type="checkbox" id="optinosCheckbox1" value="" v-model="data.isTest" @change="inqryLiveupdateVersion" >
+      <label for="optinosCheckbox1">
+        IsTest?
+      </label>
+    </div>
+
     <div class="row">
       <div class="col-md-12 padding-xs">
         <div class="panel with-nav-tabs panel-info">
@@ -9,52 +20,56 @@
             <ul class="nav nav-tabs">
               <li class="dropdown active">
                 <a href="#" data-toggle="dropdown">
-                  <i id="category_glyphicon" class="text-info glyphicon glyphicon-home"></i>
+                  <i id="lu_icon" class="fas" v-bind:class="data.lu_icon"></i>
                   <span id="category_nm">{{data.curCorp}}</span>
                   <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu" v-on:click="inqryLiveupdateVersion">
                   <li >
                     <a href="#tab_liveupdate" data-toggle="tab">
-                      <i class="text-info glyphicon glyphicon-home"></i> OK
+                      <i class="fas fa-university"></i> OK
                     </a>
                   </li>
                   <li >
                     <a href="#tab_liveupdate" data-toggle="tab">
-                      <i class="text-info glyphicon glyphicon-home"></i> AP
+                      <i class="fas fa-running"></i> AP
                     </a>
                   </li>
                   <li >
                     <a href="#tab_liveupdate" data-toggle="tab">
-                      <i class="text-info glyphicon glyphicon-home"></i> OC
+                      <i class="fas fa-building"></i> OC
                     </a>
                   </li>
                 </ul>
               </li>
+              
+              
+              
+
             </ul>
           </div>
           <div class="panel-body padding-xs">
             <div class="tab-content">
               <div class="tab-pane fade in active" id="tab_liveupdate">
                 <table class="table table-striped table-hover text-center">
-                  <thead class="alert alert-success">
+                  <thead class="alert alert-warning">
                     <tr>
-                      <td>NO</td>
-                      <td>Liveupdate Version</td>
+                      <td >NO</td>
+                      <td >Liveupdate Version</td>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(item, idx) in data.lu_list.slice().reverse()" v-bind:key="item">
-                      <td>{{ idx+1 }}</td>
-                      <td>
+                      <td >{{ idx+1 }}</td>
+                      <td >
                         {{ item }}
                         &nbsp;&nbsp;
-                        <a :href="`https://m.oksavingsbank.com/liveupdate/${item}.zip`" >
-                          <span class="glyphicon glyphicon-share"></span>
+                        <a :href="`https://${data.luDomain}/liveupdate/${item}.zip`" >
+                          <span class="text-warning glyphicon glyphicon-share"></span>
                         </a>
                         &nbsp;&nbsp;
-                        <a :href="`https://m.oksavingsbank.com/liveupdate/${item}-full.zip`" >
-                          <span class="glyphicon glyphicon-share"></span>
+                        <a :href="`https://${data.luDomain}/liveupdate/${item}-full.zip`" >
+                          <span class="text-danger glyphicon glyphicon-share"></span>
                         </a>
                       </td>
                     </tr>
@@ -64,43 +79,45 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div id="someDiv"></div>
-  </div>
+     </div>
+</div>
+</div>
 </template>
 <script>
 $(document).ready(function(e) {});
 
-var okDomain = "oksavingsbank.com";
-var apDomain = "rushncash.com";
-var ocDomain = "okaycapital.co.kr";
 
 function getLuDomain(){  
-  console.log("getDomain.",data.curCorp);
+  console.log("getLuDomain.",data.curCorp);
+  var luDomain = data.isTest?"test-m.":"m.";
+  //console.log("getLuDomain.",data.curCorp);
   if( data.curCorp == "OK"){
-      return okDomain;
+      luDomain+="oksavingsbank.com";
   }else if(data.curCorp == "AP"){
-      return apDomain;
+      luDomain+="rushncash.com";
   }else if( data.curCorp == "OC" ){
-      return ocDomain;
-  }else{
-      return okDomain;
+      luDomain+="okaycapital.co.kr";
+  }else {
+    luDomain+="oksavingsbank.com";
   }
+  luDomain += (data.isTest?":8082":"");
+  return luDomain;
 }
 
 function inqryLiveupdateVersion(event) {
   if( event ){
-    console.log("event : ", event);
-    console.log("val : ", event.target.childNodes[1].nodeValue);
-    data.curCorp = event.target.childNodes[1].nodeValue.trim();
-    data.luDomain = getLuDomain();
-    console.log("data : ", data);
-  }  
+    try{
+      console.log("event : ", event);
+      console.log("val : ", event.target.childNodes[1].nodeValue);
+      data.curCorp = event.target.childNodes[1].nodeValue.trim();        
+      data.lu_icon = event.target.childNodes[0].classList[1];
+    }catch(e){}
+  } 
+  data.luDomain = getLuDomain(); 
   data.lu_list = [];
-  waitingDialog.show();
-  var url = "https://m."+data.luDomain+"/liveupdate/liveupdate.json";
-  $.getJSON("https://jsonp.afeld.me/?callback=?&url=" + url, function(jsonData) {
+  waitingDialog.show("loading "+data.curCorp);
+  var url = "https://"+data.luDomain+"/liveupdate/liveupdate.json";
+  $.getJSON("https://cors-anywhere.herokuapp.com/" + url, function(jsonData) {
     //alert('fake AJAX! ' + data);
     data.lu_list = jsonData;
     waitingDialog.hide();
@@ -115,6 +132,8 @@ var data = {
     lu_list: []
     , curCorp : 'OK'
     , luDomain : 'oksavingsbank.com'
+    , lu_icon : 'fa-university'
+    , isTest : false
 }
 module.exports = {
   name: "MobileCheck",
@@ -131,7 +150,7 @@ module.exports = {
   methods: {
     inqryLiveupdateVersion: function(event) {
       inqryLiveupdateVersion(event);
-    }
+    }    
   },
   mounted: function() {
     inqryLiveupdateVersion();
