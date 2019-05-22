@@ -81,7 +81,10 @@
         </div>
       </div>
     </div>
-    <div id="myDiv">11</div>
+    <div id="myDiv">
+        <link href="http://10.99.4.132:5500/apro/liveupdate.json" />
+
+    </div>
 </div>
 </template>
 <script>
