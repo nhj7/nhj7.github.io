@@ -79,12 +79,62 @@
             </div>
           </div>
         </div>
-     </div>
-</div>
+      </div>
+    </div>
+    <div id="myDiv">11</div>
 </div>
 </template>
 <script>
-$(document).ready(function(e) {});
+
+function jsonpCallback(data){
+    console.error(data);
+}
+
+function testIframe(){
+    return;
+    var url = 'https://test-m.oksavingsbank.com:8082/liveupdate/liveupdate.json';
+    $.ajax({
+    url: url,
+    dataType: 'jsonp',
+    error: function(xhr, status, error) {
+        console.error(xhr, status, error);
+    },
+    success: function(data) { 
+        console.error(data);
+    },
+    done : function(data){
+        console.error(data);
+    }
+});
+}
+
+function view() {
+    try {
+    var data = arguments.length > 0 ? arguments[0] : null;
+    if (data == null) return; //데이터가 없으면 반환
+    console.log(data); //JSON 데이터 맞게 들어왔는지 확인
+    }
+    catch(e) {}
+}
+
+
+
+
+$(document).ready(function(e) {
+    var url = 'https://test-m.oksavingsbank.com:8082/liveupdate/liveupdate.json';
+    $.support.cors=true;
+$.ajax({
+    type:'GET',
+    url:url + '?callback=?',
+    data: {},
+    contentType: 'application/json; charset=utf-8',
+    dataType: 'jsonp',
+    jsonpCallback: "myJsonMethod" });
+});
+function myJsonMethod(data) {
+            //data = JSON.parse(data):
+            alert(data);
+    }
 
 
 function getLuDomain(){  
@@ -150,10 +200,16 @@ module.exports = {
   methods: {
     inqryLiveupdateVersion: function(event) {
       inqryLiveupdateVersion(event);
+    }
+    , testIframe : function(){
+        testIframe();
+    }, jsonpCallback : function(data){
+        jsonpCallback(data);
     }    
   },
   mounted: function() {
     inqryLiveupdateVersion();
+    testIframe();
   }
 };
 </script>
