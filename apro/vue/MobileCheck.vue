@@ -91,45 +91,24 @@ function jsonpCallback(data){
 }
 
 function testIframe(){
-    return;
-    var url = 'https://test-m.oksavingsbank.com:8082/liveupdate/liveupdate.json';
-    $.ajax({
-    url: url,
-    dataType: 'jsonp',
-    error: function(xhr, status, error) {
-        console.error(xhr, status, error);
-    },
-    success: function(data) { 
-        console.error(data);
-    },
-    done : function(data){
-        console.error(data);
-    }
-});
+    JsonpHttpRequest("http://10.99.4.132:5500/apro/liveupdate.json", "www")
 }
 
-function view() {
-    try {
-    var data = arguments.length > 0 ? arguments[0] : null;
-    if (data == null) return; //데이터가 없으면 반환
-    console.log(data); //JSON 데이터 맞게 들어왔는지 확인
+function JsonpHttpRequest(url, callback) {
+    var e = document.createElement('script');
+    e.src = url;
+    document.body.appendChild(e); // fyi remove this element later /assign temp class ..then .remove it later
+    //insetead of this you may also create function with  callback value and  use it instead
+    window[callback] = (data) => {
+        console.log(data);  // heres you data
     }
-    catch(e) {}
 }
-
 
 
 
 $(document).ready(function(e) {
-    var url = 'https://test-m.oksavingsbank.com:8082/liveupdate/liveupdate.json';
-    $.support.cors=true;
-$.ajax({
-    type:'GET',
-    url:url + '?callback=?',
-    data: {},
-    contentType: 'application/json; charset=utf-8',
-    dataType: 'jsonp',
-    jsonpCallback: "myJsonMethod" });
+    
+
 });
 function myJsonMethod(data) {
             //data = JSON.parse(data):
