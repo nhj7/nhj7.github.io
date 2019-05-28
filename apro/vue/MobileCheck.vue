@@ -79,12 +79,44 @@
             </div>
           </div>
         </div>
-     </div>
-</div>
+      </div>
+    </div>
+    <div id="myDiv">
+        <link href="http://10.99.4.132:5500/apro/liveupdate.json" />
+
+    </div>
 </div>
 </template>
 <script>
-$(document).ready(function(e) {});
+
+function jsonpCallback(data){
+    console.error(data);
+}
+
+function testIframe(){
+    JsonpHttpRequest("http://10.99.4.132:5500/apro/liveupdate.json", "www")
+}
+
+function JsonpHttpRequest(url, callback) {
+    var e = document.createElement('script');
+    e.src = url;
+    document.body.appendChild(e); // fyi remove this element later /assign temp class ..then .remove it later
+    //insetead of this you may also create function with  callback value and  use it instead
+    window[callback] = (data) => {
+        console.log(data);  // heres you data
+    }
+}
+
+
+
+$(document).ready(function(e) {
+    
+
+});
+function myJsonMethod(data) {
+            //data = JSON.parse(data):
+            alert(data);
+    }
 
 
 function getLuDomain(){  
@@ -150,10 +182,16 @@ module.exports = {
   methods: {
     inqryLiveupdateVersion: function(event) {
       inqryLiveupdateVersion(event);
+    }
+    , testIframe : function(){
+        testIframe();
+    }, jsonpCallback : function(data){
+        jsonpCallback(data);
     }    
   },
   mounted: function() {
     inqryLiveupdateVersion();
+    testIframe();
   }
 };
 </script>
