@@ -2,7 +2,7 @@
 <template>
   <div class="container text-warning">
     <h3><p class="text-warning">
-      Apro liveupdate Check
+      Apro live update Check
     </p></h3>
 
     <!-- Default unchecked -->
@@ -55,7 +55,7 @@
                   <thead class="alert alert-warning">
                     <tr>
                       <td >NO</td>
-                      <td >Liveupdate Version</td>
+                      <td >Live Update Version</td>
                     </tr>
                   </thead>
                   <tbody>
@@ -64,11 +64,11 @@
                       <td >
                         {{ item }}
                         &nbsp;&nbsp;
-                        <a :href="`https://${data.luDomain}/liveupdate/${item}.zip`" >
+                        <a :href="`https://${data.luDomain}/liveupdate/${item}.zip`" title="Update Zip">
                           <span class="text-warning glyphicon glyphicon-share"></span>
                         </a>
                         &nbsp;&nbsp;
-                        <a :href="`https://${data.luDomain}/liveupdate/${item}-full.zip`" >
+                        <a :href="`https://${data.luDomain}/liveupdate/${item}-full.zip`" title="Full Zip">
                           <span class="text-danger glyphicon glyphicon-share"></span>
                         </a>
                       </td>
