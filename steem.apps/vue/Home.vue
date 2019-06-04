@@ -9,7 +9,7 @@
             <!--i class="glyphicon glyphicon-user"></i-->
             @
           </span>
-          <input data-toggle="tooltip" title="아이디를 입력해주세요!" required @keyup.enter="homeSubmit" v-model="data.acct_nm" id="acct_nm" type="text" class="form-control " name="acct_nm" placeholder="account name">
+          <input data-toggle="tooltip" title="아이디를 입력해주세요!" required @keyup.enter="homeSubmit" v-model="data.acct_nm" id="acct_nm" type="text" class="form-control " name="acct_nm" placeholder="account name ex)nhj12311">
           <span class="input-group-btn">
             <button type="submit" class="btn btn-info " v-on:click="homeSubmit">Submit</button>
           </span>
