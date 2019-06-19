@@ -2,28 +2,23 @@
   <div  class="container">
     <div class="row"><br /></div>
     <div class="row">
-      Mobile Web OCR with Tesseract.js
-
-      
+      Mobile Web OCR with Tesseract.js      
     </div>
     <div class="row"><br /></div>
   	<div class="row">
   		<div class="col-md-12">
         <div class="input-group" id="adv-search">
             <input id="fileName" type="text" class="form-control width_70" placeholder="Tesseract.js" readOnly />
-
             <select class="form-control width_30" id="sel_lang">
               <option value="eng">eng</option>
               <option value="kor">kor</option>
               <option value="jpn">jpn</option>
               <option value="fra">fra</option>
             </select>
-
             <div class="input-group-btn ">
                 <div class="btn-group" role="group">
                   <button type="button" class="btn btn-success" v-on:click="capture1_click"><span class="glyphicon glyphicon-camera" aria-hidden="true"></span></button>                          
-                  <button type="button" class="btn btn-success" v-on:click="capture2_click"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span></button>                          
-                  
+                  <button type="button" class="btn btn-success" v-on:click="capture2_click"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span></button>
                 </div>
             </div>
         </div>
@@ -76,7 +71,19 @@ module.exports = {
     , capture2_click : function(){ capture2_click(); }
   }
   ,created: function() {
-		$.getScript("https://cdn.jsdelivr.net/gh/naptha/tesseract.js@v1.0.14/dist/tesseract.min.js");		
+    $.when(
+        $.getScript( "https://cdn.jsdelivr.net/gh/naptha/tesseract.js@v1.0.14/dist/tesseract.min.js" ),
+        //$.getScript( "/mypath/myscript2.js" ),
+        
+        $.Deferred(function( deferred ){
+            $( deferred.resolve );
+        })
+    ).done(function(){
+
+        alert("loading end");
+
+    });
+		$.getScript();		
 	}
   , mounted:function () {
     var input = document.querySelector('#capture1');
