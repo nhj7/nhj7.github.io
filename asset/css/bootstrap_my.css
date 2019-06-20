@@ -460,3 +460,7 @@ input[type="radio"] .styled:checked + label::after {
   padding-left: 34px;
   top: 32px;
 }
+
+.cursor_hand{
+  cursor:hand !important;
+}

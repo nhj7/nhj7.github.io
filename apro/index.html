@@ -28,6 +28,7 @@
 	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
 	crossorigin="anonymous">
 <link rel="stylesheet" href="../asset/css/bootstrap_my.css">
+<link rel="stylesheet" href="./css/custom.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
 <style>
@@ -61,9 +62,12 @@
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<!--li><a href="./decha/" @click="">Destiny Child</a></li-->
+					<li class="active" name="Links" id="Links"><a href="#Links"><i class="fas fa-link"></i> Links</a></li>
+					<li name="MobileCheck" id="MobileCheck"><a href="#MobileCheck"><i class="fas fa-mobile-alt"></i> check</a></li>
+					
 					<li class="dropdown"><a href="javascript:;" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
-						aria-expanded="false">Links <span class="caret"></span></a>
+						aria-expanded="false"><i class="fas fa-grip-vertical"></i> ETC <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="/gib/" target="_blank">OKBank.Indonesia</a></li>
 							<li role="separator" class="divider"></li>
@@ -135,7 +139,8 @@
 				currentView : ''
 			}
 			, components : {
-				'MobileCheck' : httpVueLoader('./vue/MobileCheck.vue?v='+updateVersion)				
+				'MobileCheck' : httpVueLoader('./vue/MobileCheck.vue?v='+updateVersion)
+				, 'Links' : httpVueLoader('./vue/Links.vue?v='+updateVersion)
 			}
 			, methods : {
 				setCurrentView : function(li){
@@ -155,12 +160,14 @@
 			, mounted: function () {
 				console.log(this.$route) // outputs 'yay'
 				if( this.$route.hash != "" ){
-					var vueName = this.$route.hash.substring(2);
+					var vueName = this.$route.hash.substring(1);
+
+					console.log(vueName)
 					this.$data.currentView = vueName;
 					$(".nav").find(".active").toggleClass("active");
 					$("#"+vueName).toggleClass("active");
 				}else{
-					this.$data.currentView = "MobileCheck";
+					this.$data.currentView = "Links";
 				}
 				$("#navbar li").each(
 					function(idx, val){
