@@ -66,10 +66,9 @@
                             <br />
                             <div v-if="item.input" >
                                 <div class="input-group">
-                                    <span class="input-group-addon info">
-                                        <!--i class="glyphicon glyphicon-user"></i-->
+                                    <!--span class="input-group-addon info">
                                         {{item.input}}
-                                    </span>
+                                    </span-->
                                     <input data-toggle="tooltip" :title="[[item.input]] +'를 입력해주세요!'" required type="text" v-model="item.inputData" class="form-control " :placeholder="[[item.input]] + '를 입력해주세요'">
                                     <span class="input-group-btn">
                                         <button type="submit" class="btn btn-info " v-on:click="openUrl(item)">Go</button>
