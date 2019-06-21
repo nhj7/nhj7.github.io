@@ -60,7 +60,7 @@
                       <td rowspan="2" class="vertical-align-middle">{{ idx+1 }}</td>
                       <td >{{ item.name }}-({{item.type}})</td>                      
                     </tr>
-                    <tr :key="item.name+2" class="col-md-12">                        
+                    <tr :key="item.name+2" >                        
                         <td class="left " >
                             <a class="" href="javascript:;" @click="openUrl(item)">{{ filterUrl(item) }}</a>
                             <br />
