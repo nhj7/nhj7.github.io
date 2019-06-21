@@ -129,8 +129,13 @@ function inqryLinks(event) {
   } 
   data.luDomain = getLuDomain();
   data.links = [];
+  localStorage.setItem("apro.Links.curCorp", data.curCorp)
   if( data.curCorp == "OK"){
       data.links = data.ok_links;
+  }else if( data.curCorp == "OC" ){
+      data.links = data.oc_links;
+  }else if( data.curCorp == "AP" ){
+      data.links = data.ap_links;
   }
 
   console.log(data.links);
@@ -164,9 +169,33 @@ var data = {
             , url : "/#/iden?param1"
             , type : "m"
         }
-    ],
-    lu_list: []
-    , curCorp : 'OK'
+    ]
+    , oc_links: [
+        {
+            name : "신분증수취"
+            , url : "/redirect.html?page=iden_cust_requ00&param1={{param1}}"
+            , type : "m"
+            , input : "접수번호"
+            , bind : "{{param1}}"
+            , inputData : ""
+            , isBase64 : true
+        }
+        
+    ]
+    , ap_links: [
+        {
+            name : "신분증수취"
+            , url : "/#/iden_cust_requ00?param1={{param1}}"
+            , type : "m"
+            , input : "접수번호"
+            , bind : "{{param1}}"
+            , inputData : ""
+            , isBase64 : true
+        }
+        
+    ]
+    , lu_list: []
+    , curCorp : localStorage.getItem("apro.Links.curCorp") ? localStorage.getItem("apro.Links.curCorp") : 'OK'
     , luDomain : 'oksavingsbank.com'
     , lu_icon : 'fa-university'
     , isTest : false
