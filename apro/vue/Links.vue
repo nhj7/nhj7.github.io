@@ -7,7 +7,7 @@
 
     <!-- Default unchecked -->
     <div class="checkbox checkbox-info" >
-      <input type="checkbox" id="optinosCheckbox1" value="" v-model="data.isTest" @change="inqryLinks" >
+      <input type="checkbox" id="optinosCheckbox1" value="" v-model="data.isTest" @change="changeIsTest">
       <label for="optinosCheckbox1">
         Test
       </label>
@@ -47,29 +47,29 @@
           <div class="panel-body padding-xs">
             <div class="tab-content">
               <div class="tab-pane fade in active" id="tab_liveupdate">
-                <table class="table table-striped table-hover text-center">
+                <table class="table table-striped table-hover text-center ">
                   <thead class="alert alert-warning">
                     <tr>
-                      <td >NO</td>                      
+                      <td >NO</td>
                       <td >URL</td>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody  >
                     <template v-for="(item, idx) in data.links" >
                     <tr :key="item.name+1">
                       <td rowspan="2" class="vertical-align-middle">{{ idx+1 }}</td>
                       <td >{{ item.name }}-({{item.type}})</td>                      
                     </tr>
-                    <tr :key="item.name+2">                        
-                        <td class="left" >
-                            <a href="javascript:;" @click="openUrl(item)">{{ filterUrl(item) }}</a>
+                    <tr :key="item.name+2" class="col-md-12">                        
+                        <td class="left " >
+                            <a class="" href="javascript:;" @click="openUrl(item)">{{ filterUrl(item) }}</a>
                             <br />
                             <div v-if="item.input" >
                                 <div class="input-group">
                                     <!--span class="input-group-addon info">
                                         {{item.input}}
                                     </span-->
-                                    <input data-toggle="tooltip" :title="[[item.input]] +'를 입력해주세요!'" required type="text" v-model="item.inputData" class="form-control " :placeholder="[[item.input]] + '를 입력해주세요'">
+                                    <input @keyup.enter="openUrl(item)" data-toggle="tooltip" :title="[[item.input]] +'를 입력해주세요!'" required type="text" v-model="item.inputData" class="form-control " :placeholder="[[item.input]] + '를 입력해주세요'">
                                     <span class="input-group-btn">
                                         <button type="submit" class="btn btn-info " v-on:click="openUrl(item)">Go</button>
                                     </span>
@@ -100,9 +100,9 @@ $(document).ready(function(e) {
 
 });
 
-function getLuDomain(){  
+function getLuDomain(item){  
   console.log("getLuDomain.",data.curCorp);
-  var luDomain = data.isTest?"test-m.":"m.";
+  var luDomain = "https://"+(data.isTest?"test-":"")+  (item.type=="m"? "m" : "wwww") + ".";
   //console.log("getLuDomain.",data.curCorp);
   if( data.curCorp == "OK"){
       luDomain+="oksavingsbank.com";
@@ -113,7 +113,9 @@ function getLuDomain(){
   }else {
     luDomain+="oksavingsbank.com";
   }
-  luDomain += (data.isTest?":8082":"");
+  luDomain += (data.isTest?(item.type=="m"?":8082":":8081"):"");
+
+  console.log("luDomain", luDomain);
   return luDomain;
 }
 
@@ -125,8 +127,7 @@ function inqryLinks(event) {
       data.curCorp = event.target.childNodes[1].nodeValue.trim();        
       data.lu_icon = event.target.childNodes[0].classList[1];
     }catch(e){}
-  } 
-  data.luDomain = getLuDomain();
+  }   
   data.links = [];
   localStorage.setItem("apro.Links.curCorp", data.curCorp)
   if( data.curCorp == "OK"){
@@ -197,7 +198,7 @@ var data = {
     , curCorp : localStorage.getItem("apro.Links.curCorp") ? localStorage.getItem("apro.Links.curCorp") : 'OK'
     , luDomain : 'oksavingsbank.com'
     , lu_icon : 'fa-university'
-    , isTest : false
+    , isTest : localStorage.getItem("apro.Links.isTest") == "true" ?  true : false
 }
 module.exports = {
   name: "Links",
@@ -216,10 +217,16 @@ module.exports = {
     inqryLinks: function(event) {
       inqryLinks(event);
     }, openUrl : function(item){
-        openUrl(item);
+        var url = this.filterUrl(item);
+        var domainUrl = getLuDomain(item);
+        console.log("openUrl", domainUrl + url);
+        window.open(domainUrl + url, "");
     }, filterUrl: function (item) {        
         return item.url.replace(item.bind, item.isBase64? btoa(item.inputData) : item.inputData )
-    }   
+    }, changeIsTest : function(){
+      console.log("changeIsTest", data.isTest);
+      localStorage.setItem('apro.Links.isTest',data.isTest);
+    }
   },
   mounted: function() {
     inqryLinks();    
@@ -228,5 +235,11 @@ module.exports = {
 </script>
 
 <style>
-
+.table-nonfluid {
+   width: auto !important;
+}
+.container{
+  padding-right:0.75em;
+  padding-left:0.75em;
+}
 </style>
