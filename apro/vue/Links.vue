@@ -102,7 +102,7 @@ $(document).ready(function(e) {
 
 function getLuDomain(item){  
   console.log("getLuDomain.",data.curCorp);
-  var luDomain = "https://"+(data.isTest?"test-":"")+  (item.type=="m"? "m" : "wwww") + ".";
+  var luDomain = "https://"+(data.isTest?"test-":"")+  (item.type=="m"? "m" : "www") + ".";
   //console.log("getLuDomain.",data.curCorp);
   if( data.curCorp == "OK"){
       luDomain+="oksavingsbank.com";
@@ -160,13 +160,13 @@ var data = {
             , isBase64 : true
         }
         ,{
-            name : "테스트11"
-            , url : "/#/iden?param1"
-            , type : "m"
+            name : "온라인주택 신한카드(홈페이지)"
+            , url : "/landing/okH0123L24/okH0123L24.html?rcvPathCd=00257"
+            , type : "h"
         }
         ,{
-            name : "테스트22"
-            , url : "/#/iden?param1"
+            name : "온라인주택 신한카드(모바일)"
+            , url : "/landing/okM0017L24/okM0017L24.html?rcvPathCd=00257"
             , type : "m"
         }
     ]
