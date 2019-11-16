@@ -39,6 +39,8 @@
 <script src="https://unpkg.com/vuex"></script>
 <script src="https://unpkg.com/http-vue-loader"></script>
 <script src="https://unpkg.com//vue-router"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.4.0/marked.min.js" integrity="sha256-JaznSM5IwXQK1AyjtxCTklRL05ar/8zo+oty8fS+AMc=" crossorigin="anonymous"></script>
+
 </head>
 <body style="padding-top: 4em;">
 <div id="app">
@@ -109,11 +111,12 @@
 
 	<div class="container theme-showcase">
 		<component :is="currentView"></component>
+		<!--router-view></router-view-->
 	</div>
 
 	
 </div>
-	<script>
+	<script>		
 		//$(".nav a").attr("href",'javascript:setToggle(this);');
 
 		function setToggle(obj){
@@ -132,8 +135,8 @@
 		var router = new VueRouter({
 		    mode: 'history',
 		    routes: [
-					{ path : '/', component : Home }
-					, { path : '/Home', component : Home1 }					
+					{ path : '/KakaoLink',name:'KakaoLink',  component : httpVueLoader('./poc/KakaoLink.vue?v='+updateVersion) }
+					, { path : '/Tesseract', name: 'Tesseract', component : httpVueLoader('./poc/Tesseract.vue?v='+updateVersion) }
 				]
 		});
 		Vue.use(router);
@@ -146,9 +149,10 @@
 				currentView : Home
 			}
 			, components : {
-				'Tesseract' : httpVueLoader('./poc/Tesseract.vue?v='+updateVersion)
-				, 'KakaoLink' : httpVueLoader('./poc/KakaoLink.vue?v='+updateVersion)
-				, 'Home' : Home
+				'KakaoLink' : httpVueLoader('./poc/KakaoLink.vue?v='+updateVersion)
+				, 'Home' : httpVueLoader('./Home.vue?v='+updateVersion)
+				 , 'Tesseract' : httpVueLoader('./poc/Tesseract.vue?v='+updateVersion)
+				
 			}
 			, methods : {
 				setCurrentView : function(li){
@@ -159,33 +163,42 @@
 					app.currentView = name.trim();
 					//gtag('config', 'UA-109501118-1', {'page_path': name });
 					setToggle( li );
+				}, setInitView(){
+					console.log(this.$route) // outputs 'yay'
+					if( this.$route.hash != "" ){
+						var vueName = this.$route.hash.substring(2);
+						this.$data.currentView = vueName;
+						$(".nav").find(".active").toggleClass("active");
+						$("#"+vueName).toggleClass("active");
+					}else{
+						this.$data.currentView = "Home";
+					}
+					$("#navbar li").each(
+						function(idx, val){
+							//console.log(idx, val);
+							$(val).on("click",
+								function(){
+									app.setCurrentView(val);
+								}
+							);
+						}
+					);
 				}
 			} // end methods
 			,created: function() {
-
+				window.onpopstate = function(event) {
+					console.log(app.$router, window.history, "location: " + document.location + ", state: " + JSON.stringify(event.state));
+					app.setInitView();
+				};
+			},
+			beforeDestroy () {
+				
 			}		
-			
-			, mounted: function () {
-				console.log(this.$route) // outputs 'yay'
-				if( this.$route.hash != "" ){
-					var vueName = this.$route.hash.substring(2);
-					this.$data.currentView = vueName;
-					$(".nav").find(".active").toggleClass("active");
-					$("#"+vueName).toggleClass("active");
-				}else{
-					this.$data.currentView = "Home";
-				}
-				$("#navbar li").each(
-					function(idx, val){
-						//console.log(idx, val);
-						$(val).on("click",
-							function(){
-								app.setCurrentView(val);
-							}
-						);
-					}
-				);
+			, watch : {
 
+			}
+			, mounted: function () {
+				this.setInitView();
 				$(".dropdown").on('touchmove touchend', function(event){
 					event.stopPropagation();
 				});
@@ -277,6 +290,11 @@
 			};
 
 		})(jQuery);
+	</script>
+
+	<script>
+	
+	
 	</script>
 </body>
 </html>

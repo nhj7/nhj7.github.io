@@ -80,7 +80,7 @@ module.exports = {
         })
     ).done(function(){
 
-        alert("loading end");
+        //alert("loading end");
 
     });
 		$.getScript();		
