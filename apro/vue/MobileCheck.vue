@@ -9,7 +9,7 @@
     <div class="checkbox checkbox-info" >
       <input type="checkbox" id="optinosCheckbox1" value="" v-model="data.isTest" @change="inqryLiveupdateVersion" >
       <label for="optinosCheckbox1">
-        IsTest?
+        Test
       </label>
     </div>
 
@@ -149,11 +149,15 @@ function inqryLiveupdateVersion(event) {
   data.lu_list = [];
   waitingDialog.show("loading "+data.curCorp);
   var url = "https://"+data.luDomain+"/liveupdate/liveupdate.json";
-  $.getJSON("https://cors-anywhere.herokuapp.com/" + url, function(jsonData) {
+  $.getJSON((data.isTest?"":"https://cors-anywhere.herokuapp.com/") + url, function(jsonData) {
     //alert('fake AJAX! ' + data);
     data.lu_list = jsonData;
     waitingDialog.hide();
-  });
+  }).error(function(jqxhr, textStatus, error) {
+    console.error( "error : ",jqxhr, textStatus, error );
+    data.lu_list = [{}];
+    waitingDialog.hide();
+  })
 }
 
 function myCallback() {
