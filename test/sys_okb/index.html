@@ -40,7 +40,10 @@
                 <p>※ 전산작업시간은 예상 소요시간이며, 변경될 수 있습니다.</p>
             </div>
 
-            <a href="#" arget="_blank" class="btn red gotobank" title="새창열기-OK저축은행 인터넷 뱅킹 바로가기" >인터넷 뱅킹 바로가기</a>
+            <a href="javascript:;" arget="_blank" class="btn red gotobank" title="새창열기-OK저축은행 인터넷 뱅킹 바로가기" >인터넷 뱅킹 바로가기</a>
+
+
+            <a href="javascript:;" onclikc="doAppExit();" arget="_blank" class="btn red gotobank" title="새창열기-OK저축은행 인터넷 뱅킹 바로가기" >앱 종료</a>
 
 
             <div class="area-img foot-img">
@@ -60,4 +63,60 @@
     </div>
 </div>
 </body>
+<script>
+
+var mobileUtil = {
+	type : {
+		android : 'android',
+		android_web : 'android_web',
+		ios : 'ios',
+		ios_web : 'ios_web',
+		pc : 'pc'
+	},
+	getMobileType : function(){
+		var type = navigator.userAgent.toLocaleLowerCase();
+
+		if(type.indexOf('device_os=android;') > -1) {
+			return mobileUtil.type.android;
+		}else if(type.indexOf('device_os=ios;') > -1) {
+			return mobileUtil.type.ios;
+		}else if(type.indexOf('android') > -1) {
+			return mobileUtil.type.android;
+		}else if(type.indexOf('iphone') > -1 || type.indexOf('ipad') > -1){
+			return mobileUtil.type.ios_web;
+		}else{
+			return mobileUtil.type.pc;
+		}
+	},
+}
+
+var MobileBridge = {
+	invoke: function (json) {
+
+		switch (mobileUtil.getMobileType()) {
+			case mobileUtil.type.android:
+
+				window.nativeCall.callApi(JSON.stringify(json));
+				break;
+			case mobileUtil.type.ios:
+
+                var api = json.api;
+                var param = json.param;
+                var callback = json.callback;
+                var paramString = JSON.stringify(param);
+                var obj = {"api": api, "param": paramString, "callback":callback}
+				webkit.messageHandlers.nativeCall.postMessage(JSON.stringify(obj));
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+function doAppExit() {
+    console.log("doAppExit");
+    var obj = {api: "doAppExit", callback: ""}
+    MobileBridge.invoke(obj);
+}
+</script>
 </html>

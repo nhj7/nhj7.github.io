@@ -9,9 +9,9 @@
 html, body { height:100%; width:100%; letter-spacing:-0.5px; line-height:1; font:10px/1 'Noto Sans KR','nanumbarungothic','-apple-system','BlinkMacSystemFont', sans-serif; color:#55474a; }
 body { font-family: 'Noto Sans KR'; margin:0; padding:0; }
 dl, dt, dd, p { margin:0; padding:0; }
-img { border:0; vertical-align:middle; width:100%; } 
+img { border:0; vertical-align:middle; width:100%; }
 
-/* header */  
+/* header */
 .header { background-color:#55474a; z-index:1; }
 .header > .inner { position:relative; height:80px; width:1230px; margin:0 auto; padding:0 32px; }
 .header h1 { padding:0; margin:0; position:absolute; top:25px; }
@@ -47,7 +47,7 @@ img { border:0; vertical-align:middle; width:100%; }
 .btn.red { background-color:#e54100; }
 
 /* mediaquery */
-@media screen and (max-width: 1250px) { 
+@media screen and (max-width: 1250px) {
     /* header */
     .top, .header, .footer { display:none; }
     /* content */
@@ -78,7 +78,7 @@ img { border:0; vertical-align:middle; width:100%; }
     .area-txt dd { font-size:1.6rem; }
     .area-txt dd.howlong { margin-top:.7rem; font-size:1.6rem; }
     .area-txt p { font-size:1.3rem; margin-top:1.2rem; }
-    .btn { display:inline-block; margin:2.8rem 0 2rem; padding:1.6rem 4.4rem; font-size:1.8rem; -moz-border-radius:0.6rem; -webkit-border-radius:0.6rem; -ms-border-radius:0.6rem; border-radius:0.6rem; }
+    .btn { display:inline-block; margin:1.8rem 0 1rem; padding:1.6rem 1.4rem; font-size:1.8rem; -moz-border-radius:0.6rem; -webkit-border-radius:0.6rem; -ms-border-radius:0.6rem; border-radius:0.6rem; }
 
 /*
 
