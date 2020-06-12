@@ -11,63 +11,77 @@
 	}
 .floating1 {
     animation-name: floating1;
-    animation-duration: 1s;
+    animation-duration: .8s;
     animation-iteration-count: infinite;
     animation-timing-function: ease-in-out;
     margin-right:55px;
 		top:50%;
-		left:47%;
-		height: 1em;
-		width: 1em;
+		left:45%;
+		height: .75em;
+		width: .75em;
+		position:fixed;
+		cursor:pointer;
+		border-radius:75px;
+		background-color:yellow;
+		transition: background-color 0.3s ease;
+		-webkit-transition: background-color 2s ease-out;
+	  -moz-transition: background-color 2s ease-out;
+	  -o-transition: background-color 2s ease-out;
+}
+.floating2 {
+    animation-name: floating2;
+		animation-delay : .2s;
+    animation-duration: .8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    margin-right:55px;
+		top:50%;
+		left:52%;
+		height: .75em;
+		width: .75em;
 		position:fixed;
 		cursor:pointer;
 		border-radius:75px;
 		background-color:#fe735c;
-}
-.floating2 {
-    animation-name: floating2;
-    animation-duration: 1s;
-    animation-iteration-count: infinite;
-    animation-timing-function: ease-in-out;
-    margin-right:55px;
-		top:50%;
-		left:50%;
-		height: 1em;
-		width: 1em;
-		position:fixed;
-		cursor:pointer;
-		border-radius:75px;
-		background-color:#ff8d51;
+		transition: background-color 0.3s ease;
+		-webkit-transition: background-color 2s ease-out;
+	  -moz-transition: background-color 2s ease-out;
+	  -o-transition: background-color 2s ease-out;
 }
 .floating3 {
     animation-name: floating3;
-    animation-duration: 1s;
+		animation-delay : .4s;
+    animation-duration: .8s;
     animation-iteration-count: infinite;
     animation-timing-function: ease-in-out;
     margin-right:55px;
 		top:50%;
-		left:53%;
-		height: 1em;
-		width: 1em;
+		left:59%;
+		height: .75em;
+		width: .75em;
 		position:fixed;
 		cursor:pointer;
 		border-radius:75px;
-		background-color:#ffaf4a;
+		background-color:#fe735c;
+		transition: background-color 0.3s ease;
+		-webkit-transition: background-color 2s ease-out;
+	  -moz-transition: background-color 2s ease-out;
+	  -o-transition: background-color 2s ease-out;
 }
 @keyframes floating1 {
-    from { transform: translate(0,  0px); }
-    65%  { transform: translate(0, 15px); }
-    to   { transform: translate(0, -0px); }
+    from { transform: translate(0,  0px); background-color:yellow;}
+    65%  { transform: translate(0, -20px);background-color:#fe735c;}
+    to   { transform: translate(0, -0px); background-color:yellow;}
 }
 @keyframes floating2 {
-    from { transform: translate(0,  15px); }
-    65%  { transform: translate(0, 0px); }
-    to   { transform: translate(0, 15px); }
+	from { transform: translate(0,  0px); background-color:yellow;}
+	65%  { transform: translate(0, -20px);background-color:#fe735c;}
+	to   { transform: translate(0, -0px); background-color:yellow;}
 }
 @keyframes floating3 {
-    from { transform: translate(0,  0px); }
-    65%  { transform: translate(0, 15px); }
-    to   { transform: translate(0, -0px); }
+	from { transform: translate(0,  0px); background-color:yellow;}
+	65%  { transform: translate(0, -20px);background-color:#fe735c;}
+	to   { transform: translate(0, -0px); background-color:yellow;}
 }
 
 </style>
