@@ -50,11 +50,11 @@ window.onload = function(){
         return mobile_iPhone;
     }
     if( isMobile_Android() ){
-      var android_pkg_name = 'kr.or.sbbank.banksb';
+      var android_pkg_name = 'kr.or.sbbank.plus';
       $link.setAttribute('href',"intent://" + android_pkg_name + "#Intent;scheme=http;package=" + android_pkg_name + ";end");
     } else if( isMobile_iPhone() ){
         //Mobile iPhone link
-        $link.setAttribute('href','https://itunes.apple.com/kr/app/id567325889?mt=8');
+        $link.setAttribute('href','https://itunes.apple.com/kr/app/id1469002262?mt=8');
     }else {
         //PC link
         $link.setAttribute('href','https://ok.banking.fsb.or.kr');
