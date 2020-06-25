@@ -1,0 +1,153 @@
+@charset "utf-8";
+
+/* INITIALIZE */
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video {margin:0;padding:0;border:0;font-size:100%;word-break:break-all;box-sizing:border-box;outline:0 none;}
+html,body {height:100%;}
+html {width:100%;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;}
+body {-webkit-text-size-adjust:none;}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {display:block;}
+ol,ul {list-style:none;}
+em,i,address {font-style:normal;}
+img {max-width:100%;vertical-align:top;}
+video {min-width:100%;max-width:100%;}
+table {width:100%;border-collapse:collapse;border-spacing:0;table-layout:fixed;empty-cells:show;text-align:center;word-wrap:break-word;}
+caption {overflow:hidden;height:0;font-size:1px;line-height:0;}
+legend {font-size:0;}
+input,textarea,select,button,label {display:inline-block;vertical-align:top;outline:0 none;}
+pre {white-space:pre-line;}
+
+@font-face {
+	font-family:apro-R;
+	font-style: normal;
+	font-weight: normal;
+	src: url('../fonts/APRO_Regular.woff2') format('woff2'), /* WOFF2 Supported Browsers */
+		url('../fonts/APRO_Regular.woff') format('woff'); /* Modern Browsers */
+}
+@font-face {
+	font-family:apro-M;
+	font-style: normal;
+	font-weight: normal;
+	src: url('../fonts/APRO_Medium.woff2') format('woff2'), /* WOFF2 Supported Browsers */
+		url('../fonts/APRO_Medium.woff') format('woff'); /* Modern Browsers */
+}
+@font-face {
+	font-family:apro-B;
+	font-style: normal;
+	font-weight: normal;
+	src: url('../fonts/APRO_Bold.woff2') format('woff2'), /* WOFF2 Supported Browsers */
+		url('../fonts/APRO_Bold.woff') format('woff'); /* Modern Browsers */
+}
+@font-face {
+	font-family:noto-R;
+	font-style: normal;
+	font-weight: normal;
+	src: url('../fonts/NotoSans-Regular.woff2') format('woff2'), /* WOFF2 Supported Browsers */
+		url('../fonts/NotoSans-Regular.woff') format('woff'); /* Modern Browsers */
+}
+@font-face {
+	font-family:noto-M;
+	font-style: normal;
+	font-weight: normal;
+	src: url('../fonts/NotoSans-Medium.woff2') format('woff2'), /* WOFF2 Supported Browsers */
+		url('../fonts/NotoSans-Medium.woff') format('woff'); /* Modern Browsers */
+}
+@font-face {
+	font-family:noto-B;
+	font-style: normal;
+	font-weight: normal;
+	src: url('../fonts/NotoSans-Bold.woff2') format('woff2'), /* WOFF2 Supported Browsers */
+		url('../fonts/NotoSans-Bold.woff') format('woff'); /* Modern Browsers */
+}
+
+/* FONT */
+body,a,button,table,pre {font-family:Droid Sans,Apple SD Gothic Neo,sans-serif;color:#666;}
+body {font-size:13px;letter-spacing:-.065em;}
+:not(input):not(textarea) {-webkit-touch-callout:none;-webkit-touch-select:none;-webkit-user-select:none;-user-select:none;-webkit-tap-highlight-color:rgba(0,0,0,0);}
+
+/* LINK */
+a,a:hover {text-decoration:none;}
+a,button,input {-webkit-tap-highlight-color:rgba(255,255,255,0);}
+
+/* LAYOUT */
+.wrap,
+.wrap-inner {height:100%;min-height:100%;}
+.wrap {min-width:320px;}
+.wrap-inner {display:table;position:relative;width:100%;table-layout:fixed;vertical-align:top;}
+.container {padding-top:60px;}
+.contents {margin:30px 0;padding:0 20px;}
+.header {display:none;overflow:hidden;height:80px;padding:0 20px;border-bottom:1px solid #ececec;}
+.header .header-inner {width:900px;margin:0 auto;}
+.header h1 {margin-top:26px;}
+.header h1 img {width:120px}
+.footer {height:54px;}
+.footer .footer-inner {display:-webkit-flex;display:flex;position:fixed;left:0;right:0;bottom:0;z-index:9;width:100%;table-layout:fixed;}
+.footer button {-webkit-flex:1;flex:1;width:100%;height:54px;-webkit-border-radius:0;border-radius:0;font-size:17px;font-family:apro-M;}
+.footer button span {line-height:1;}
+.footer button[disabled] {border:1px solid #e5e5e5 !important;background-color:#e5e5e5 !important;color:#999;}
+
+/* BUTTON */
+.btns-solid2 {border:1px solid #e78a67; background-color:#e78a67 !important;color:#fff !important;}
+.btns-solid2:active {background-color:#ff734d !important;}
+
+/* ICON */
+.icos-attention {display:inline-block;width:76px;height:83px; margin-bottom:20px;background:url('../images/ico_procedure.png') no-repeat 0 0;-webkit-background-size:100% auto;background-size:100% auto;}
+
+/* MESSAGE */
+.result-msg {margin:60px 0;text-align:center;}
+.result-msg > strong {display:block;font-size:18px;font-family:apro-M;font-weight:normal;line-height:26px;color:#222;}
+
+/* CONTENT */
+.check-time-area {overflow:hidden;margin-top:-30px;text-align:center;}
+.check-time-area .check-time-inner {text-align:left;}
+.check-time-area .info-list ul {border-top:1px solid #ccc;}
+.check-time-area .info-list li {display:table;width:100%;table-layout:fixed;border-left:hidden;border-right:hidden;}
+.check-time-area .info-list li .tit,
+.check-time-area .info-list li .txt {display:table-cell;border:solid #ececec;border-width:0 0 1px;font-size:13px;line-height:20px;vertical-align:middle;}
+.check-time-area .info-list li .tit {width:92px;padding:12px 0 12px 10px;background-color:#f5f5f5;font-weight:bold;color:#222;text-align:left;}
+.check-time-area .info-list li .txt {padding:12px 20px;background-color:#fff;font-family:apro-R;color:#222;text-align:left;word-break:keep-all;}
+.check-time-area .info-list li .txt strong {font-size:14px;font-family:apro-B;font-weight:normal;color:#ff734d;}
+.check-time-area .info-list li .txt strong span {display:inline-block;vertical-align:top;}
+.check-time-area .refer {margin-top:12px;font-size:10px;color:#999;}
+.check-time-area .btns {display:-webkit-flex;display:flex;margin-top:30px;text-align:center;}
+.check-time-area .btns.pc {display:none;}
+.check-time-area .btns a {-webkit-flex:1;flex:1;padding-top:4px;border:1px solid #e5e5e5;-webkit-border-radius:48px;border-radius:48px;height:48px;line-height:19px;color:#777;}
+.check-time-area .btns a + a {margin-left:6px;}
+.check-time-area .btns a span {display:inline-block;vertical-align:top;}
+.check-time-area .btns a[class*="btn"]:before {content:'';display:inline-block;width:24px;height:22px;margin:9px 5px 0 0;background-position:0 0;background-repeat:no-repeat;-webkit-background-size:100% auto;background-size:100% auto;vertical-align:top;}
+.check-time-area .btns a.btn1:before {background-image:url('../images/ico_authority07.png');}
+.check-time-area .btns a.btn2:before {background-image:url('../images/ico_authority06.png');}
+.check-time-area .btns a.btn3 
+{display:inline-block;height:54px;padding:0 36px;border:1px solid #ff694f;background-color:#ff694f;
+font-size:20px;font-weight:normal;line-height:50px;color:#fff;}
+.check-time-area .btns a.btn3:before {display:none;}
+.check-time-area .btns p {margin-top:30px;font-size:15px;color:#777;}
+.check-time-area .btns p strong {color:#222;}
+.check-time-area .btns p  em {color:#222; font-family:apro-B;  font-size:18px}
+.check-time-area .btns img	{width:3%}
+
+/* PC */
+@media screen and (min-width: 767px) {
+	body,a,button,table,pre {font-family:noto-R;}
+
+	.header {display:block;}
+	.container {padding:0 20px;}
+	.contents {max-width:900px;margin:0 auto;padding:0;}
+	.footer {display:none;}
+
+	.icos-attention {width:100px;height:108px; margin-bottom:10px;}
+	.result-msg > strong {font-size:24px;line-height:36px;color:#222;}
+
+	.check-time-area .check-time-inner {padding:30px;border:solid #eaeaea; border-width:0 1px 1px;border-top:1px solid #999;text-align:center;}
+	.check-time-area .info-list ul {border:0;}
+	.check-time-area .info-list li {display:block;}
+	.check-time-area .info-list li + li {margin-top:18px;}
+	.check-time-area .info-list li .tit,
+	.check-time-area .info-list li .txt {display:inline-block;padding:0;border:0;font-size:15px;color:#222;vertical-align:top;}
+	.check-time-area .info-list li .tit {width:auto;margin-right:12px;background:transparent;font-weight:normal;}
+	.check-time-area .info-list li .txt {font-family:noto-R;}
+	.check-time-area .info-list li .txt strong {font-size:15px;font-family:noto-M; font-size:20px}
+	.check-time-area .refer {margin-top:18px;font-size:13px;color:#999;}
+	.check-time-area .btns.pc {display:block;margin-top:40px;}
+	.check-time-area .btns.pc a {-webkit-flex:none;flex:none;font-family:noto-M;}
+	.check-time-area .btns.mw {display:none;}
+}

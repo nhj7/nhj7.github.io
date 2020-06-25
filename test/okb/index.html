@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+<meta name="format-detection" content="telephone=no" />
+<title>OK저축은행 서비스 점검 안내</title>
+<link type="text/css" rel="stylesheet" href="./css/content.css" />
+</head>
+<body>
+<div class="wrap">
+	<div class="wrap-inner">
+		<div class="header">
+			<div class="header-inner">
+				<h1><img src="./images/img_logo.png" alt="OK저축은행" /></h1>
+			</div>
+		</div>
+		<div class="container" role="main">
+			<div class="contents">
+				<div class="result-msg">
+					<i class="icos-attention"></i>
+					<strong>더 나은 서비스 제공을 위해<br> 서비스 점검 중입니다.</strong>
+				</div>
+				<div class="check-time-area">
+					<div class="check-time-inner">
+						<div class="info-list">
+							<ul>
+								<li>
+									<div class="tit">점검대상</div>
+									<div class="txt">
+										OK저축은행 PC홈페이지 및 모바일 App/Web
+									</div>
+								</li>
+								<li>
+									<div class="tit">점검시간</div>
+									<div class="txt">
+										<strong><span><em>2020.06.27(토)</em> <em>00:00</em></span> ~ <span><em>28(일)</em> <em>18:00</em></span></strong>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<p class="refer">점검 시간은 예상 소요시간이며, 변경될 수 있습니다.</p>
+					</div>
+					<div class="btns mw">
+						<a class="btn1" href="" role="button"><span>인터넷뱅킹<br> 바로가기</span></a>
+						<a class="btn2" href="tel:1800-8282" role="button"><span>콜센터 문의하기<br> 1800-8282</span></a>
+					</div>
+					<div class="btns pc">
+						<a class="btn3" href="" role="button"><span>인터넷 뱅킹 바로가기</span></a>
+						<p>관련 문의사항이 있을 경우 <img src="images/ico_authority06.png" alt=""><em>콜센터 1800-8282</em> 로 문의바랍니다.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="footer-inner">
+				<button id="closeApp" style="display:none;" type="button" class="btns-solid2" onclick="doAppExit();"><span>앱 종료</span></button>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+<script>
+
+var mobileUtil = {
+	type : {
+		android : 'android',
+		android_web : 'android_web',
+		ios : 'ios',
+		ios_web : 'ios_web',
+		pc : 'pc'
+	},
+	getMobileType : function(){
+		var type = navigator.userAgent.toLocaleLowerCase();
+
+		if(type.indexOf('device_os=android;') > -1) {
+			return mobileUtil.type.android;
+		}else if(type.indexOf('device_os=ios;') > -1) {
+			return mobileUtil.type.ios;
+		}else if(type.indexOf('android') > -1) {
+			return mobileUtil.type.android_web;
+		}else if(type.indexOf('iphone') > -1 || type.indexOf('ipad') > -1){
+			return mobileUtil.type.ios_web;
+		}else{
+			return mobileUtil.type.pc;
+		}
+	},
+}
+
+var MobileBridge = {
+	invoke: function (json) {
+
+		switch (mobileUtil.getMobileType()) {
+			case mobileUtil.type.android:
+
+				window.nativeCall.callApi(JSON.stringify(json));
+				break;
+			case mobileUtil.type.ios:
+
+                var api = json.api;
+                var param = json.param;
+                var callback = json.callback;
+                var paramString = JSON.stringify(param);
+                var obj = {"api": api, "param": paramString, "callback":callback}
+				webkit.messageHandlers.nativeCall.postMessage(JSON.stringify(obj));
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+if( mobileUtil.getMobileType() == mobileUtil.type.android || mobileUtil.getMobileType() == mobileUtil.type.ios){
+      var closeApp = document.getElementById("closeApp");
+      closeApp.style.display = "";
+}
+
+function doAppExit() {
+    console.log("doAppExit");
+    var obj = {api: "doAppExit", callback: ""}
+    MobileBridge.invoke(obj);
+}
+
+
+//mobile link
+var mobileArry = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+var mobile_Android = /Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+var mobile_iPhone = /iPhone|ipad|ipod/i.test(navigator.userAgent);
+var $link = document.getElementsByClassName('btn1')[0];
+
+function isMobile_Android(){
+		return mobile_Android;
+}
+function isMobile_iPhone(){
+		return mobile_iPhone;
+}
+if( isMobile_Android() ){
+	var android_pkg_name = 'kr.or.sbbank.plus';
+	$link.setAttribute('href',"intent://" + android_pkg_name + "#Intent;scheme=http;package=" + android_pkg_name + ";end");
+} else if( isMobile_iPhone() ){
+		//Mobile iPhone link
+		$link.setAttribute('href','https://itunes.apple.com/kr/app/id1469002262?mt=8');
+}else {
+		//PC link
+		$link.setAttribute('href','https://ok.banking.fsb.or.kr');
+}
+</script>
+</html>
