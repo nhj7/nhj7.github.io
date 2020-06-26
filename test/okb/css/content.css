@@ -73,7 +73,7 @@ a,button,input {-webkit-tap-highlight-color:rgba(255,255,255,0);}
 .wrap-inner {height:100%;min-height:100%;}
 .wrap {min-width:320px;}
 .wrap-inner {display:table;position:relative;width:100%;table-layout:fixed;vertical-align:top;}
-.container {padding-top:60px;}
+.container {padding-top:0px;}
 .contents {margin:30px 0;padding:0 20px;}
 .header {display:none;overflow:hidden;height:80px;padding:0 20px;border-bottom:1px solid #ececec;}
 .header .header-inner {width:900px;margin:0 auto;}
@@ -116,7 +116,7 @@ a,button,input {-webkit-tap-highlight-color:rgba(255,255,255,0);}
 .check-time-area .btns a[class*="btn"]:before {content:'';display:inline-block;width:24px;height:22px;margin:9px 5px 0 0;background-position:0 0;background-repeat:no-repeat;-webkit-background-size:100% auto;background-size:100% auto;vertical-align:top;}
 .check-time-area .btns a.btn1:before {background-image:url('../images/ico_authority07.png');}
 .check-time-area .btns a.btn2:before {background-image:url('../images/ico_authority06.png');}
-.check-time-area .btns a.btn3 
+.check-time-area .btns a.btn3
 {display:inline-block;height:54px;padding:0 36px;border:1px solid #ff694f;background-color:#ff694f;
 font-size:20px;font-weight:normal;line-height:50px;color:#fff;}
 .check-time-area .btns a.btn3:before {display:none;}
@@ -150,4 +150,5 @@ font-size:20px;font-weight:normal;line-height:50px;color:#fff;}
 	.check-time-area .btns.pc {display:block;margin-top:40px;}
 	.check-time-area .btns.pc a {-webkit-flex:none;flex:none;font-family:noto-M;}
 	.check-time-area .btns.mw {display:none;}
+	.check-time-area .mw {display:none;}
 }
