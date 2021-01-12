@@ -1702,7 +1702,7 @@ async function inqryDelegateInfo() {
 }
 
 var data = {
-  acct_nm: '',
+  acct_nm: 'nhj12311',
   inqry_acct: '',
   busy_msg: '',
   acct_sp_tot: 0,
