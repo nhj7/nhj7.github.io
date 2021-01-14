@@ -184,7 +184,7 @@
             <div id="tab_feed_spinner" class="text-center"><i class="text-info glyphicon glyphicon-repeat fast-right-spinner"></i></div>
             <table id="tab_feed_table" class="table table-hover text-center hidden">
               <tbody>
-                <tr v-for="(item, idx) in data.feedList" v-on:click="viewPost(item)" data-html="true" data-toggle="modal" data-target="#postModal">
+                <tr v-bind:key="item.url" v-for="(item) in data.feedList" v-on:click="viewPost(item)" data-html="true" data-toggle="modal" data-target="#postModal">
                   <td class="text-left padding-lg">
 
                     <div class="margin-zero">
@@ -229,7 +229,7 @@
             <div id="tab_post_spinner" class="text-center"><i class="text-info glyphicon glyphicon-repeat fast-right-spinner"></i></div>
             <table id="tab_post_table" class="table table-hover text-center hidden">
               <tbody>
-                <tr v-for="(item, idx) in data.postList" v-on:click="viewPost(item)" data-html="true" data-toggle="modal" data-target="#postModal">
+                <tr v-bind:key="item.url" v-for="(item) in data.postList" v-on:click="viewPost(item)" data-html="true" data-toggle="modal" data-target="#postModal">
                   <td class="text-left padding-xs">
                     <div class="col-md-2 padding-xs margin-bottom-xs" v-if="item.images && item.images.length > 0">
                       <img class="col-xs-12 padding-xs" :src="`${item.images[1]}`" alt="door">
@@ -270,7 +270,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, idx) in data.muterList" v-on:click="clickVotingRateRow(item.account)">
+                <tr :key="idx" v-for="(item, idx) in data.muterList" v-on:click="clickVotingRateRow(item.account)">
                   <td>{{ idx+1 }}</td>
                   <td>
                     {{ item.account }}
@@ -288,7 +288,7 @@
             <table id="tab_comments_table" class="table table-striped table-hover table_fixed hidden">
 
               <tbody>
-                <tr v-for="(item, idx) in data.commentsList" v-on:click="" data-html="true">
+                <tr v-for="(item, idx) in data.commentsList" data-html="true" :key="idx">
                   <td>
                     <b>
                       <a :href="`https://steemit.com/@${item.parent_author}`" target="_blank">
@@ -308,7 +308,7 @@
             <div id="tab_replies_spinner" class="text-center"><span class="text-info glyphicon glyphicon-repeat fast-right-spinner"></span></div>
             <table id="tab_replies_table" class="table table-striped table-hover table_fixed hidden">
               <tbody>
-                <tr v-for="(item, idx) in data.repliesList" v-on:click="">
+                <tr v-for="(item, idx) in data.repliesList" :key="idx">
                   <td>
                     <b>
                       <a :href="`https://steemit.com/@${item.author}`" target="_blank">
@@ -335,7 +335,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, idx) in data.delegateList" v-on:click="clickVotingRateRow(item.account)">
+                <tr v-for="(item, idx) in data.delegateList" v-on:click="clickVotingRateRow(item.account)" :key="idx">
                   <td>{{ idx+1 }}</td>
                   <td>
                     {{ item.delegator }}
