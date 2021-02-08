@@ -27,7 +27,7 @@
   </div>
   <!-- form-group -->
 
-  <div id="acct_info" class="form-group collapse in">
+  <div id="acct_info" class="form-group collapse in hidden" >
     <div class="row">
       <div class="col-sm-3">
         <div class="input-group">
@@ -1086,7 +1086,7 @@ function _inqryAccountInfo(marketInfo, rewardFund, gprops, acctInfo, rcInfo) {
   } catch (err) {
 
   } finally {
-    $("#acct_info").removeClass("hidden");
+    //$("#acct_info").removeClass("hidden");
     waitingDialog.hide();
 
     //$("#acct_nm").focus();
@@ -1129,7 +1129,8 @@ function homeSubmit() {
   data.postList = [];
   data.commentsList = [];
   data.repliesList = [];
-  inqryFeedInfo();
+  //inqryFeedInfo();
+  inqryTagInfo('kr-dev', 'blackboard')
   inqryAccountInfo();
   inqryMuteInfo();
   inqryPostInfo();
