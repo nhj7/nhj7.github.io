@@ -1,7 +1,7 @@
 <template>
 <div class="">
 
-  <div class="form-group ">
+  <div class="form-group hidden">
     <div class="row ">
       <div class="col-sm-6 col-sm-offset-2">
         <div class="input-group">
