@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site
+      mirrorsURL="mirrors.xml">
+   <description url="http://download.forge.ow2.org/eclipse-update/">
+      ObjectWeb Consortium Eclipse Update Site.
+   </description>
+   <feature url="features/org.objectweb.asm.feature_2.2.1.jar" id="org.objectweb.asm.feature" version="2.2.1">
+      <category name="asm"/>
+   </feature>
+   <feature url="features/org.objectweb.asm.feature_2.2.0.jar" id="org.objectweb.asm.feature" version="2.2.0">
+      <category name="asm"/>
+   </feature>
+   <feature url="features/org.objectweb.asm.feature_2.1.0.jar" id="org.objectweb.asm.feature" version="2.1.0">
+      <category name="asm"/>
+   </feature>
+   <feature url="features/org.objectweb.asm.feature_2.0.0.jar" id="org.objectweb.asm.feature" version="2.0.0">
+      <category name="asm"/>
+   </feature>
+   <feature url="features/org.objectweb.asm.feature_2.0.0.RC1.jar" id="org.objectweb.asm.feature" version="2.0.0.RC1">
+      <category name="asm"/>
+   </feature>
+   <feature url="features/de.loskutov.BytecodeOutline.feature_2.0.1.jar" id="de.loskutov.BytecodeOutline.feature" version="2.0.1">
+      <category name="bytecode-outline"/>
+   </feature>
+   <feature url="features/de.loskutov.BytecodeOutline.feature_2.0.2.jar" id="de.loskutov.BytecodeOutline.feature" version="2.0.2">
+      <category name="bytecode-outline"/>
+   </feature>
+   <feature url="features/de.loskutov.BytecodeOutline.feature_2.1.0.jar" id="de.loskutov.BytecodeOutline.feature" version="2.1.0">
+      <category name="bytecode-outline"/>
+   </feature>
+   <feature url="features/de.loskutov.BytecodeOutline.feature_2.2.0.jar" id="de.loskutov.BytecodeOutline.feature" version="2.2.0">
+      <category name="bytecode-outline"/>
+   </feature>
+   <feature url="features/de.loskutov.BytecodeOutline.feature_2.2.3.jar" id="de.loskutov.BytecodeOutline.feature" version="2.2.3">
+      <category name="bytecode-outline"/>
+   </feature>
+   <feature url="features/de.loskutov.BytecodeOutline.feature_2.2.5.jar" id="de.loskutov.BytecodeOutline.feature" version="2.2.5">
+      <category name="bytecode-outline"/>
+   </feature>
+   <feature url="features/org.objectweb.jope4j.feature_1.0.2.jar" id="org.objectweb.jope4j.feature" version="1.0.2">
+      <category name="jonas-dev"/>
+   </feature>
+   <feature url="features/org.objectweb.jope4j.feature_1.0.3.jar" id="org.objectweb.jope4j.feature" version="1.0.3">
+      <category name="jonas-dev"/>
+   </feature>
+   <feature url="features/org.objectweb.jope4j.feature_1.0.4.jar" id="org.objectweb.jope4j.feature" version="1.0.4">
+      <category name="jonas-dev"/>
+   </feature>
+   <feature url="features/org.exoplatform.eclipse.feature_1.0.1.jar" id="org.exoplatform.eclipse.feature" version="1.0.1">
+      <category name="org-exoplatform-eclipse-plugins"/>
+   </feature>
+   <feature url="features/org.exoplatform.eclipse.feature_2.0.0.jar" id="org.exoplatform.eclipse.feature" version="2.0">
+      <category name="org-exoplatform-eclipse-plugins"/>
+   </feature>
+   <feature url="features/org.objectweb.jonas.wtp.adapter_3.0.10.jar" id="org.objectweb.jonas.wtp.adapter" version="3.0.10">
+      <category name="jonas-dev"/>
+   </feature>
+   <archive path="plugins/org.objectweb.asm_2.2.1.jar" url="http://download.forge.ow2.org/asm/org.objectweb.asm_2.2.1.jar"/>
+   <archive path="plugins/org.objectweb.asm_2.2.0.jar" url="http://download.forge.ow2.org/asm/org.objectweb.asm_2.2.0.jar"/>
+   <archive path="plugins/org.objectweb.asm_2.1.0.jar" url="http://download.forge.ow2.org/asm/org.objectweb.asm_2.1.0.jar"/>
+   <archive path="plugins/org.objectweb.asm_2.0.0.jar" url="http://download.forge.ow2.org/asm/org.objectweb.asm_2.0.0.jar"/>
+   <archive path="plugins/org.objectweb.asm_2.0.0.RC1.jar" url="http://download.forge.ow2.org/asm/org.objectweb.asm_2.0.0.RC1.jar"/>
+   <archive path="plugins/de.loskutov.BytecodeOutline_2.0.1.jar" url="http://download.forge.ow2.org/asm/de.loskutov.BytecodeOutline_2.0.1.jar"/>
+   <archive path="plugins/de.loskutov.BytecodeOutline_2.0.2.jar" url="http://download.forge.ow2.org/asm/de.loskutov.BytecodeOutline_2.0.2.jar"/>
+   <archive path="plugins/de.loskutov.BytecodeOutline_2.1.0.jar" url="http://download.forge.ow2.org/asm/de.loskutov.BytecodeOutline_2.1.0.jar"/>
+   <archive path="plugins/de.loskutov.BytecodeOutline_2.2.0.jar" url="http://download.forge.ow2.org/asm/de.loskutov.BytecodeOutline_2.2.0.jar"/>
+   <archive path="plugins/de.loskutov.BytecodeOutline_2.2.3.jar" url="http://download.forge.ow2.org/asm/de.loskutov.BytecodeOutline_2.2.3.jar"/>
+   <archive path="plugins/de.loskutov.BytecodeOutline_2.2.5.jar" url="http://download.forge.ow2.org/asm/de.loskutov.BytecodeOutline_2.2.5.jar"/>
+   <archive path="plugins/org.objectweb.jope4j.plugin_1.0.3.jar" url="http://download.forge.ow2.org/jope/org.objectweb.jope4j.plugin_1.0.3.jar"/>
+   <archive path="plugins/org.objectweb.jope4j.plugin_1.0.2.jar" url="http://download.forge.ow2.org/jope/org.objectweb.jope4j.plugin_1.0.2.jar"/>
+   <archive path="plugins/org.objectweb.jope4j.plugin_1.0.4.jar" url="http://download.forge.ow2.org/jope/org.objectweb.jope4j.plugin_1.0.4.jar"/>
+   <category-def name="asm" label="ASM Framework"/>
+   <category-def name="bytecode-outline" label="Bytecode Outline"/>
+   <category-def name="jonas-dev" label="JOnAS Development"/>
+   <category-def name="org-exoplatform-eclipse-plugins" label="eXo Platform Eclipse Plugins">
+      <description>
+         Under this category you will find a set of plugins that work together to help you with writing eXo platform based portlet applications.
+      </description>
+   </category-def>
+</site>
