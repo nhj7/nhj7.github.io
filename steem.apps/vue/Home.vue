@@ -1847,6 +1847,7 @@ var home = module.exports = {
     setVpSlider(0);
 
     var steem_id = localStorage.getItem('steem.id');
+    if( !steem_id ) { steem_id = "nhj12311"; }
     if (steem_id) {
       data.acct_nm = steem_id;
       homeSubmit();
