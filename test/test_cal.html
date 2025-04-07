@@ -52,7 +52,7 @@ function openCalendarWithEvent() {
 
         // 새로운 이벤트 생성을 위한 스키마
         // 포맷: webcal:// 또는 webcalc://
-        const iosNewEventUrl = `webcal:///?title=${encodeURIComponent(event.title)}`
+        const iosNewEventUrl = `webcalc:///?title=${encodeURIComponent(event.title)}`
             + `&start=${encodeURIComponent(event.startDate)}`
             + `&end=${encodeURIComponent(event.endDate)}`
             + `&description=${encodeURIComponent(event.description)}`
@@ -85,6 +85,6 @@ function openCalendarWithEvent() {
 </script>
 </head>
 <body>
-	<button onclick="openCalendarWithEvent()">캘린더 테스트 333</button>
+	<button onclick="openCalendarWithEvent()">캘린더 테스트 444</button>
 </body>
 </html>
