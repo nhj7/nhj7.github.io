@@ -58,9 +58,11 @@ function openCalendarWithEvent() {
             + `&description=${encodeURIComponent(event.description)}`
             + `&location=${encodeURIComponent(event.location)}`;
 
+        const iosIcs = `webcal:////test/test.ics`;
+
         //window.location.href = iosCalendarUrl;
         // 또는 새 이벤트 생성
-        window.location.href = iosNewEventUrl;
+        window.location.href = iosIcs;
     } 
     else if (getMobileOperatingSystem() === 'Android') {
         // Android Calendar Schema
