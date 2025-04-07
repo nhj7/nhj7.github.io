@@ -1,0 +1,42 @@
+<html>
+<head>
+<script>
+function getMobileOperatingSystem() {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+	console.log('userAgent', userAgent);
+    // iOS detection
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        return 'iOS';
+    }
+
+    // Android detection
+    if (/android/i.test(userAgent)) {
+        return 'Android';
+    }
+
+    // Windows Phone detection
+    if (/windows phone/i.test(userAgent)) {
+        return 'Windows Phone';
+    }
+
+    return 'unknown';
+}
+
+function testCal(){
+
+	console.log(getMobileOperatingSystem());
+	// 앱 스키마 활용 (앱이 설치된 경우)
+	if (getMobileOperatingSystem() === 'iOS') {
+		window.location.href = 'calshow://';  // iOS 캘린더
+	} else if (getMobileOperatingSystem() === 'Android') {
+		window.location.href = 'content://com.android.calendar/';  // Android 캘린더
+	} else{
+		alert(getMobileOperatingSystem());
+	}
+}
+</script>
+</head>
+<body>
+	<button onclick="testCal()">캘린더 테스트</button>
+</body>
+</html>
