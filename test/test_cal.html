@@ -84,9 +84,42 @@ function openCalendarWithEvent() {
 }
 
 
+// 알림 권한 요청
+function requestNotificationPermission() {
+    Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+            console.log("알림 권한이 허용되었습니다.");
+        } else {
+            console.log("알림 권한이 거부되었습니다.");
+        }
+    });
+}
+
+// 알람 설정
+function scheduleAlarm() {
+    setTimeout(() => {
+        new Notification("알람 제목", {
+            body: "알람 내용입니다!",
+            icon: "/path/to/icon.png"
+        });
+    }, 5000); // 5초 뒤 알림
+}
+
+// 사용 예제
+async function doAlarm(){
+    await requestNotificationPermission();
+    await scheduleAlarm();
+}
+
+
 </script>
 </head>
 <body>
 	<button onclick="openCalendarWithEvent()" large>캘린더 테스트 888</button>
+
+    <br />
+    <br />
+
+    <button onclick="doAlarm()" large>알람 테스트 888</button>
 </body>
 </html>
