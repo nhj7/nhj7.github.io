@@ -58,9 +58,9 @@ function openCalendarWithEvent() {
             + `&description=${encodeURIComponent(event.description)}`
             + `&location=${encodeURIComponent(event.location)}`;
 
-        window.location.href = iosCalendarUrl;
+        //window.location.href = iosCalendarUrl;
         // 또는 새 이벤트 생성
-        // window.location.href = iosNewEventUrl;
+        window.location.href = iosNewEventUrl;
     } 
     else if (getMobileOperatingSystem() === 'Android') {
         // Android Calendar Schema
@@ -75,9 +75,9 @@ function openCalendarWithEvent() {
             + `&beginTime=${new Date(event.startDate).getTime()}`
             + `&endTime=${new Date(event.endDate).getTime()}`;
 
-        window.location.href = androidCalendarUrl;
+        //window.location.href = androidCalendarUrl;
         // 또는 새 이벤트 생성
-        // window.location.href = androidNewEventUrl;
+        window.location.href = androidNewEventUrl;
     }
 }
 
@@ -85,6 +85,6 @@ function openCalendarWithEvent() {
 </script>
 </head>
 <body>
-	<button onclick="openCalendarWithEvent()">캘린더 테스트222</button>
+	<button onclick="openCalendarWithEvent()">캘린더 테스트 333</button>
 </body>
 </html>
