@@ -88,11 +88,16 @@ function openCalendarWithEvent() {
 function requestNotificationPermission() {
     Notification.requestPermission().then(permission => {
         if (permission === "granted") {
-            console.log("알림 권한이 허용되었습니다.");
+            wlog("알림 권한이 허용되었습니다.");
         } else {
-            console.log("알림 권한이 거부되었습니다.");
+            wlog("알림 권한이 거부되었습니다.");
         }
     });
+}
+
+function wlog(str){
+    document.getElementById("vInput").value = str;
+    console.log(str);
 }
 
 // 알람 설정
@@ -102,6 +107,8 @@ function scheduleAlarm() {
             body: "알람 내용입니다!",
             icon: "/path/to/icon.png"
         });
+
+        wlog("scheduleAlarm gg");
     }, 5000); // 5초 뒤 알림
 }
 
@@ -128,5 +135,10 @@ async function doAlarm(){
     <br />
 
     <button onclick="doAlarm()" class="userButton">알람 테스트 888</button>
+
+    <br />
+    <br />
+
+    <input id="vInput" type="text" style="width:100%;" />
 </body>
 </html>
