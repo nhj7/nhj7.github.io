@@ -34,9 +34,57 @@ function testCal(){
 		alert(getMobileOperatingSystem());
 	}
 }
+
+function openCalendarWithEvent() {
+    const event = {
+        title: '미팅',
+        description: '프로젝트 논의',
+        location: '회의실',
+        startDate: '20240220T090000',
+        endDate: '20240220T100000'
+    };
+
+    if (getMobileOperatingSystem() === 'iOS') {
+        // iOS Calendar Schema
+        // 포맷: calshow://[timestamp]
+        const timestamp = new Date(event.startDate).getTime();
+        const iosCalendarUrl = `calshow://${timestamp}`;
+
+        // 새로운 이벤트 생성을 위한 스키마
+        // 포맷: webcal:// 또는 webcalc://
+        const iosNewEventUrl = `webcal:///?title=${encodeURIComponent(event.title)}`
+            + `&start=${encodeURIComponent(event.startDate)}`
+            + `&end=${encodeURIComponent(event.endDate)}`
+            + `&description=${encodeURIComponent(event.description)}`
+            + `&location=${encodeURIComponent(event.location)}`;
+
+        window.location.href = iosCalendarUrl;
+        // 또는 새 이벤트 생성
+        // window.location.href = iosNewEventUrl;
+    } 
+    else if (getMobileOperatingSystem() === 'Android') {
+        // Android Calendar Schema
+        const androidCalendarUrl = 'content://com.android.calendar/time/'
+            + new Date(event.startDate).getTime();
+
+        // 새로운 이벤트 생성을 위한 인텐트
+        const androidNewEventUrl = 'content://com.android.calendar/events'
+            + `?title=${encodeURIComponent(event.title)}`
+            + `&description=${encodeURIComponent(event.description)}`
+            + `&location=${encodeURIComponent(event.location)}`
+            + `&beginTime=${new Date(event.startDate).getTime()}`
+            + `&endTime=${new Date(event.endDate).getTime()}`;
+
+        window.location.href = androidCalendarUrl;
+        // 또는 새 이벤트 생성
+        // window.location.href = androidNewEventUrl;
+    }
+}
+
+
 </script>
 </head>
 <body>
-	<button onclick="testCal()">캘린더 테스트</button>
+	<button onclick="openCalendarWithEvent()">캘린더 테스트</button>
 </body>
 </html>
