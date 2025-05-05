@@ -1,0 +1,528 @@
+<html>
+
+<head>
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+    <style>
+        :root {
+            /*
+            --main-bg-color: white;
+            --initScrn-color : black;
+            --main-bg-color: #598CDB;
+            335adb
+            */
+            --main-bg-color: #0074DE;
+            --initScrn-color : white;
+
+            --point-color : #0074DE;
+            --point-light-color : #729ee1;
+
+            --point2-color:#14B5BA;
+            --point2-light-color : #26cad0;
+
+            
+            /* 초기 변수 값 */
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: var(--main-bg-color); /* CSS 변수 사용 */
+            font-family: "Apple SD Gothic Neo";
+
+        }
+
+        .card-layout {
+            width: 150px;
+            height: 100px;
+            background-color: var(--point-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            user-select: none;
+            /* Prevent text selection */
+        }
+
+        .card-layout:active {
+            transform: scale(0.95);
+            /* 작아지는 효과 */
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+            /* 그림자 감소 */
+        }
+
+        /* Popup Overlay (Background) */
+        .popup-overlay {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.6);
+            /* 어두운 배경 */
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            /* animation: fade-in 0.3s ease; */
+            transform: translateY(100%);
+        }
+
+        /* Popup - Full Bottom Popup */
+        .popup {
+            width: 100%;
+            height: 90vh;
+            /* 화면의 9/10 차지 */
+            background: var(--point-color);
+            /* 배경색 */
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+            /* animation: slide-up 0.2s ease; */
+            position: relative;
+            transform: translateY(100%);
+        }
+
+        /* Animations */
+        @keyframes slide-up {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0%);
+            }
+        }
+
+        @keyframes slide-down {
+            from {
+                transform: translateY(0);
+                /* 초기 상태: 원래 위치 */
+            }
+
+            to {
+                transform: translateY(100%);
+                /* 끝 상태: 화면 아래로 완전히 벗어나기 */
+            }
+        }
+
+
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            color: white;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .close-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* Popup Title */
+        .popup-title {
+            margin-top: 60px;
+            margin-bottom: 77px;
+            font-size: 1.4em;
+            color: white;
+            text-align: center;
+        }
+
+        /* PIN Indicator */
+        .pin-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .circle {
+            width: 20px;
+            height: 20px;
+            background: var(--point-light-color);
+            /* 밝은 파란색 */
+            border-radius: 50%;
+            transition: background 0.2s ease;
+        }
+
+        /* 채워진 Circle 스타일 */
+        .circle.filled {
+            background: white;
+            animation: pop 0.3s ease-in-out;
+        }
+
+        /* "Pop Effect" 애니메이션 */
+        @keyframes pop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.3);
+                /* 1.5배 커짐 */
+            }
+
+            100% {
+                transform: scale(1);
+                /* 원래 크기로 복귀 */
+            }
+        }
+
+        /* Keypad */
+        .keypad {
+            margin-top: 15vh;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px 16px;
+
+        }
+
+        .key {
+            background: none;
+            color: white;
+            border: none;
+            /* 테두리 제거 */
+            font-size: 1.75em;
+            font-weight: bold;
+            height: 60px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            outline: none;
+            user-select: none;
+            /* 텍스트 선택 방지 */
+            -webkit-tap-highlight-color: transparent;
+            /* 모바일 클릭 강조 제거 */
+            box-shadow: none;
+            /* 클릭 시 그림자 제거 */
+        }
+
+        .key:active {
+            transform: scale(0.87);
+            background-color: var(--point-light-color);
+            /* 작아지는 효과 */
+
+            /*
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+             그림자 감소 */
+        }
+
+        .key.delete {
+            color: white;
+            /* 빨간색 백스페이스 */
+        }
+
+        .key-placeholder {
+            visibility: hidden;
+        }
+
+
+
+        @keyframes fade-in {
+            from {
+                background: rgba(0, 0, 0, 0);
+            }
+
+            to {
+                background: rgba(0, 0, 0, 0.6);
+            }
+        }
+
+
+
+        /* "slide-down" 애니메이션을 적용할 때 사용하는 클래스 */
+        .popup.slide-down {
+            animation: slide-down 0.3s ease forwards;
+            /* 0.3초 동안 애니메이션 */
+        }
+
+        .temp {
+            color: #0c5356;
+        }
+
+        .appNameDiv {
+            position: relative;
+            /* ::after를 사용할 때 필요 */
+            color: var(--initScrn-color );
+            /* 텍스트 색상 */
+
+            /* 텍스트 강조 */
+            margin-bottom: 120px;
+            font-size: 2.5em;
+
+
+        }
+
+        .appNameClass1 {
+            position: relative;
+            /* ::after를 사용할 때 필요 */
+            color: #14B5BA;
+            /* 텍스트 색상 */
+            font-weight: bold;
+            /* 텍스트 강조 */
+        }
+
+        .appNameClass2 {
+            position: relative;
+            /* ::after를 사용할 때 필요 */
+            color: #14B5BA;
+            /* 텍스트 색상 */
+            font-weight: bold;
+            /* 텍스트 강조 */
+        }
+
+        .appNameClass3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            /* 텍스트 바로 아래 위치 */
+            width: 100%;
+            /* 텍스트 너비와 동일 */
+            height: 0.3em;
+            /* 형광팬 높이 */
+            background-color: #14B5BA;
+            /* 밑줄 배경색 */
+            z-index: -1;
+            /* 텍스트 위로 겹치지 않도록 뒤로 배치 */
+            border-radius: 7px;
+            /* 둥근 모서리로 형광팬 느낌 강화 */
+        }
+
+        .initScrn{
+            color:var(--initScrn-color) ;
+            height:100vh;
+            text-align: center;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <div id="initScrn" class="initScrn" style="">
+        <div style="height:30vh;"></div>
+        <div style="margin-bottom: 1px;">금융생활의 열쇠</div>
+        <div id="app-name-txt" class="appNameDiv">
+            <font id="appNameFont" class="appNameClass1">KEY</font>뱅크
+        </div>
+        <div style="height:15vh"></div>
+        <div style="display:block;align-items: center;text-align: center">
+            <img src="./assets/ci0.png" width="100px" style="top:30px;position:relative" />
+        </div>
+        <div style="text-align: left;font-size:1.05em;margin-bottom: 1.5em;">한국투자저축은행 모바일앱</div>
+        <div id="login-btn" style="margin-bottom: 0.5em;">로그인</div>
+        <div id="color-btn" style="margin-bottom: 1em;">색전환</div>
+
+        <div id="color-text"></div>
+    </div>
+
+
+
+
+
+
+    <div class="popup-overlay">
+        <div class="popup">
+            <button class="close-btn">X</button>
+            <div class="popup-title"><b style="font-size:1.2em;">간편비밀번호</b><br />6자리를 입력해주세요</div>
+            <div class="pin-indicator">
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+            </div>
+            <div class="keypad">
+                <div class="key">1</div>
+                <div class="key">2</div>
+                <div class="key">3</div>
+                <div class="key">4</div>
+                <div class="key">5</div>
+                <div class="key">6</div>
+                <div class="key">7</div>
+                <div class="key">8</div>
+                <div class="key">9</div>
+                <div class="key-placeholder"></div>
+                <div class="key">0</div>
+                <div class="key delete">←</div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script>
+
+        function handleClick() {
+            console.log("카드가 클릭되었습니다!");
+        }
+
+
+
+        // PIN Indicator 업데이트 함수
+        let pin = []; // 입력한 핀 번호를 저장
+        function updatePinIndicator() {
+            const circles = document.querySelectorAll('.circle');
+            circles.forEach((circle, index) => {
+                if (index < pin.length) {
+                    // 채워진 상태
+                    circle.classList.add('filled');
+                } else {
+                    // 비워진 상태
+                    circle.classList.remove('filled');
+                }
+            });
+
+            // 6자리 입력 완료 시 처리
+            if (pin.length === 6) {
+                setTimeout(() => {
+                    console.log(`입력한 PIN: ${pin.join('')}`);
+                    pin = [];
+                    updatePinIndicator();
+                }, 300);
+            }
+        }
+
+        function rgbToHex(color) {
+            // RGB나 RGBA 색상에서 r, g, b 값만 추출
+            const rgb = color.match(/\d+/g).map(Number);
+            return (
+                "#" +
+                rgb
+                    .slice(0, 3) // r, g, b만 사용
+                    .map((num) => num.toString(16).padStart(2, "0")) // 16진수 변환
+                    .join("")
+                    .toUpperCase() // 소문자를 대문자로 표준화
+            );
+        }
+
+        //const popup = document.querySelector('.popup');
+        let startY = 0; // 터치 시작 위치
+        let currentY = 0; // 현재 터치 위치
+        let isDragging = false; // 드래그 상태 확인용 변수
+
+        function setTimeoutPopup(popup_overlay, popup) {
+            setTimeout(() => {
+                popup_overlay.style.animation = 'slide-up 0.2s ease forwards';
+                popup.style.animation = 'slide-up 0.2s ease forwards';
+
+            }, 1500);
+        }
+
+
+        window.onload = () => {
+            const popup_overlay = document.querySelector('.popup-overlay');
+            const popup = document.querySelector('.popup');
+
+
+
+
+
+            // 닫기 버튼 이벤트
+            const closeButton = document.querySelector('.close-btn');
+            closeButton.addEventListener('click', () => {
+                popup_overlay.style.animation = 'slide-down 0.2s ease forwards';
+
+                //popup_overlay.addEventListener('animationend', () => popup_overlay.remove());
+            });
+
+            const loginBtn = document.getElementById("login-btn");
+            loginBtn.addEventListener('click', () => {
+                popup_overlay.style.animation = 'slide-up 0.2s ease forwards';
+                popup.style.animation = 'slide-up 0.2s ease forwards';
+
+            });
+
+            // 키패드 클릭 이벤트
+            const keys = document.querySelectorAll('.key');
+            keys.forEach((key) => {
+                key.addEventListener('click', () => {
+                    const keyValue = key.textContent;
+
+                    if (keyValue === '←') {
+                        // 백스페이스: 마지막 입력 삭제
+                        pin.pop();
+                    } else if (pin.length < 6) {
+                        // 숫자 입력
+                        pin.push(keyValue);
+                    }
+
+                    // PIN Indicator 업데이트
+                    updatePinIndicator();
+                });
+            });
+
+            //setTimeoutPopup(popup_overlay, popup);
+
+            const colorBtn = document.getElementById("color-btn");
+            colorBtn.addEventListener('click', () => {
+                const body = document.getElementsByTagName("body");
+                const initScrn = document.getElementById("initScrn");
+                const appNameTxt = document.getElementById("app-name-txt");
+                const appNameFont = document.getElementById("appNameFont");
+
+                console.log(rgbToHex(window.getComputedStyle(body[0]).backgroundColor));
+
+                const root = document.documentElement; // :root 요소 선택
+                
+
+
+                if (rgbToHex(window.getComputedStyle(body[0]).backgroundColor) != "#FFFFFF") {
+                    root.style.setProperty("--main-bg-color", "white"); // 변수 값 변경
+                    root.style.setProperty("--initScrn-color", "black"); // 변수 값 변경
+                    
+                    
+                    //appNameTxt.style.color = "black";
+                    appNameFont.classList.remove("appNameClass2");
+                    appNameFont.classList.add("appNameClass1");
+                } else {                    
+                    root.style.setProperty("--main-bg-color", "#0074DE"); // 변수 값 변경
+                    root.style.setProperty("--initScrn-color", "white"); // 변수 값 변경
+                    
+                    //appNameTxt.style.color = "#017872";
+                    //appNameTxt.style.color = "white";
+                    appNameFont.classList.remove("appNameClass1");
+                    appNameFont.classList.add("appNameClass2");
+
+                }
+
+                setColorTxt();
+
+            });
+
+            setColorTxt();
+            
+
+
+        }
+
+        function setColorTxt(){
+            const colorTxt = document.getElementById("color-text");
+            const body = document.getElementsByTagName("body");
+            colorTxt.innerHTML = ` ${rgbToHex(window.getComputedStyle(body[0]).backgroundColor)} `;
+        }
+
+    </script>
+</body>
+
+</html>

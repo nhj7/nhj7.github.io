@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edge Swipe Detection</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #content {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div id="content">
+    Drag from the left edge to go back.
+  </div>
+
+  <script>
+    let startX = 0; // 터치 시작 X 좌표
+    let startY = 0; // 터치 시작 Y 좌표
+    let endX = 0;   // 터치 끝 X 좌표
+    const edgeTolerance = 30; // 화면 끝으로부터의 감지 범위(px)
+
+    const content = document.getElementById('content'); // 감지 대상 요소
+
+    // 터치 시작
+    content.addEventListener('touchstart', (event) => {
+      const touch = event.touches[0];
+      startX = touch.clientX; // X 시작 좌표 기록
+      startY = touch.clientY; // Y 시작 좌표 기록
+    });
+
+    // 터치 이동
+    content.addEventListener('touchmove', (event) => {
+      const touch = event.touches[0];
+      endX = touch.clientX; // X 종료 좌표 업데이트
+    });
+
+    // 터치 종료 및 판단
+    content.addEventListener('touchend', () => {
+      const diffX = endX - startX;
+
+      // 조건 검증: 시작 좌표가 특정 영역(화면 좌측 끝) 내에 있는지 확인
+      if (startX <= edgeTolerance && diffX > 50) {
+        alert('Swiped from left edge! Going back!');
+        // 뒤로가기 이벤트 처리
+        window.history.back();
+      }
+
+      // 좌표 초기화
+      startX = 0;
+      endX = 0;
+    });
+  </script>
+</body>
+</html>
