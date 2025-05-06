@@ -12,15 +12,17 @@
             335adb
             */
             --main-bg-color: #0074DE;
-            --initScrn-color : white;
+            --initScrn-color: white;
 
-            --point-color : #0074DE;
-            --point-light-color : #729ee1;
+            --point-color: #0074DE;
+            --point-light-color: #729ee1;
 
-            --point2-color:#14B5BA;
-            --point2-light-color : #26cad0;
+            --point2-color: #14B5BA;
+            --point2-light-color: #26cad0;
 
-            
+            --keyTxt-color : #14B5BA;
+
+
             /* 초기 변수 값 */
         }
 
@@ -30,7 +32,8 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: var(--main-bg-color); /* CSS 변수 사용 */
+            background-color: var(--main-bg-color);
+            /* CSS 변수 사용 */
             font-family: "Apple SD Gothic Neo";
 
         }
@@ -258,7 +261,7 @@
         .appNameDiv {
             position: relative;
             /* ::after를 사용할 때 필요 */
-            color: var(--initScrn-color );
+            color: var(--initScrn-color);
             /* 텍스트 색상 */
 
             /* 텍스트 강조 */
@@ -271,7 +274,7 @@
         .appNameClass1 {
             position: relative;
             /* ::after를 사용할 때 필요 */
-            color: #14B5BA;
+            color: var(--keyTxt-color);
             /* 텍스트 색상 */
             font-weight: bold;
             /* 텍스트 강조 */
@@ -304,10 +307,62 @@
             /* 둥근 모서리로 형광팬 느낌 강화 */
         }
 
-        .initScrn{
-            color:var(--initScrn-color) ;
-            height:100vh;
+        .initScrn {
+            color: var(--initScrn-color);
+            height: 100vh;
             text-align: center;
+        }
+
+        .color-select {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .color-select.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .color-options {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .color-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border: 2px solid #ddd;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.selected {
+            border: 1px solid #575656;
+        }
+
+        .initScrn {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .initScrn.visible {
+            opacity: 1;
         }
     </style>
 
@@ -315,6 +370,16 @@
 </head>
 
 <body>
+
+    <div class="color-select">
+        <div class="color-select-title">원하시는 색상을 선택해주세요</div>
+        <div class="color-options" style="margin-bottom: 1em;">
+            <div class="color-option" style="background-color: #0074DE;" data-color="#0074DE" data-color2="#14B5BA" data-color3="#1982e3" data-color4="white"></div>            
+            <div class="color-option" style="background-color: #598CDB;" data-color="#598CDB" data-color2="#14B5BA" data-color3="#6c9be1" data-color4="white"></div>
+            <div class="color-option" style="background-color: #14B5BA;" data-color="#14B5BA" data-color2="#0074DE" data-color3="#24bbc0" data-color4="white"></div>
+        </div>
+        <button class="start-button">시작하기</button>
+    </div>
 
     <div id="initScrn" class="initScrn" style="">
         <div style="height:30vh;"></div>
@@ -329,7 +394,7 @@
         <div style="text-align: left;font-size:1.05em;margin-bottom: 1.5em;">한국투자저축은행 모바일앱</div>
         <div id="login-btn" style="margin-bottom: 0.5em;">로그인</div>
         <div id="color-btn" style="margin-bottom: 1em;">색전환</div>
-
+        <div id="color-select-btn" style="margin-bottom: 1em;">색상선택</div>
         <div id="color-text"></div>
     </div>
 
@@ -475,6 +540,7 @@
             //setTimeoutPopup(popup_overlay, popup);
 
             const colorBtn = document.getElementById("color-btn");
+            let beforeBgColor = '';
             colorBtn.addEventListener('click', () => {
                 const body = document.getElementsByTagName("body");
                 const initScrn = document.getElementById("initScrn");
@@ -484,25 +550,25 @@
                 console.log(rgbToHex(window.getComputedStyle(body[0]).backgroundColor));
 
                 const root = document.documentElement; // :root 요소 선택
-                
+
 
 
                 if (rgbToHex(window.getComputedStyle(body[0]).backgroundColor) != "#FFFFFF") {
+                    beforeBgColor = rgbToHex(window.getComputedStyle(body[0]).backgroundColor);
+
                     root.style.setProperty("--main-bg-color", "white"); // 변수 값 변경
                     root.style.setProperty("--initScrn-color", "black"); // 변수 값 변경
-                    
-                    
+
+
                     //appNameTxt.style.color = "black";
-                    appNameFont.classList.remove("appNameClass2");
-                    appNameFont.classList.add("appNameClass1");
-                } else {                    
-                    root.style.setProperty("--main-bg-color", "#0074DE"); // 변수 값 변경
-                    root.style.setProperty("--initScrn-color", "white"); // 변수 값 변경
                     
+                } else {
+                    root.style.setProperty("--main-bg-color", beforeBgColor); // 변수 값 변경
+                    root.style.setProperty("--initScrn-color", "white"); // 변수 값 변경
+
                     //appNameTxt.style.color = "#017872";
                     //appNameTxt.style.color = "white";
-                    appNameFont.classList.remove("appNameClass1");
-                    appNameFont.classList.add("appNameClass2");
+                    
 
                 }
 
@@ -511,15 +577,66 @@
             });
 
             setColorTxt();
-            
 
 
+            const colorSelect = document.querySelector('.color-select');
+            const initScrn = document.getElementById('initScrn');
+            const colorOptions = document.querySelectorAll('.color-option');
+            const startButton = document.querySelector('.start-button');
+            let selectedColor = '';
+            let selectedColor2 = '';
+            let selectedColor3 = '';
+            let selectedColor4 = '';
+
+            // 색상 선택 이벤트
+            colorOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    colorOptions.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    selectedColor = option.dataset.color;
+                    selectedColor2 = option.dataset.color2 || "";
+                    selectedColor3 = option.dataset.color3 || "";
+                    selectedColor4 = option.dataset.color4 || "";
+                });
+            });
+
+            // 시작하기 버튼 클릭 이벤트
+            startButton.addEventListener('click', () => {
+
+                console.log(selectedColor, selectedColor2);
+
+                const root = document.documentElement;
+                root.style.setProperty('--main-bg-color', selectedColor);
+                root.style.setProperty('--point-color', selectedColor);
+                if( selectedColor2 ){
+                    root.style.setProperty('--keyTxt-color', selectedColor2);
+                }
+                if( selectedColor3 ){
+                    root.style.setProperty('--point-light-color', selectedColor3);
+                }
+                if( selectedColor4 ){
+                    root.style.setProperty('--initScrn-color', selectedColor4);
+                }
+                
+
+                colorSelect.classList.add('hidden');
+                initScrn.classList.add('visible');
+            });
+
+
+            const colorSelectBtn = document.getElementById('color-select-btn');
+            // 색상선택 버튼 클릭 이벤트
+            colorSelectBtn.addEventListener('click', () => {
+                colorSelect.classList.remove('hidden');
+                initScrn.classList.remove('visible');
+            });
         }
 
-        function setColorTxt(){
+        function setColorTxt() {
             const colorTxt = document.getElementById("color-text");
             const body = document.getElementsByTagName("body");
             colorTxt.innerHTML = ` ${rgbToHex(window.getComputedStyle(body[0]).backgroundColor)} `;
+            
         }
 
     </script>
