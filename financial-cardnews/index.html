@@ -3,958 +3,1036 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>제21회 금융공모전 카드뉴스 — 유심 해킹과 금융 인증 재구축</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <title>금융공모전 카드뉴스 — 유심 해킹과 금융 인증 재구축</title>
+  
+  <!-- Pretendard 폰트 불러오기 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- html2canvas CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
-            serif: ['"Noto Serif KR"', 'Georgia', 'serif'],
-            sans:  ['"Noto Sans KR"', '"Plus Jakarta Sans"', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              50:  '#fff1f2',
-              100: '#ffe4e6',
-              200: '#fecdd3',
-              300: '#fda4af',
-              400: '#fb7185',
-              500: '#f43f5e',
-              600: '#e11d48',
-              700: '#be123c',
-              800: '#9f1239',
-              900: '#881337',
-              950: '#4c0519',
-            },
-            slate: {
-              950: '#0b0f19',
-            }
-          },
-          boxShadow: {
-            'glow-rose': '0 0 20px -5px rgba(225, 29, 72, 0.3)',
-            'glow-dark': '0 0 30px -10px rgba(0, 0, 0, 0.7)',
+            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
           }
-        },
-      },
-    };
-  </script>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; }
-    body {
-      -webkit-font-smoothing: antialiased;
-      font-family: "Noto Sans KR", sans-serif;
+        }
+      }
     }
-    
-    /* 얇고 고급스러운 프로그레스 바 */
-    #progress-bar {
-      position: fixed;
+  </script>
+
+  <style>
+    /* 기본 리셋 및 폰트 세팅 */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Pretendard', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background-color: #0b0f19;
+      color: #e2e8f0;
+      overflow-x: hidden;
+    }
+
+    /* 1:1 정사각형 1080px 고정 캔버스 클래스 */
+    .card-canvas {
+      width: 1080px;
+      height: 1080px;
+      position: relative;
+      flex-shrink: 0;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* 스케일 다운을 위해 transform의 중심축 설정 */
+    .scale-wrapper {
+      transform-origin: center center;
+      transition: transform 0.3s ease;
+    }
+
+    /* 슬라이더 모드 카드 페이드 전환 효과 */
+    .slider-card-item {
+      position: absolute;
       top: 0;
       left: 0;
-      height: 4px;
-      width: 0%;
-      background: linear-gradient(90deg, #e11d48, #fb7185);
-      z-index: 9999;
-      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* 카드 슬라이드 전용 스타일 */
-    .card-container {
-      perspective: 1000px;
-    }
-    
-    .slide-card {
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
-                  opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
-                  filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    
-    .slide-card.inactive-left {
-      transform: translateX(-120%) scale(0.9) rotateY(15deg);
       opacity: 0;
+      z-index: 10;
       pointer-events: none;
-      filter: blur(4px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
-    
-    .slide-card.inactive-right {
-      transform: translateX(120%) scale(0.9) rotateY(-15deg);
-      opacity: 0;
-      pointer-events: none;
-      filter: blur(4px);
-    }
-    
-    .slide-card.active {
-      transform: translateX(0) scale(1) rotateY(0deg);
+    .slider-card-item.active {
       opacity: 1;
       z-index: 20;
+      pointer-events: auto;
     }
 
-    /* 모아보기 카드 스크롤 애니메이션 */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
-                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    /* 체크박스 커스텀 */
+    .checkbox-custom {
+      appearance: none;
+      border: 3px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    
-    .reveal.visible {
-      opacity: 1;
-      transform: none;
-    }
-
-    /* 글래스모피즘 데코용 배경 */
-    .bg-blur-glass {
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-    }
-    .dark .bg-blur-glass {
-      background: rgba(15, 23, 42, 0.8);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-    }
-
-    /* 3D 그라데이션 카드 헤더 백그라운드 */
-    .hero-gradient {
-      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #4c0519 100%);
-    }
-    
-    .closing-gradient {
-      background: linear-gradient(135deg, #4c0519 0%, #1e1b4b 50%, #0f172a 100%);
-    }
-
-    /* 슬라이드 뷰 전환 애니메이션 스무딩 */
-    #card-slider-wrapper {
-      will-change: transform;
+    .checkbox-custom:checked {
+      background-color: #2d6be0;
+      border-color: #2d6be0;
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300 min-h-screen flex flex-col justify-between overflow-x-hidden">
+<body class="min-h-screen flex flex-col justify-between select-none">
 
-<div id="progress-bar"></div>
+<!-- 프로그레스 인디케이터 (상단 얇은 바) -->
+<div id="progress-indicator" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-emerald-400 to-blue-500 z-50 transition-all duration-300" style="width: 0%;"></div>
 
-<!-- 상단 고정 헤더 -->
-<header class="bg-blur-glass fixed top-0 inset-x-0 z-50 border-b border-slate-200/60 dark:border-slate-800/40 flex items-center justify-between px-6 py-4 transition-colors">
-  <div class="flex items-center gap-3">
-    <div class="bg-brand-600 text-white p-2 rounded-xl shadow-glow-rose flex items-center justify-center">
-      <i data-lucide="shield-check" class="w-5 h-5"></i>
-    </div>
+<!-- 상단 네비게이션 헤더 -->
+<header class="fixed top-0 inset-x-0 h-16 bg-slate-900/90 backdrop-blur border-b border-slate-800/80 z-40 flex items-center justify-between px-6">
+  <div class="flex items-center gap-2">
+    <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white text-xs">금융</div>
     <div class="flex flex-col">
-      <span class="font-serif font-bold text-base leading-tight tracking-tight text-slate-900 dark:text-white">제21회 금융공모전</span>
-      <span class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold tracking-wider">카드뉴스 부문 최우수작 재구성</span>
+      <span class="text-xs font-extrabold text-white tracking-tight">제21회 금융공모전 카드뉴스</span>
+      <span class="text-[9px] text-slate-400 font-semibold tracking-widest uppercase">Security Campaign Infographics</span>
     </div>
   </div>
-  
-  <div class="flex items-center gap-2">
-    <!-- 뷰 모드 토글 (슬라이드 <-> 모아보기) -->
-    <button id="view-toggle-btn" 
-            class="flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold transition-all">
-      <span id="view-toggle-icon" class="flex items-center"><i data-lucide="grid" class="w-4 h-4 mr-1.5"></i></span>
-      <span id="view-toggle-text">모아보기</span>
+
+  <!-- 콘트롤 영역 -->
+  <div class="flex items-center gap-3">
+    <!-- 모드 토글 (슬라이더 / 세로 정렬) -->
+    <button id="view-mode-toggle" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-700 bg-slate-800 text-xs font-bold text-slate-200 hover:bg-slate-700 transition">
+      <svg id="view-mode-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <!-- 기본 그리드/리스트 아이콘 -->
+        <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+        <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+        <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+        <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+      </svg>
+      <span id="view-mode-label">세로 정렬로 보기</span>
     </button>
 
-    <!-- 다크모드 토글 -->
-    <button id="theme-btn"
-      class="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-      aria-label="테마 전환">
-      <i data-lucide="moon" id="icon-moon" class="w-4.5 h-4.5"></i>
-      <i data-lucide="sun" id="icon-sun" class="hidden w-4.5 h-4.5"></i>
+    <!-- 전체 다운로드 버튼 -->
+    <button id="download-all-btn" class="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-xs font-black text-white shadow-lg transition">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path></svg>
+      전체 저장
     </button>
   </div>
 </header>
 
-<!-- 메인 슬라이드 뷰어 컨테이너 (Slide View) -->
-<main id="slide-view-container" class="flex-1 w-full max-w-[850px] mx-auto px-4 flex flex-col justify-center items-center py-24 md:py-28 relative">
-  <div class="w-full relative min-h-[460px] md:min-h-[500px] flex items-center justify-center card-container overflow-visible py-4">
+<!-- 메인 콘텐츠 영역 (슬라이더 모드) -->
+<main id="slider-view" class="flex-1 flex flex-col items-center justify-center pt-24 pb-16 px-4">
+  <div class="relative w-full max-w-[540px] flex items-center justify-center">
     
-    <!-- 0. Hero Card -->
-    <div class="slide-card active w-full max-w-[620px] bg-blur-glass dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/60 rounded-[32px] overflow-hidden shadow-2xl p-0 absolute">
-      <div class="hero-gradient p-8 md:p-12 min-h-[430px] md:min-h-[460px] flex flex-col justify-between relative text-white">
-        <div class="absolute top-6 right-8">
-          <span class="text-[10px] font-bold tracking-widest uppercase bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4.5 py-1.5 text-brand-300">
-            INTRO
-          </span>
-        </div>
-        <div>
-          <span class="text-[10px] font-bold tracking-widest uppercase text-white/50">금융IT 에세이 시각화</span>
-          <h1 class="font-serif text-4xl md:text-5xl font-black leading-[1.2] mt-4 mb-6">
-            본인을<br>
-            <span class="text-brand-400">증명할 수 없게</span><br>
-            된 날
-          </h1>
-        </div>
-        <div>
-          <p class="text-white/70 text-sm md:text-base leading-relaxed font-light">
-            유심 해킹 사태, 2,500만 명이 흔들렸던 그 밤에<br>
-            저축은행 비대면 인증을 다시 쌓아 올린 이야기
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 1. 발단 Card -->
-    <div class="slide-card inactive-right w-full max-w-[620px] bg-blur-glass dark:bg-slate-900/85 border border-slate-200/80 dark:border-slate-800/60 rounded-[32px] overflow-hidden shadow-2xl p-8 md:p-10 absolute min-h-[430px] md:min-h-[460px] flex flex-col justify-between">
-      <div class="flex justify-between items-start">
-        <div>
-          <span class="text-xs font-extrabold tracking-widest uppercase text-brand-600 dark:text-brand-400">01 — 발단</span>
-          <div class="w-8 h-[3px] bg-brand-600 dark:bg-brand-500 rounded-full mt-2"></div>
-        </div>
-        <div class="bg-brand-50 dark:bg-brand-950/40 p-2 rounded-xl text-brand-600 dark:text-brand-400">
-          <i data-lucide="alert-triangle" class="w-5 h-5"></i>
-        </div>
-      </div>
-      
-      <div class="my-6 space-y-4">
-        <h2 class="font-serif text-2xl md:text-3xl font-bold text-slate-950 dark:text-white leading-snug">
-          믿어 왔던 문이<br>흔들렸다
-        </h2>
-        <div class="pl-4 border-l-[3px] border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 rounded-r-xl py-3 pr-4">
-          <p class="font-serif text-sm md:text-base font-semibold text-brand-700 dark:text-brand-300 leading-relaxed italic">
-            "문자 인증번호만으로 신원을 확인하는 거, 지금도 괜찮은 겁니까?"
-          </p>
-          <span class="block mt-1 text-[10px] text-slate-400 dark:text-slate-500">— 회의실 한 마디, 2025년 봄</span>
-        </div>
-      </div>
-
-      <p class="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-[1.8] font-light">
-        2025년 봄, 국내 최대 이동통신사의 유심 정보가 유출됐다. <br>
-        순식간에 <strong class="text-slate-950 dark:text-white font-semibold">2,500만 명</strong>의 '폰 번호 = 나'라는 등식이 의심받기 시작했다.
-      </p>
-    </div>
-
-    <!-- 2. 통계 Card -->
-    <div class="slide-card inactive-right w-full max-w-[620px] bg-blur-glass dark:bg-slate-900/85 border border-slate-200/80 dark:border-slate-800/60 rounded-[32px] overflow-hidden shadow-2xl p-8 md:p-10 absolute min-h-[430px] md:min-h-[460px] flex flex-col justify-between">
-      <div class="flex justify-between items-start">
-        <div>
-          <span class="text-xs font-extrabold tracking-widest uppercase text-brand-600 dark:text-brand-400">숫자로 보는 위기</span>
-          <div class="w-8 h-[3px] bg-brand-600 dark:bg-brand-500 rounded-full mt-2"></div>
-        </div>
-        <div class="bg-brand-50 dark:bg-brand-950/40 p-2 rounded-xl text-brand-600 dark:text-brand-400">
-          <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-3 gap-3 md:gap-4 my-6">
-        <div class="flex flex-col items-center justify-center text-center bg-slate-100/50 dark:bg-white/4 border border-slate-200/40 dark:border-white/5 rounded-2xl p-4 transition-all hover:scale-[1.02]">
-          <span class="font-serif text-2xl md:text-3xl font-black text-brand-600 dark:text-brand-400 leading-none mb-1">2,500만</span>
-          <span class="text-[9px] md:text-[10px] text-slate-500 dark:text-slate-400 leading-tight">유출 유심<br>추정 규모</span>
-        </div>
-        <div class="flex flex-col items-center justify-center text-center bg-slate-100/50 dark:bg-white/4 border border-slate-200/40 dark:border-white/5 rounded-2xl p-4 transition-all hover:scale-[1.02]">
-          <span class="font-serif text-2xl md:text-3xl font-black text-brand-600 dark:text-brand-400 leading-none mb-1">1개</span>
-          <span class="text-[9px] md:text-[10px] text-slate-500 dark:text-slate-400 leading-tight">당시 인증<br>수단(SMS)</span>
-        </div>
-        <div class="flex flex-col items-center justify-center text-center bg-slate-100/50 dark:bg-white/4 border border-slate-200/40 dark:border-white/5 rounded-2xl p-4 transition-all hover:scale-[1.02]">
-          <span class="font-serif text-2xl md:text-3xl font-black text-brand-600 dark:text-brand-400 leading-none mb-1">48h</span>
-          <span class="text-[9px] md:text-[10px] text-slate-500 dark:text-slate-400 leading-tight">비상 대응<br>소요 시간</span>
-        </div>
-      </div>
-
-      <p class="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-[1.8] font-light">
-        하나의 인증 수단에 의존하는 구조는 <strong class="text-slate-950 dark:text-white font-semibold">그 수단이 무너지는 순간</strong> 모든 문이 열린다.
-      </p>
-    </div>
-
-    <!-- 3. 위협 Card -->
-    <div class="slide-card inactive-right w-full max-w-[620px] bg-blur-glass dark:bg-slate-900/85 border border-slate-200/80 dark:border-slate-800/60 rounded-[32px] overflow-hidden shadow-2xl p-8 md:p-10 absolute min-h-[430px] md:min-h-[460px] flex flex-col justify-between">
-      <div class="flex justify-between items-start">
-        <div>
-          <span class="text-xs font-extrabold tracking-widest uppercase text-brand-600 dark:text-brand-400">02 — 위협 구조</span>
-          <div class="w-8 h-[3px] bg-brand-600 dark:bg-brand-500 rounded-full mt-2"></div>
-        </div>
-        <div class="bg-brand-50 dark:bg-brand-950/40 p-2 rounded-xl text-brand-600 dark:text-brand-400">
-          <i data-lucide="shield-alert" class="w-5 h-5"></i>
-        </div>
-      </div>
-
-      <div class="my-6 space-y-4">
-        <h2 class="font-serif text-2xl md:text-3xl font-bold text-slate-950 dark:text-white leading-snug">
-          복제폰이<br>'나'가 되는 순간
-        </h2>
+    <!-- 카드 캔버스 뷰포트 (실제 1080px 크기의 박스를 스케일링해서 보여줌) -->
+    <div id="canvas-viewport" class="relative overflow-visible" style="width: 1080px; height: 1080px;">
+      <div id="scale-container" class="scale-wrapper absolute top-0 left-0 w-[1080px] h-[1080px]">
         
-        <div class="bg-slate-100/50 dark:bg-white/4 rounded-2xl p-4 border border-slate-200/40 dark:border-white/5 space-y-3">
-          <div class="flex items-center gap-3">
-            <span class="text-[10px] font-bold text-slate-400 uppercase w-12 shrink-0">기존 인증</span>
-            <span class="text-xs font-semibold px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 line-through decoration-brand-500">
-              SMS 인증번호
-            </span>
+        <!-- [1장 표지] -->
+        <div class="card-canvas slider-card-item active rounded-[48px] p-[80px] flex flex-col justify-between text-[#EaF0F6] bg-[#0E1A2B]" data-index="0" data-stage="A">
+          <div class="flex items-center justify-between">
+            <span class="text-[28px] font-bold text-[#3FB6A8]">01 / 10</span>
+            <span class="text-[24px] font-medium opacity-40">INTRO</span>
           </div>
-          <div class="flex items-center gap-2 pl-14 text-slate-400 dark:text-slate-600">
-            <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
-            <span class="text-[10px] font-medium">유심 복제 시</span>
+          
+          <div class="my-auto space-y-6">
+            <h1 class="text-[76px] font-extrabold leading-[1.25] tracking-tight text-white">
+              이제 그 인증,<br>못 믿습니다.
+            </h1>
+            <p class="text-[38px] leading-[1.6] opacity-75 font-normal">
+              휴대폰 인증이 흔들린 봄,<br>화면 뒤의 이틀과 우리가 지켜야 할 것들
+            </p>
           </div>
-          <div class="flex items-start gap-3">
-            <span class="text-[10px] font-bold text-slate-400 uppercase w-12 shrink-0 mt-1">위협 노출</span>
-            <div class="flex flex-wrap gap-1.5">
-              <span class="text-[11px] font-medium px-2.5 py-1 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">공격자가 번호 탈취</span>
-              <span class="text-[11px] font-medium px-2.5 py-1 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">비대면 금융 뚫림</span>
+
+          <!-- 일러스트 영역 -->
+          <div class="w-full h-[400px] flex items-center justify-center relative">
+            <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 화면광 그라데이션 -->
+              <radialGradient id="screen-glow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                <stop offset="0%" stop-color="#3FB6A8" stop-opacity="0.3"></stop>
+                <stop offset="100%" stop-color="#3FB6A8" stop-opacity="0"></stop>
+              </radialGradient>
+              <circle cx="300" cy="180" r="180" fill="url(#screen-glow)"></circle>
+              
+              <!-- 모니터 -->
+              <rect x="150" y="80" width="300" height="200" rx="16" fill="#14202E" stroke="#3FB6A8" stroke-width="4"></rect>
+              <rect x="165" y="95" width="270" height="170" rx="8" fill="#0E1A2B"></rect>
+              <!-- 받침대 -->
+              <path d="M260 280 L340 280 L360 330 L240 330 Z" fill="#14202E" stroke="#3FB6A8" stroke-width="4" stroke-linejoin="round"></path>
+              
+              <!-- 자물쇠 -->
+              <g transform="translate(265, 125)">
+                <!-- 고리 -->
+                <path d="M15 25 V15 A20 20 0 0 1 55 15 V25" stroke="#3FB6A8" stroke-width="6" stroke-linecap="round" fill="none"></path>
+                <!-- 몸통 -->
+                <rect x="0" y="23" width="70" height="52" rx="12" fill="#3FB6A8"></rect>
+                <!-- 열쇠구멍 -->
+                <circle cx="35" cy="45" r="8" fill="#0E1A2B"></circle>
+                <path d="M35 50 V60" stroke="#0E1A2B" stroke-width="5" stroke-linecap="round"></path>
+              </g>
+            </svg>
+          </div>
+
+          <div class="flex items-center justify-between border-t border-white/10 pt-6">
+            <span class="text-[20px] font-bold tracking-widest uppercase opacity-45">제21회 금융공모전 출품작</span>
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-[#3FB6A8]"></span>
+              <span class="text-[20px] font-medium text-[#3FB6A8]">금융 IT 에세이</span>
             </div>
           </div>
         </div>
-      </div>
 
-      <p class="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-[1.8] font-light">
-        번호 하나가 정체성 전부가 된 구조에서, <em class="not-italic text-brand-600 dark:text-brand-400 font-semibold">복제된 유심은 곧 복제된 나</em>였다.
-      </p>
-    </div>
+        <!-- [2장 발단] -->
+        <div class="card-canvas slider-card-item rounded-[48px] p-[80px] flex flex-col justify-between text-[#EaF0F6] bg-[#0E1A2B]" data-index="1" data-stage="A">
+          <div class="flex items-center justify-between">
+            <span class="text-[28px] font-bold text-[#3FB6A8]">02 / 10</span>
+            <span class="text-[24px] font-medium opacity-40">THE CRISIS</span>
+          </div>
+          
+          <div class="my-auto space-y-6">
+            <h1 class="text-[76px] font-extrabold leading-[1.25] tracking-tight text-white">
+              바깥의 자물쇠가<br>부서졌다
+            </h1>
+            <p class="text-[38px] leading-[1.6] opacity-75 font-normal">
+              2025년 봄, 한 통신사가 해킹당해 약 <span class="text-[#D86A6A] font-extrabold">2,500만 명</span>의 유심 정보가 유출됐습니다. 전 국민의 절반에 가까운 숫자였습니다.
+            </p>
+          </div>
 
-    <!-- 4. 타임라인 Card -->
-    <div class="slide-card inactive-right w-full max-w-[620px] bg-blur-glass dark:bg-slate-900/85 border border-slate-200/80 dark:border-slate-800/60 rounded-[32px] overflow-hidden shadow-2xl p-8 md:p-10 absolute min-h-[430px] md:min-h-[460px] flex flex-col justify-between">
-      <div class="flex justify-between items-start">
-        <div>
-          <span class="text-xs font-extrabold tracking-widest uppercase text-brand-600 dark:text-brand-400">03 — 48시간 대응</span>
-          <div class="w-8 h-[3px] bg-brand-600 dark:bg-brand-500 rounded-full mt-2"></div>
-        </div>
-        <div class="bg-brand-50 dark:bg-brand-950/40 p-2 rounded-xl text-brand-600 dark:text-brand-400">
-          <i data-lucide="clock" class="w-5 h-5"></i>
-        </div>
-      </div>
+          <!-- 일러스트 영역 -->
+          <div class="w-full h-[400px] flex items-center justify-center relative">
+            <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 유출 데이터 라인 데코 -->
+              <path d="M100 200 Q200 100 300 200 T500 200" stroke="#3FB6A8" stroke-dasharray="8,8" stroke-width="2" opacity="0.3"></path>
+              <path d="M100 240 Q200 340 300 240 T500 240" stroke="#D86A6A" stroke-dasharray="6,6" stroke-width="2" opacity="0.2"></path>
+              
+              <!-- 해진 자물쇠 형태 -->
+              <g transform="translate(250, 130)">
+                <path d="M20 30 V15 A30 30 0 0 1 80 15 V30" stroke="#D86A6A" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.5" stroke-dasharray="10,5"></path>
+                <!-- 금이 간 자물쇠 몸통 -->
+                <rect x="0" y="25" width="100" height="70" rx="16" fill="#14202E" stroke="#D86A6A" stroke-width="4"></rect>
+                <!-- 번개형 크랙 -->
+                <path d="M50 35 L45 55 L55 50 L50 75" stroke="#D86A6A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+              </g>
 
-      <div class="my-4 relative pl-4 border-l-2 border-slate-200 dark:border-slate-800 space-y-4 text-left">
-        <!-- 타임라인 아이템들 -->
-        <div class="relative">
-          <div class="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-brand-500 ring-4 ring-white dark:ring-slate-900"></div>
-          <span class="text-[9px] font-bold text-brand-600 dark:text-brand-400 block uppercase">D+0 낮</span>
-          <h4 class="text-xs font-bold text-slate-900 dark:text-white">사태 인지 및 비상대응팀 구성</h4>
-          <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">SMS 단일 인증 취약성 검토 착수</p>
-        </div>
-        <div class="relative">
-          <div class="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-brand-600 ring-4 ring-white dark:ring-slate-900"></div>
-          <span class="text-[9px] font-bold text-brand-600 dark:text-brand-400 block uppercase">D+0 밤</span>
-          <h4 class="text-xs font-bold text-slate-900 dark:text-white">고위험 거래 긴급 차단 및 모니터링</h4>
-          <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">피해 의심 거래 이상 징후 실시간 추적</p>
-        </div>
-        <div class="relative">
-          <div class="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-brand-700 ring-4 ring-white dark:ring-slate-900"></div>
-          <span class="text-[9px] font-bold text-brand-600 dark:text-brand-400 block uppercase">D+1 오전</span>
-          <h4 class="text-xs font-bold text-slate-900 dark:text-white">3중 다중 인증 아키텍처 설계</h4>
-          <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">OCR + 안면인식 기술 결합 가속화</p>
-        </div>
-        <div class="relative">
-          <div class="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-white dark:ring-slate-900"></div>
-          <span class="text-[9px] font-bold text-emerald-500 block uppercase">D+2</span>
-          <h4 class="text-xs font-bold text-slate-900 dark:text-white">비대면 인증 1차 패치 완료</h4>
-          <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">신규 다중인증 시스템 파일럿 배포 개시</p>
-        </div>
-      </div>
+              <!-- 사람들 실루엣 심플 도식 -->
+              <g opacity="0.35" fill="#3FB6A8">
+                <circle cx="100" cy="300" r="16"></circle><path d="M80 325 C80 325 80 370 100 370 C120 370 120 325 120 325 Z"></path>
+                <circle cx="180" cy="300" r="16"></circle><path d="M160 325 C160 325 160 370 180 370 C200 370 200 325 200 325 Z"></path>
+                <circle cx="420" cy="300" r="16"></circle><path d="M400 325 C400 325 400 370 420 370 C440 370 440 325 440 325 Z"></path>
+                <circle cx="500" cy="300" r="16"></circle><path d="M480 325 C480 325 480 370 500 370 C520 370 520 325 520 325 Z"></path>
+              </g>
+              
+              <!-- 2500만 타이포 강조 배경 -->
+              <text x="300" y="80" text-anchor="middle" fill="#D86A6A" font-size="54" font-weight="900" opacity="0.8">2,500,000,000</text>
+            </svg>
+          </div>
 
-      <p class="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-light">
-        이틀 동안 비상팀 전체가 거의 잠들지 않고 금융 인증 체계를 새롭게 재설계했습니다.
-      </p>
-    </div>
-
-    <!-- 5. 해법 Card -->
-    <div class="slide-card inactive-right w-full max-w-[620px] bg-blur-glass dark:bg-slate-900/85 border border-slate-200/80 dark:border-slate-800/60 rounded-[32px] overflow-hidden shadow-2xl p-8 md:p-10 absolute min-h-[430px] md:min-h-[460px] flex flex-col justify-between">
-      <div class="flex justify-between items-start">
-        <div>
-          <span class="text-xs font-extrabold tracking-widest uppercase text-brand-600 dark:text-brand-400">04 — 해법</span>
-          <div class="w-8 h-[3px] bg-brand-600 dark:bg-brand-500 rounded-full mt-2"></div>
+          <div class="flex items-center justify-between border-t border-white/10 pt-6">
+            <span class="text-[20px] font-medium opacity-50">사상 초유의 정보 유출 사태</span>
+            <span class="text-[20px] font-bold text-[#D86A6A]">STAGE 01</span>
+          </div>
         </div>
-        <div class="bg-brand-50 dark:bg-brand-950/40 p-2 rounded-xl text-brand-600 dark:text-brand-400">
-          <i data-lucide="key-round" class="w-5 h-5"></i>
-        </div>
-      </div>
 
-      <div class="my-6 space-y-4">
-        <h2 class="font-serif text-2xl md:text-3xl font-bold text-slate-950 dark:text-white leading-snug">
-          하나가 무너져도<br>나머지가 버틴다
-        </h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div class="bg-red-50/50 dark:bg-red-950/10 border border-red-200/30 dark:border-red-950/30 rounded-xl p-3.5 flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 flex items-center justify-center text-xs font-bold">구</div>
-            <div>
-              <h5 class="text-xs font-bold text-slate-900 dark:text-white">단일 인증 채널</h5>
-              <p class="text-[10px] text-slate-400 dark:text-slate-500">SMS 인증번호 의존</p>
+        <!-- [3장 위협] -->
+        <div class="card-canvas slider-card-item rounded-[48px] p-[80px] flex flex-col justify-between text-[#EaF0F6] bg-[#0E1A2B]" data-index="2" data-stage="A">
+          <div class="flex items-center justify-between">
+            <span class="text-[28px] font-bold text-[#3FB6A8]">03 / 10</span>
+            <span class="text-[24px] font-medium opacity-40">THREAT</span>
+          </div>
+          
+          <div class="my-auto space-y-6">
+            <h1 class="text-[76px] font-extrabold leading-[1.25] tracking-tight text-white">
+              가짜가 '진짜 나'가<br>될 수 있다
+            </h1>
+            <p class="text-[38px] leading-[1.6] opacity-75 font-normal">
+              휴대폰 인증은 통신사의 보증에 기댑니다. 유심이 복제되면 그 보증이 가짜에게 넘어가, <span class="text-[#D86A6A] font-semibold">비밀번호 변경과 금융 인출</span>까지 뚫립니다.
+            </p>
+          </div>
+
+          <!-- 일러스트 영역 -->
+          <div class="w-full h-[400px] flex items-center justify-center relative">
+            <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 진짜 폰 (좌) -->
+              <g transform="translate(100, 60)">
+                <rect x="0" y="0" width="140" height="260" rx="20" fill="#14202E" stroke="#3FB6A8" stroke-width="4"></rect>
+                <rect x="10" y="10" width="120" height="210" rx="12" fill="#0E1A2B"></rect>
+                <circle cx="70" cy="240" r="10" fill="#3FB6A8"></circle>
+                <!-- 정상 기호 -->
+                <circle cx="70" cy="110" r="30" fill="#3FB6A8" fill-opacity="0.2"></circle>
+                <path d="M58 110 L66 118 L82 102" stroke="#3FB6A8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+                <text x="70" y="180" text-anchor="middle" fill="#3FB6A8" font-size="18" font-weight="bold">진짜 나</text>
+              </g>
+
+              <!-- 복제 흐름 점선 화살표 -->
+              <path d="M260 190 H340" stroke="#D86A6A" stroke-width="4" stroke-dasharray="10,6" stroke-linecap="round"></path>
+              <path d="M330 180 L345 190 L330 200" fill="#D86A6A"></path>
+              <text x="300" y="160" text-anchor="middle" fill="#D86A6A" font-size="16" font-weight="bold">유심 복제</text>
+
+              <!-- 가짜 폰 (우) -->
+              <g transform="translate(360, 60)">
+                <rect x="0" y="0" width="140" height="260" rx="20" fill="#14202E" stroke="#D86A6A" stroke-width="4"></rect>
+                <rect x="10" y="10" width="120" height="210" rx="12" fill="#0E1A2B"></rect>
+                <circle cx="70" cy="240" r="10" fill="#D86A6A"></circle>
+                <!-- 경고 기호 -->
+                <circle cx="70" cy="110" r="30" fill="#D86A6A" fill-opacity="0.2"></circle>
+                <path d="M70 95 V115 M70 125 H70.01" stroke="#D86A6A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+                <text x="70" y="180" text-anchor="middle" fill="#D86A6A" font-size="18" font-weight="bold">공격자</text>
+              </g>
+            </svg>
+          </div>
+
+          <div class="flex items-center justify-between border-t border-white/10 pt-6">
+            <span class="text-[20px] font-medium opacity-50">인증의 본질적 신뢰가 무너진 순간</span>
+            <span class="text-[20px] font-bold text-[#D86A6A]">STAGE 02</span>
+          </div>
+        </div>
+
+        <!-- [4장 대응] -->
+        <div class="card-canvas slider-card-item rounded-[48px] p-[80px] flex flex-col justify-between text-[#EaF0F6] bg-[#0E1A2B]" data-index="3" data-stage="A">
+          <div class="flex items-center justify-between">
+            <span class="text-[28px] font-bold text-[#3FB6A8]">04 / 10</span>
+            <span class="text-[24px] font-medium opacity-40">48 HOURS</span>
+          </div>
+          
+          <div class="my-auto space-y-6">
+            <h1 class="text-[76px] font-extrabold leading-[1.25] tracking-tight text-white">
+              금융을 멈출 수도,<br>사기를 둘 수도 없었다
+            </h1>
+            <p class="text-[38px] leading-[1.6] opacity-75 font-normal">
+              금융사들은 인증을 더 세워야 했습니다. <span class="text-[#3FB6A8] font-bold">세 명의 개발자</span>가 이틀 밤을 새우며 '신분증 촬영·진위 확인·얼굴 대조' 다중 인증을 구축했습니다.
+            </p>
+          </div>
+
+          <!-- 일러스트 영역 -->
+          <div class="w-full h-[400px] flex items-center justify-center relative">
+            <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 코드 백그라운드 라인 데코 -->
+              <g stroke="#3FB6A8" stroke-width="2" opacity="0.15">
+                <path d="M50 80 H200 M50 110 H150 M50 140 H280"></path>
+                <path d="M50 170 H180 M50 200 H320 M50 230 H220"></path>
+              </g>
+              <g stroke="#3FB6A8" stroke-width="2" opacity="0.15" transform="translate(300, 0)">
+                <path d="M50 80 H250 M50 110 H180 M50 140 H160"></path>
+                <path d="M50 170 H220 M50 200 H190 M50 230 H270"></path>
+              </g>
+
+              <!-- 세 명의 개발자 실루엣 -->
+              <g fill="#14202E" stroke="#3FB6A8" stroke-width="3">
+                <!-- 개발자 1 -->
+                <circle cx="200" cy="220" r="35"></circle>
+                <path d="M140 330 C140 280 170 270 200 270 C230 270 260 280 260 330 Z"></path>
+                
+                <!-- 개발자 2 -->
+                <circle cx="300" cy="190" r="35"></circle>
+                <path d="M240 300 C240 250 270 240 300 240 C330 240 360 250 360 300 Z"></path>
+                
+                <!-- 개발자 3 -->
+                <circle cx="400" cy="220" r="35"></circle>
+                <path d="M340 330 C340 280 370 270 400 270 C430 270 460 280 460 330 Z"></path>
+              </g>
+
+              <!-- 흐름도 안면/신분증 아이콘 -->
+              <rect x="270" y="270" width="60" height="40" rx="6" fill="#3FB6A8" stroke="#14202E" stroke-width="2"></rect>
+              <circle cx="300" cy="285" r="7" fill="#0E1A2B"></circle>
+              <path d="M292 298 C292 298 292 305 300 305 C308 305 308 298 308 298 Z" fill="#0E1A2B"></path>
+            </svg>
+          </div>
+
+          <div class="flex items-center justify-between border-t border-white/10 pt-6">
+            <span class="text-[20px] font-medium opacity-50">금융 보안의 비상 대응 48시간</span>
+            <span class="text-[20px] font-bold text-[#3FB6A8]">STAGE 03</span>
+          </div>
+        </div>
+
+        <!-- [5장 교훈] -->
+        <div class="card-canvas slider-card-item rounded-[48px] p-[80px] flex flex-col justify-between text-[#16263A] bg-[#FFFFFF] border-4 border-slate-100" data-index="4" data-stage="B">
+          <div class="flex items-center justify-between">
+            <span class="text-[28px] font-bold text-[#2D6BE0]">05 / 10</span>
+            <span class="text-[24px] font-medium opacity-40">LESSON</span>
+          </div>
+          
+          <div class="my-auto space-y-6">
+            <h1 class="text-[76px] font-extrabold leading-[1.25] tracking-tight text-[#16263A]">
+              하나가 무너지면,<br>무엇이 남습니까?
+            </h1>
+            <p class="text-[38px] leading-[1.6] text-[#475569] font-normal">
+              편리하다는 이유로 한 개의 수단에 매달려 있었습니다. <span class="text-[#2D6BE0] font-bold">한 수단이 뚫려도 다른 방어벽이 버티도록</span> 인증은 여러 겹이어야 합니다.
+            </p>
+          </div>
+
+          <!-- 일러스트 영역 -->
+          <div class="w-full h-[400px] flex items-center justify-center relative">
+            <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 스마트폰 배경 -->
+              <rect x="230" y="60" width="140" height="260" rx="24" fill="#F4F7FB" stroke="#E2E8F0" stroke-width="4"></rect>
+              <rect x="245" y="75" width="110" height="210" rx="14" fill="#FFFFFF"></rect>
+
+              <!-- 방패 3중 보호막 -->
+              <!-- 1번 방패 (깨진 바깥 방패) -->
+              <path d="M300 130 L360 110 V160 C360 210 300 240 300 240 C300 240 240 210 240 160 V110 Z" fill="none" stroke="#D86A6A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"></path>
+              <!-- 깨짐 크랙 선 -->
+              <path d="M260 140 L285 155 L275 175" stroke="#D86A6A" stroke-width="4" stroke-linecap="round"></path>
+
+              <!-- 2번 방패 (중간 방패) -->
+              <path d="M300 150 L340 135 V170 C340 205 300 225 300 225 C300 225 260 205 260 170 V135 Z" fill="none" stroke="#2D6BE0" stroke-width="4" opacity="0.6"></path>
+
+              <!-- 3번 방패 (안전한 안쪽 방패) -->
+              <path d="M300 170 L320 160 V180 C320 200 300 210 300 210 C300 210 280 200 280 180 V160 Z" fill="#2D6BE0" stroke="#2D6BE0" stroke-width="2" opacity="0.9"></path>
+            </svg>
+          </div>
+
+          <div class="flex items-center justify-between border-t border-slate-100 pt-6">
+            <span class="text-[20px] font-medium opacity-50">다중 인증 체계 (MFA)의 중요성</span>
+            <span class="text-[20px] font-bold text-[#2D6BE0]">STAGE 04</span>
+          </div>
+        </div>
+
+        <!-- [6장 방어선 1] -->
+        <div class="card-canvas slider-card-item rounded-[48px] p-[80px] flex flex-col justify-between text-[#16263A] bg-[#FFFFFF] border-4 border-slate-100" data-index="5" data-stage="B">
+          <div class="flex items-center justify-between">
+            <span class="text-[28px] font-bold text-[#2D6BE0]">06 / 10</span>
+            <span class="text-[24px] font-medium opacity-40">GUARD 1</span>
+          </div>
+          
+          <div class="my-auto space-y-6">
+            <h1 class="text-[76px] font-extrabold leading-[1.25] tracking-tight text-[#16263A]">
+              방어선 1.<br>유심 보호 서비스
+            </h1>
+            <p class="text-[38px] leading-[1.6] text-[#475569] font-normal">
+              타인이 내 명의로 유심을 복제하여 가로채 개통하는 것을 방지하는 통신사 서비스입니다. <span class="text-[#2D6BE0] font-bold">통신사 앱이나 고객센터</span>에서 무료로 가입 가능합니다.
+            </p>
+          </div>
+
+          <!-- 일러스트 영역 -->
+          <div class="w-full h-[400px] flex items-center justify-center relative">
+            <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 유심 카드 칩 -->
+              <g transform="translate(180, 80)">
+                <rect x="0" y="0" width="240" height="180" rx="20" fill="#F4F7FB" stroke="#E2E8F0" stroke-width="4"></rect>
+                <path d="M40 0 H200 A40 40 0 0 1 240 40 V180 H0 V40 A40 40 0 0 1 40 0 Z" fill="#2D6BE0" fill-opacity="0.08"></path>
+                <!-- 잘려나간 유심 귀퉁이 -->
+                <path d="M210 0 L240 30 V0 Z" fill="#FFFFFF"></path>
+                <!-- 금속 단자 모양 -->
+                <rect x="40" y="50" width="100" height="80" rx="8" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="3"></rect>
+                <path d="M90 50 V130 M40 90 H140 M40 70 H140 M40 110 H140" stroke="#E2E8F0" stroke-width="2"></path>
+              </g>
+
+              <!-- 잠긴 자물쇠 -->
+              <g transform="translate(300, 150)">
+                <!-- 고리 -->
+                <path d="M15 25 V15 A20 20 0 0 1 55 15 V25" stroke="#2D6BE0" stroke-width="6" stroke-linecap="round" fill="none"></path>
+                <!-- 몸통 -->
+                <rect x="0" y="23" width="70" height="52" rx="10" fill="#2D6BE0"></rect>
+                <!-- 체크 표시 -->
+                <path d="M23 48 L31 56 L47 40" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+              </g>
+            </svg>
+          </div>
+
+          <div class="flex items-center justify-between border-t border-slate-100 pt-6">
+            <span class="text-[20px] font-medium opacity-50">명의도용 및 유심 무단 복제 원천 봉쇄</span>
+            <span class="text-[20px] font-bold text-[#2D6BE0]">STAGE 05</span>
+          </div>
+        </div>
+
+        <!-- [7장 방어선 2] -->
+        <div class="card-canvas slider-card-item rounded-[48px] p-[80px] flex flex-col justify-between text-[#16263A] bg-[#FFFFFF] border-4 border-slate-100" data-index="6" data-stage="B">
+          <div class="flex items-center justify-between">
+            <span class="text-[28px] font-bold text-[#2D6BE0]">07 / 10</span>
+            <span class="text-[24px] font-medium opacity-40">GUARD 2</span>
+          </div>
+          
+          <div class="my-auto space-y-6">
+            <h1 class="text-[76px] font-extrabold leading-[1.25] tracking-tight text-[#16263A]">
+              방어선 2.<br>여신거래 안심차단
+            </h1>
+            <p class="text-[38px] leading-[1.6] text-[#475569] font-normal">
+              의도치 않은 신규 대출이나 카드 발급 등을 사전에 막는 강력한 차단 제도입니다. <span class="text-[#2D6BE0] font-bold">주거래 은행</span>에 한번 가입해두면 전 금융권 대출이 일괄 제한됩니다.
+            </p>
+          </div>
+
+          <!-- 일러스트 영역 -->
+          <div class="w-full h-[400px] flex items-center justify-center relative">
+            <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 대출 서류 / 계약서 -->
+              <g transform="translate(150, 70)">
+                <rect x="0" y="0" width="150" height="200" rx="12" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="4"></rect>
+                <line x1="30" y1="40" x2="120" y2="40" stroke="#E2E8F0" stroke-width="6" stroke-linecap="round"></line>
+                <line x1="30" y1="70" x2="120" y2="70" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"></line>
+                <line x1="30" y1="95" x2="100" y2="95" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"></line>
+                <line x1="30" y1="120" x2="120" y2="120" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"></line>
+                <circle cx="110" cy="160" r="15" fill="#E2E8F0" fill-opacity="0.5"></circle>
+              </g>
+
+              <!-- 신용 카드 -->
+              <g transform="translate(260, 130)">
+                <rect x="0" y="0" width="180" height="110" rx="10" fill="#2D6BE0" opacity="0.15" stroke="#2D6BE0" stroke-width="3"></rect>
+                <rect x="20" y="20" width="35" height="25" rx="4" fill="#2D6BE0" opacity="0.4"></rect>
+                <circle cx="140" cy="80" r="12" fill="#2D6BE0" opacity="0.3"></circle>
+                <circle cx="155" cy="80" r="12" fill="#2D6BE0" opacity="0.2"></circle>
+              </g>
+
+              <!-- 차단 게이트 / 방패 장벽 -->
+              <g transform="translate(120, 260)">
+                <!-- 차단 봉/가로막대 -->
+                <rect x="0" y="0" width="360" height="20" rx="10" fill="#D86A6A"></rect>
+                <path d="M40 0 L60 20 M120 0 L140 20 M200 0 L220 20 M280 0 L300 20" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
+                <!-- 경고 텍스트/표시 -->
+                <circle cx="180" cy="10" r="22" fill="#D86A6A" stroke="#FFFFFF" stroke-width="3"></circle>
+                <path d="M180 3 V13 M180 17 H180.01" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
+              </g>
+            </svg>
+          </div>
+
+          <div class="flex items-center justify-between border-t border-slate-100 pt-6">
+            <span class="text-[20px] font-medium opacity-50">명의 도용 불법 대출을 차단하는 보호막</span>
+            <span class="text-[20px] font-bold text-[#2D6BE0]">STAGE 06</span>
+          </div>
+        </div>
+
+        <!-- [8장 방어선 3] -->
+        <div class="card-canvas slider-card-item rounded-[48px] p-[80px] flex flex-col justify-between text-[#16263A] bg-[#FFFFFF] border-4 border-slate-100" data-index="7" data-stage="B">
+          <div class="flex items-center justify-between">
+            <span class="text-[28px] font-bold text-[#2D6BE0]">08 / 10</span>
+            <span class="text-[24px] font-medium opacity-40">GUARD 3</span>
+          </div>
+          
+          <div class="my-auto space-y-6">
+            <h1 class="text-[76px] font-extrabold leading-[1.25] tracking-tight text-[#16263A]">
+              비밀번호는 다르게,<br>인증은 한 겹 더
+            </h1>
+            <p class="text-[38px] leading-[1.6] text-[#475569] font-normal">
+              중요 앱의 비밀번호를 다르게 구성하여 2차 감염을 막습니다. 메일 및 이체 로그인 시 <span class="text-[#2D6BE0] font-bold">생체인증이나 OTP를 중복 설정</span>해 두는 것이 안전합니다.
+            </p>
+          </div>
+
+          <!-- 일러스트 영역 -->
+          <div class="w-full h-[400px] flex items-center justify-center relative">
+            <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 서로 다른 열쇠 모음 -->
+              <g transform="translate(100, 100)" stroke="#2D6BE0" stroke-width="4" fill="none">
+                <!-- 열쇠 1 -->
+                <g transform="rotate(-30 50 50)">
+                  <circle cx="40" cy="40" r="16" stroke-width="5"></circle>
+                  <path d="M56 40 H110 M100 40 V50 M90 40 V50" stroke-linecap="round"></path>
+                </g>
+                <!-- 열쇠 2 -->
+                <g transform="translate(100, 120) rotate(15 50 50)" opacity="0.5">
+                  <circle cx="40" cy="40" r="14" stroke-width="4"></circle>
+                  <path d="M54 40 H95 M85 40 V48 M75 40 V48" stroke-linecap="round"></path>
+                </g>
+              </g>
+
+              <!-- 지문 / 생체 인식 아이콘 -->
+              <g transform="translate(340, 100)">
+                <rect x="0" y="0" width="140" height="170" rx="16" fill="#F4F7FB" stroke="#E2E8F0" stroke-width="3"></rect>
+                <!-- 지문 나선 효과 -->
+                <path d="M70 45 A25 25 0 0 1 95 70 C95 85 85 95 70 95 A25 25 0 0 1 45 70" stroke="#2D6BE0" stroke-width="4" stroke-linecap="round" fill="none"></path>
+                <path d="M70 55 A15 15 0 0 1 85 70 C85 80 80 85 70 85 A15 15 0 0 1 55 70" stroke="#2D6BE0" stroke-width="3" stroke-linecap="round" fill="none"></path>
+                <path d="M70 65 A5 5 0 0 1 75 70 C75 72 72 75 70 75 A5 5 0 0 1 65 70" stroke="#2D6BE0" stroke-width="2" stroke-linecap="round" fill="none"></path>
+                
+                <!-- 하단 패스 신호 -->
+                <path d="M45 135 L60 150 L95 115" stroke="#3FB6A8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </g>
+            </svg>
+          </div>
+
+          <div class="flex items-center justify-between border-t border-slate-100 pt-6">
+            <span class="text-[20px] font-medium opacity-50">다양화된 패스워드와 다채널 인증 구축</span>
+            <span class="text-[20px] font-bold text-[#2D6BE0]">STAGE 07</span>
+          </div>
+        </div>
+
+        <!-- [9장 방어선 4] -->
+        <div class="card-canvas slider-card-item rounded-[48px] p-[80px] flex flex-col justify-between text-[#16263A] bg-[#FFFFFF] border-4 border-slate-100" data-index="8" data-stage="B">
+          <div class="flex items-center justify-between">
+            <span class="text-[28px] font-bold text-[#2D6BE0]">09 / 10</span>
+            <span class="text-[24px] font-medium opacity-40 text-[#E8A33D]">ALERT</span>
+          </div>
+          
+          <div class="my-auto space-y-6">
+            <h1 class="text-[76px] font-extrabold leading-[1.25] tracking-tight text-[#16263A]">
+              평소엔 점검,<br><span class="text-[#E8A33D]">의심되면 즉시</span>
+            </h1>
+            <p class="text-[38px] leading-[1.6] text-[#475569] font-normal">
+              명의도용방지 서비스를 가입하여 신규 개통 내역을 상시 모니터링합니다. 위협 감지 시에는 <span class="text-[#E8A33D] font-extrabold">즉각 112 또는 1332</span>로 전화하여 지급정지를 요청하세요.
+            </p>
+          </div>
+
+          <!-- 일러스트 영역 -->
+          <div class="w-full h-[400px] flex items-center justify-center relative">
+            <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 클립보드 체크리스트 -->
+              <g transform="translate(130, 80)">
+                <rect x="0" y="0" width="140" height="190" rx="12" fill="#F4F7FB" stroke="#E2E8F0" stroke-width="4"></rect>
+                <rect x="40" y="-10" width="60" height="25" rx="6" fill="#E2E8F0"></rect>
+                <!-- 점선들 -->
+                <line x1="25" y1="40" x2="115" y2="40" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"></line>
+                <line x1="25" y1="70" x2="115" y2="70" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"></line>
+                <line x1="25" y1="100" x2="95" y2="100" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"></line>
+                <line x1="25" y1="130" x2="115" y2="130" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"></line>
+              </g>
+
+              <!-- 긴급 전화기 / 경고음 -->
+              <g transform="translate(320, 100)">
+                <!-- 전화기 바닥 본체 -->
+                <rect x="0" y="40" width="140" height="110" rx="20" fill="#E8A33D"></rect>
+                <!-- 전화 수화기 -->
+                <path d="M-10 35 C-10 10, 150 10, 150 35 C150 45, 130 50, 120 40 C110 30, 30 30, 20 40 C10 50, -10 45, -10 35 Z" fill="#E8A33D"></path>
+                <!-- 다이얼 구멍 데코 -->
+                <circle cx="70" cy="95" r="25" fill="#FFFFFF" fill-opacity="0.3"></circle>
+                <!-- 경고 광파선 -->
+                <path d="M-25 10 Q30 -20 70 -20 T165 10" stroke="#E8A33D" stroke-dasharray="10,5" stroke-width="4" stroke-linecap="round" fill="none"></path>
+              </g>
+            </svg>
+          </div>
+
+          <div class="flex items-center justify-between border-t border-slate-100 pt-6">
+            <span class="text-[20px] font-medium opacity-50">명의도용 방지 및 긴급 대응 라인</span>
+            <span class="text-[20px] font-bold text-[#E8A33D]">STAGE 08</span>
+          </div>
+        </div>
+
+        <!-- [10장 마무리] -->
+        <div class="card-canvas slider-card-item rounded-[48px] p-[80px] flex flex-col justify-between text-[#2A3A4A] bg-gradient-to-br from-[#FFF6EC] to-[#EAF2FB] border-4 border-white" data-index="9" data-stage="C">
+          <div class="flex items-center justify-between">
+            <span class="text-[28px] font-bold text-[#2D6BE0]">10 / 10</span>
+            <span class="text-[24px] font-medium opacity-40">FINISH</span>
+          </div>
+          
+          <div class="my-auto space-y-6 text-center">
+            <h1 class="text-[76px] font-extrabold leading-[1.25] tracking-tight text-[#1a2b3a] mx-auto max-w-[800px]">
+              함께 지킬 때,<br>비로소 안전합니다
+            </h1>
+            <p class="text-[38px] leading-[1.65] text-[#4a5568] font-normal max-w-[850px] mx-auto">
+              인증이 한 단계 늘어나는 번거로움은 나를 지키는 울타리입니다. 만드는 개발자와 사용하는 당신이 만날 때, 금융은 비로소 단단해집니다.
+            </p>
+          </div>
+
+          <!-- 일러스트 영역 -->
+          <div class="w-full h-[380px] flex items-center justify-center relative">
+            <svg class="w-full h-full max-h-[330px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 아침 창가 격자 데코 -->
+              <g opacity="0.05" stroke="#16263A" stroke-width="4">
+                <rect x="150" y="30" width="300" height="240" rx="10"></rect>
+                <line x1="300" y1="30" x2="300" y2="270"></line>
+                <line x1="150" y1="150" x2="450" y2="150"></line>
+              </g>
+              
+              <!-- 아침 햇빛 그라데이션 광배 -->
+              <radialGradient id="morning-sun" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                <stop offset="0%" stop-color="#E8A33D" stop-opacity="0.15"></stop>
+                <stop offset="100%" stop-color="#EAF2FB" stop-opacity="0"></stop>
+              </radialGradient>
+              <circle cx="300" cy="180" r="190" fill="url(#morning-sun)"></circle>
+
+              <!-- 스마트폰을 든 실루엣 구조 -->
+              <g fill="#2D6BE0" fill-opacity="0.1" stroke="#2D6BE0" stroke-width="3" opacity="0.6">
+                <!-- 뒤에서 보호막을 두르는 아우라 실루엣 -->
+                <path d="M220 330 C220 250 260 230 300 230 C340 230 380 250 380 330 Z"></path>
+                <circle cx="300" cy="170" r="45"></circle>
+              </g>
+
+              <g fill="#16263A" opacity="0.8">
+                <!-- 폰을 보는 사람 본체 실루엣 -->
+                <circle cx="260" cy="200" r="30"></circle>
+                <path d="M200 330 C200 270 230 260 260 260 C290 260 320 270 320 330 Z"></path>
+                
+                <!-- 손 및 스마트폰 모양 -->
+                <rect x="300" y="220" width="30" height="55" rx="6" fill="#16263A" stroke="#FFF6EC" stroke-width="2" transform="rotate(15 300 220)"></rect>
+              </g>
+            </svg>
+          </div>
+
+          <div class="flex items-center justify-between border-t border-slate-200/50 pt-6">
+            <span class="text-[20px] font-bold tracking-widest uppercase opacity-45">제21회 금융공모전 출품작</span>
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-[#2D6BE0]"></span>
+              <span class="text-[20px] font-semibold text-[#2D6BE0]">보안 캠페인</span>
             </div>
           </div>
-          <div class="bg-emerald-50/50 dark:bg-emerald-950/10 border border-emerald-200/30 dark:border-emerald-950/30 rounded-xl p-3.5 flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-bold">신</div>
-            <div>
-              <h5 class="text-xs font-bold text-slate-900 dark:text-white">3중 다중 인증 (MFA)</h5>
-              <p class="text-[10px] text-slate-400 dark:text-slate-500">신분증 OCR + 안면인식 + SMS</p>
-            </div>
-          </div>
         </div>
-      </div>
 
-      <p class="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-[1.8] font-light">
-        다중 인증의 핵심은 <strong class="text-slate-950 dark:text-white font-semibold">각 수단이 서로 다른 물리 영역</strong>의 취약점을 가져야 한다는 것입니다. 하나가 뚫려도 다음 방어선이 버텨줍니다.
-      </p>
-    </div>
-
-    <!-- 6. 원칙 Card -->
-    <div class="slide-card inactive-right w-full max-w-[620px] bg-blur-glass dark:bg-slate-900/85 border border-slate-200/80 dark:border-slate-800/60 rounded-[32px] overflow-hidden shadow-2xl p-8 md:p-10 absolute min-h-[430px] md:min-h-[460px] flex flex-col justify-between">
-      <div class="flex justify-between items-start">
-        <div>
-          <span class="text-xs font-extrabold tracking-widest uppercase text-brand-600 dark:text-brand-400">05 — 금융 IT의 원칙</span>
-          <div class="w-8 h-[3px] bg-brand-600 dark:bg-brand-500 rounded-full mt-2"></div>
-        </div>
-        <div class="bg-brand-50 dark:bg-brand-950/40 p-2 rounded-xl text-brand-600 dark:text-brand-400">
-          <i data-lucide="book-open" class="w-5 h-5"></i>
-        </div>
-      </div>
-
-      <div class="my-4 space-y-3.5 text-left">
-        <div class="flex gap-3 items-start bg-slate-100/50 dark:bg-white/4 border border-slate-200/30 dark:border-white/5 rounded-xl p-3.5">
-          <span class="text-lg shrink-0">🛡️</span>
-          <div>
-            <h4 class="text-xs font-bold text-slate-900 dark:text-white">다중 인증 (MFA) 교차 설계</h4>
-            <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">지식(패스워드), 소유(유심/OTP), 생체(안면) 세 요소를 결합해 단일 실패점 방지</p>
-          </div>
-        </div>
-        <div class="flex gap-3 items-start bg-slate-100/50 dark:bg-white/4 border border-slate-200/30 dark:border-white/5 rounded-xl p-3.5">
-          <span class="text-lg shrink-0">⚡</span>
-          <div>
-            <h4 class="text-xs font-bold text-slate-900 dark:text-white">24시간 신속 가드레일</h4>
-            <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">위협 인지 즉시 임시 제한 조치를 발동하고 실시간 교정을 수행</p>
-          </div>
-        </div>
-        <div class="flex gap-3 items-start bg-slate-100/50 dark:bg-white/4 border border-slate-200/30 dark:border-white/5 rounded-xl p-3.5">
-          <span class="text-lg shrink-0">🤝</span>
-          <div>
-            <h4 class="text-xs font-bold text-slate-900 dark:text-white">보안 투명성과 신뢰도 구축</h4>
-            <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">기술적 방어선 구축과 동시에 정직한 고객 커뮤니케이션 실행</p>
-          </div>
-        </div>
-      </div>
-
-      <h3 class="font-serif text-sm md:text-base font-bold text-brand-600 dark:text-brand-400 leading-tight">
-        "하나면 충분한가"에서 "하나가 무너지면 무엇이 남는가"
-      </h3>
-    </div>
-
-    <!-- 7. 체크리스트 Card (Interactive) -->
-    <div class="slide-card inactive-right w-full max-w-[620px] bg-blur-glass dark:bg-slate-900/85 border border-slate-200/80 dark:border-slate-800/60 rounded-[32px] overflow-hidden shadow-2xl p-8 md:p-10 absolute min-h-[430px] md:min-h-[460px] flex flex-col justify-between">
-      <div class="flex justify-between items-start">
-        <div>
-          <span class="text-xs font-extrabold tracking-widest uppercase text-brand-600 dark:text-brand-400">06 — 개인 실천 수칙</span>
-          <div class="w-8 h-[3px] bg-brand-600 dark:bg-brand-500 rounded-full mt-2"></div>
-        </div>
-        <div class="bg-brand-50 dark:bg-brand-950/40 p-2 rounded-xl text-brand-600 dark:text-brand-400">
-          <i data-lucide="check-square" class="w-5 h-5"></i>
-        </div>
-      </div>
-
-      <div class="my-5 space-y-2 text-left">
-        <!-- 체크리스트 아이템들 (인터랙티브 클릭 동작) -->
-        <label class="flex items-center gap-3 bg-slate-100/50 dark:bg-white/4 border border-slate-200/30 dark:border-white/5 rounded-xl px-4.5 py-3 cursor-pointer select-none transition-all hover:bg-slate-100 dark:hover:bg-slate-800">
-          <input type="checkbox" class="w-4.5 h-4.5 rounded border-slate-300 dark:border-slate-700 text-brand-600 focus:ring-brand-500 cursor-pointer" />
-          <span class="text-xs md:text-sm text-slate-700 dark:text-slate-300 font-medium check-text">유심 보호 서비스 가입 (통신사 공식 어플)</span>
-        </label>
-        <label class="flex items-center gap-3 bg-slate-100/50 dark:bg-white/4 border border-slate-200/30 dark:border-white/5 rounded-xl px-4.5 py-3 cursor-pointer select-none transition-all hover:bg-slate-100 dark:hover:bg-slate-800">
-          <input type="checkbox" class="w-4.5 h-4.5 rounded border-slate-300 dark:border-slate-700 text-brand-600 focus:ring-brand-500 cursor-pointer" />
-          <span class="text-xs md:text-sm text-slate-700 dark:text-slate-300 font-medium check-text">금융앱 OTP / 생체인증 적극 활성화</span>
-        </label>
-        <label class="flex items-center gap-3 bg-slate-100/50 dark:bg-white/4 border border-slate-200/30 dark:border-white/5 rounded-xl px-4.5 py-3 cursor-pointer select-none transition-all hover:bg-slate-100 dark:hover:bg-slate-800">
-          <input type="checkbox" class="w-4.5 h-4.5 rounded border-slate-300 dark:border-slate-700 text-brand-600 focus:ring-brand-500 cursor-pointer" />
-          <span class="text-xs md:text-sm text-slate-700 dark:text-slate-300 font-medium check-text">해외 로밍 시 보안 취약한 SMS 사용 최소화</span>
-        </label>
-        <label class="flex items-center gap-3 bg-slate-100/50 dark:bg-white/4 border border-slate-200/30 dark:border-white/5 rounded-xl px-4.5 py-3 cursor-pointer select-none transition-all hover:bg-slate-100 dark:hover:bg-slate-800">
-          <input type="checkbox" class="w-4.5 h-4.5 rounded border-slate-300 dark:border-slate-700 text-brand-600 focus:ring-brand-500 cursor-pointer" />
-          <span class="text-xs md:text-sm text-slate-700 dark:text-slate-300 font-medium check-text">이상 거래 알림 및 이체 알리미 신청</span>
-        </label>
-        <label class="flex items-center gap-3 bg-slate-100/50 dark:bg-white/4 border border-slate-200/30 dark:border-white/5 rounded-xl px-4.5 py-3 cursor-pointer select-none transition-all hover:bg-slate-100 dark:hover:bg-slate-800">
-          <input type="checkbox" class="w-4.5 h-4.5 rounded border-slate-300 dark:border-slate-700 text-brand-600 focus:ring-brand-500 cursor-pointer" />
-          <span class="text-xs md:text-sm text-slate-700 dark:text-slate-300 font-medium check-text">SMS 수신 연동 서비스 재점검 및 폰보안 진단</span>
-        </label>
-      </div>
-
-      <p class="text-[11px] text-slate-400 dark:text-slate-500 leading-tight">
-        * 각 수칙을 확인하며 직접 체크박스를 탭해보세요.
-      </p>
-    </div>
-
-    <!-- 8. Closing Card -->
-    <div class="slide-card inactive-right w-full max-w-[620px] bg-blur-glass dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/60 rounded-[32px] overflow-hidden shadow-2xl p-0 absolute">
-      <div class="closing-gradient p-8 md:p-12 min-h-[430px] md:min-h-[460px] flex flex-col justify-between relative text-white text-center">
-        <div class="absolute top-6 right-8">
-          <span class="text-[10px] font-bold tracking-widest uppercase bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4.5 py-1.5 text-brand-300">
-            FINISH
-          </span>
-        </div>
-        <div class="flex flex-col items-center">
-          <div class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-2xl shadow-inner mb-5">🏦</div>
-          <h2 class="font-serif text-2xl md:text-3xl font-bold leading-[1.3] mb-6">
-            돈을 직접 만지지 않아도,<br>
-            <span class="text-brand-300">돈을 지키는 일</span>은 있다
-          </h2>
-          <p class="text-white/60 text-xs md:text-sm leading-[1.8] max-w-sm">
-            보이지 않는 곳에서 코드를 고치고, 새벽에 서버를 붙잡고 앉아 있는 사람들. 금융 IT 개발자는 고객의 일상이 무사한 아침을 만드는 사람입니다.
-          </p>
-        </div>
-        <div class="text-[10px] text-white/30 tracking-wider">
-          제21회 금융공모전 카드뉴스 · 2026
-        </div>
       </div>
     </div>
 
   </div>
 
-  <!-- 슬라이드 제어 및 인디케이터 -->
-  <div class="w-full max-w-[620px] flex items-center justify-between mt-8 relative z-30">
-    <button id="prev-btn" 
-            class="w-12 h-12 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all active:scale-95 disabled:opacity-40 disabled:pointer-events-none shadow-md">
-      <i data-lucide="chevron-left" class="w-5 h-5"></i>
+  <!-- 슬라이더 컨트롤 UI -->
+  <div class="w-full max-w-[540px] flex items-center justify-between mt-8 z-30">
+    <button id="prev-card-btn" class="w-12 h-12 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-200 transition disabled:opacity-40 disabled:pointer-events-none active:scale-95 shadow">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"></path></svg>
     </button>
     
-    <!-- 도트 인디케이터 & 페이지 수 -->
-    <div class="flex flex-col items-center gap-2">
-      <div id="dot-indicator" class="flex gap-2"></div>
-      <span id="page-counter" class="text-xs font-semibold text-slate-400 dark:text-slate-500 tracking-widest mt-1">1 / 9</span>
+    <div class="flex flex-col items-center gap-1.5">
+      <div id="slider-dots" class="flex gap-2"></div>
+      <span id="slider-page-counter" class="text-xs font-bold text-slate-400 tracking-widest mt-1">1 / 10</span>
     </div>
 
-    <button id="next-btn" 
-            class="w-12 h-12 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all active:scale-95 disabled:opacity-40 disabled:pointer-events-none shadow-md">
-      <i data-lucide="chevron-right" class="w-5 h-5"></i>
+    <button id="next-card-btn" class="w-12 h-12 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-200 transition disabled:opacity-40 disabled:pointer-events-none active:scale-95 shadow">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path></svg>
+    </button>
+  </div>
+
+  <!-- 개별 저장 패널 (슬라이더 전용) -->
+  <div class="mt-8 flex justify-center">
+    <button id="single-save-btn" class="flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 shadow-md transition">
+      <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path></svg>
+      현재 카드 고화질 PNG로 저장
     </button>
   </div>
 </main>
 
-<!-- 모아보기 뷰어 컨테이너 (Grid View) -->
-<main id="grid-view-container" class="hidden flex-1 w-full max-w-[680px] mx-auto px-4 pt-28 pb-32 space-y-8">
-  <!-- 0. Hero -->
-  <article class="reveal hero-gradient rounded-3xl overflow-hidden shadow-xl text-white min-h-[350px] flex flex-col justify-end p-9 relative">
-    <div class="absolute top-6 right-8">
-      <span class="text-[9px] font-bold tracking-widest bg-white/10 border border-white/20 rounded-full px-3.5 py-1 text-brand-300">INTRO</span>
-    </div>
-    <span class="text-[10px] tracking-widest uppercase text-white/50 mb-1">제21회 금융공모전 카드뉴스</span>
-    <h1 class="font-serif text-3xl sm:text-4xl font-black leading-tight mb-4">
-      본인을 <span class="text-brand-300">증명할 수 없게</span> 된 날
-    </h1>
-    <p class="text-white/70 text-xs sm:text-sm leading-relaxed">
-      유심 해킹 사태, 2,500만 명이 흔들렸던 그 밤에 저축은행 비대면 인증을 다시 쌓아 올린 이야기
-    </p>
-  </article>
-
-  <!-- 1. 발단 -->
-  <article class="reveal bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/40 rounded-3xl shadow-sm p-8 flex flex-col justify-between">
-    <div class="flex justify-between items-start mb-6">
-      <span class="text-xs font-bold tracking-widest text-brand-600 dark:text-brand-400">01 — 발단</span>
-      <i data-lucide="alert-triangle" class="w-5 h-5 text-brand-500"></i>
-    </div>
-    <h2 class="font-serif text-2xl font-bold text-slate-950 dark:text-white leading-snug mb-5">믿어 왔던 문이 흔들렸다</h2>
-    <div class="pl-4 border-l-[3px] border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 rounded-r-xl py-3 pr-4 mb-5">
-      <p class="font-serif text-sm font-semibold text-brand-700 dark:text-brand-300 italic">
-        "문자 인증번호만으로 신원을 확인하는 거, 지금도 괜찮은 겁니까?"
-      </p>
-      <span class="block mt-1 text-[9px] text-slate-400 dark:text-slate-500">— 회의실 한 마디, 2025년 봄</span>
-    </div>
-    <p class="text-sm text-slate-600 dark:text-slate-400 leading-[1.8] font-light">
-      2025년 봄, 국내 최대 이동통신사의 유심 정보가 유출됐다. 순식간에 2,500만 명의 '폰 번호 = 나'라는 등식이 의심받기 시작했다.
-    </p>
-  </article>
-
-  <!-- 2. 통계 -->
-  <article class="reveal bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/40 rounded-3xl shadow-sm p-8">
-    <div class="flex justify-between items-start mb-6">
-      <span class="text-xs font-bold tracking-widest text-brand-600 dark:text-brand-400">숫자로 보는 위기</span>
-      <i data-lucide="bar-chart-3" class="w-5 h-5 text-brand-500"></i>
-    </div>
-    <div class="grid grid-cols-3 gap-3 mb-6">
-      <div class="flex flex-col items-center justify-center text-center bg-slate-100/50 dark:bg-white/4 border border-slate-200/40 dark:border-white/5 rounded-2xl py-5 px-2">
-        <span class="font-serif text-xl sm:text-2xl font-black text-brand-600 dark:text-brand-400 mb-1">2,500만</span>
-        <span class="text-[9px] text-slate-500 dark:text-slate-400 leading-tight">유출 유심<br>추정 규모</span>
-      </div>
-      <div class="flex flex-col items-center justify-center text-center bg-slate-100/50 dark:bg-white/4 border border-slate-200/40 dark:border-white/5 rounded-2xl py-5 px-2">
-        <span class="font-serif text-xl sm:text-2xl font-black text-brand-600 dark:text-brand-400 mb-1">1개</span>
-        <span class="text-[9px] text-slate-500 dark:text-slate-400 leading-tight">당시 인증<br>수단(SMS)</span>
-      </div>
-      <div class="flex flex-col items-center justify-center text-center bg-slate-100/50 dark:bg-white/4 border border-slate-200/40 dark:border-white/5 rounded-2xl py-5 px-2">
-        <span class="font-serif text-xl sm:text-2xl font-black text-brand-600 dark:text-brand-400 mb-1">48h</span>
-        <span class="text-[9px] text-slate-500 dark:text-slate-400 leading-tight">비상 대응<br>소요 시간</span>
-      </div>
-    </div>
-    <p class="text-sm text-slate-600 dark:text-slate-400 leading-[1.8] font-light">
-      하나의 인증 수단에 의존하는 구조는 그 수단이 무너지는 순간 모든 문이 열린다.
-    </p>
-  </article>
-
-  <!-- 3. 위협 -->
-  <article class="reveal bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/40 rounded-3xl shadow-sm p-8">
-    <div class="flex justify-between items-start mb-6">
-      <span class="text-xs font-bold tracking-widest text-brand-600 dark:text-brand-400">02 — 위협 구조</span>
-      <i data-lucide="shield-alert" class="w-5 h-5 text-brand-500"></i>
-    </div>
-    <h2 class="font-serif text-2xl font-bold text-slate-950 dark:text-white leading-snug mb-6">복제폰이 '나'가 되는 순간</h2>
-    <div class="bg-slate-100/50 dark:bg-white/4 rounded-2xl p-4 border border-slate-200/40 dark:border-white/5 space-y-3 mb-6">
-      <div class="flex items-center gap-3">
-        <span class="text-[9px] font-bold text-slate-400 uppercase w-12 shrink-0">기존 인증</span>
-        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 line-through decoration-brand-500">
-          SMS 인증번호
-        </span>
-      </div>
-      <div class="flex items-center gap-2 pl-14 text-slate-400 dark:text-slate-600">
-        <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
-        <span class="text-[9px] font-medium">유심 복제 시</span>
-      </div>
-      <div class="flex items-start gap-3">
-        <span class="text-[9px] font-bold text-slate-400 uppercase w-12 shrink-0 mt-1">위협 노출</span>
-        <div class="flex flex-wrap gap-1.5">
-          <span class="text-[10px] font-medium px-2 py-1 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">공격자가 번호 탈취</span>
-          <span class="text-[10px] font-medium px-2 py-1 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">비대면 금융 뚫림</span>
-        </div>
-      </div>
-    </div>
-    <p class="text-sm text-slate-600 dark:text-slate-400 leading-[1.8] font-light">
-      번호 하나가 정체성 전부가 된 구조에서, 복제된 유심은 곧 복제된 나였다.
-    </p>
-  </article>
-
-  <!-- 4. 타임라인 -->
-  <article class="reveal bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/40 rounded-3xl shadow-sm p-8">
-    <div class="flex justify-between items-start mb-6">
-      <span class="text-xs font-bold tracking-widest text-brand-600 dark:text-brand-400">03 — 48시간 대응</span>
-      <i data-lucide="clock" class="w-5 h-5 text-brand-500"></i>
-    </div>
-    <h2 class="font-serif text-2xl font-bold text-slate-950 dark:text-white leading-snug mb-6">이틀을 거의 잠들지 않았다</h2>
-    <div class="relative pl-4 border-l-2 border-slate-200 dark:border-slate-800 space-y-5 text-left mb-6">
-      <div class="relative">
-        <div class="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-brand-500 ring-4 ring-white dark:ring-slate-900"></div>
-        <span class="text-[9px] font-bold text-brand-600 dark:text-brand-400 block uppercase">D+0 낮</span>
-        <h4 class="text-xs font-bold text-slate-900 dark:text-white">사태 인지 및 비상대응팀 구성</h4>
-        <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">SMS 단일 인증 취약성 검토 착수</p>
-      </div>
-      <div class="relative">
-        <div class="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-brand-600 ring-4 ring-white dark:ring-slate-900"></div>
-        <span class="text-[9px] font-bold text-brand-600 dark:text-brand-400 block uppercase">D+0 밤</span>
-        <h4 class="text-xs font-bold text-slate-900 dark:text-white">고위험 거래 긴급 차단 및 모니터링</h4>
-        <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">피해 의심 거래 이상 징후 실시간 추적</p>
-      </div>
-      <div class="relative">
-        <div class="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-brand-700 ring-4 ring-white dark:ring-slate-900"></div>
-        <span class="text-[9px] font-bold text-brand-600 dark:text-brand-400 block uppercase">D+1 오전</span>
-        <h4 class="text-xs font-bold text-slate-900 dark:text-white">3중 다중 인증 아키텍처 설계</h4>
-        <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">OCR + 안면인식 기술 결합 가속화</p>
-      </div>
-      <div class="relative">
-        <div class="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-white dark:ring-slate-900"></div>
-        <span class="text-[9px] font-bold text-emerald-500 block uppercase">D+2</span>
-        <h4 class="text-xs font-bold text-slate-900 dark:text-white">비대면 인증 1차 패치 완료</h4>
-        <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">신규 다중인증 시스템 파일럿 배포 개시</p>
-      </div>
-    </div>
-  </article>
-
-  <!-- 5. 해법 -->
-  <article class="reveal bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/40 rounded-3xl shadow-sm p-8">
-    <div class="flex justify-between items-start mb-6">
-      <span class="text-xs font-bold tracking-widest text-brand-600 dark:text-brand-400">04 — 해법</span>
-      <i data-lucide="key-round" class="w-5 h-5 text-brand-500"></i>
-    </div>
-    <h2 class="font-serif text-2xl font-bold text-slate-950 dark:text-white leading-snug mb-6">하나가 무너져도 나머지가 버틴다</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-      <div class="bg-red-50/50 dark:bg-red-950/10 border border-red-200/30 dark:border-red-950/30 rounded-xl p-3.5 flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 flex items-center justify-center text-xs font-bold">구</div>
-        <div>
-          <h5 class="text-xs font-bold text-slate-900 dark:text-white">단일 인증 채널</h5>
-          <p class="text-[10px] text-slate-400 dark:text-slate-500">SMS 인증번호 의존</p>
-        </div>
-      </div>
-      <div class="bg-emerald-50/50 dark:bg-emerald-950/10 border border-emerald-200/30 dark:border-emerald-950/30 rounded-xl p-3.5 flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-bold">신</div>
-        <div>
-          <h5 class="text-xs font-bold text-slate-900 dark:text-white">3중 다중 인증 (MFA)</h5>
-          <p class="text-[10px] text-slate-400 dark:text-slate-500">신분증 OCR + 안면인식 + SMS</p>
-        </div>
-      </div>
-    </div>
-    <p class="text-sm text-slate-600 dark:text-slate-400 leading-[1.8] font-light">
-      다중 인증의 핵심은 각 수단이 서로 다른 취약점을 가져야 한다는 것입니다. 하나가 뚫려도 나머지 방어선이 공격자를 막습니다.
-    </p>
-  </article>
-
-  <!-- 6. 원칙 -->
-  <article class="reveal bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/40 rounded-3xl shadow-sm p-8">
-    <div class="flex justify-between items-start mb-6">
-      <span class="text-xs font-bold tracking-widest text-brand-600 dark:text-brand-400">05 — 금융 IT의 원칙</span>
-      <i data-lucide="book-open" class="w-5 h-5 text-brand-500"></i>
-    </div>
-    <h2 class="font-serif text-xl sm:text-2xl font-bold text-slate-950 dark:text-white leading-snug mb-6">"하나면 충분한가"에서 "하나가 무너지면 무엇이 남는가"</h2>
-    <div class="space-y-3.5 mb-6">
-      <div class="flex gap-3 items-start bg-slate-100/50 dark:bg-white/4 border border-slate-200/30 dark:border-white/5 rounded-xl p-3.5">
-        <span class="text-lg shrink-0">🛡️</span>
-        <div>
-          <h4 class="text-xs font-bold text-slate-900 dark:text-white">다중 인증 (MFA) 교차 설계</h4>
-          <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">지식(패스워드), 소유(유심/OTP), 생체(안면) 세 요소를 결합해 단일 실패점 방지</p>
-        </div>
-      </div>
-      <div class="flex gap-3 items-start bg-slate-100/50 dark:bg-white/4 border border-slate-200/30 dark:border-white/5 rounded-xl p-3.5">
-        <span class="text-lg shrink-0">⚡</span>
-        <div>
-          <h4 class="text-xs font-bold text-slate-900 dark:text-white">24시간 신속 가드레일</h4>
-          <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">위협 인지 즉시 임시 제한 조치를 발동하고 실시간 교정을 수행</p>
-        </div>
-      </div>
-      <div class="flex gap-3 items-start bg-slate-100/50 dark:bg-white/4 border border-slate-200/30 dark:border-white/5 rounded-xl p-3.5">
-        <span class="text-lg shrink-0">🤝</span>
-        <div>
-          <h4 class="text-xs font-bold text-slate-900 dark:text-white">보안 투명성과 신뢰도 구축</h4>
-          <p class="text-[11px] text-slate-400 dark:text-slate-500 font-light">기술적 방어선 구축과 동시에 정직한 고객 커뮤니케이션 실행</p>
-        </div>
-      </div>
-    </div>
-  </article>
-
-  <!-- 7. 체크리스트 (Interactive) -->
-  <article class="reveal bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/40 rounded-3xl shadow-sm p-8">
-    <div class="flex justify-between items-start mb-6">
-      <span class="text-xs font-bold tracking-widest text-brand-600 dark:text-brand-400">06 — 개인 실천 수칙</span>
-      <i data-lucide="check-square" class="w-5 h-5 text-brand-500"></i>
-    </div>
-    <h2 class="font-serif text-2xl font-bold text-slate-950 dark:text-white leading-snug mb-6">가장 안전한 금융은 함께 지킬 때</h2>
-    <div class="space-y-2 mb-6">
-      <label class="flex items-center gap-3 bg-slate-100/50 dark:bg-white/4 border border-slate-200/30 dark:border-white/5 rounded-xl px-4 py-3.5 cursor-pointer transition-all">
-        <input type="checkbox" class="w-4.5 h-4.5 rounded border-slate-300 text-brand-600 focus:ring-brand-500 cursor-pointer" />
-        <span class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium check-text">유심 보호 서비스 가입 (통신사 공식 어플)</span>
-      </label>
-      <label class="flex items-center gap-3 bg-slate-100/50 dark:bg-white/4 border border-slate-200/30 dark:border-white/5 rounded-xl px-4 py-3.5 cursor-pointer transition-all">
-        <input type="checkbox" class="w-4.5 h-4.5 rounded border-slate-300 text-brand-600 focus:ring-brand-500 cursor-pointer" />
-        <span class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium check-text">금융앱 OTP / 생체인증 적극 활성화</span>
-      </label>
-      <label class="flex items-center gap-3 bg-slate-100/50 dark:bg-white/4 border border-slate-200/30 dark:border-white/5 rounded-xl px-4 py-3.5 cursor-pointer transition-all">
-        <input type="checkbox" class="w-4.5 h-4.5 rounded border-slate-300 text-brand-600 focus:ring-brand-500 cursor-pointer" />
-        <span class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium check-text">해외 로밍 시 보안 취약한 SMS 사용 최소화</span>
-      </label>
-      <label class="flex items-center gap-3 bg-slate-100/50 dark:bg-white/4 border border-slate-200/30 dark:border-white/5 rounded-xl px-4 py-3.5 cursor-pointer transition-all">
-        <input type="checkbox" class="w-4.5 h-4.5 rounded border-slate-300 text-brand-600 focus:ring-brand-500 cursor-pointer" />
-        <span class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium check-text">이상 거래 알림 및 이체 알리미 신청</span>
-      </label>
-      <label class="flex items-center gap-3 bg-slate-100/50 dark:bg-white/4 border border-slate-200/30 dark:border-white/5 rounded-xl px-4 py-3.5 cursor-pointer transition-all">
-        <input type="checkbox" class="w-4.5 h-4.5 rounded border-slate-300 text-brand-600 focus:ring-brand-500 cursor-pointer" />
-        <span class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium check-text">SMS 수신 연동 서비스 재점검 및 폰보안 진단</span>
-      </label>
-    </div>
-  </article>
-
-  <!-- 8. Closing -->
-  <article class="reveal closing-gradient rounded-3xl overflow-hidden shadow-xl text-white text-center p-9 relative">
-    <div class="absolute top-6 right-8">
-      <span class="text-[9px] font-bold tracking-widest bg-white/10 border border-white/20 rounded-full px-3.5 py-1 text-brand-300">FINISH</span>
-    </div>
-    <div class="flex flex-col items-center my-6">
-      <div class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-2xl shadow-inner mb-4">🏦</div>
-      <h2 class="font-serif text-2xl font-bold leading-normal mb-4">
-        돈을 직접 만지지 않아도,<br>돈을 지키는 일은 있다
-      </h2>
-      <p class="text-white/60 text-xs sm:text-sm leading-relaxed max-w-sm">
-        보이지 않는 곳에서 코드를 고치고, 새벽에 서버를 붙잡고 앉아 있는 사람들. 금융 IT 개발자는 고객의 일상이 무사한 아침을 만드는 사람입니다.
-      </p>
-    </div>
-  </article>
+<!-- 메인 콘텐츠 영역 (세로 정렬 모드) -->
+<main id="grid-view" class="hidden flex-1 flex flex-col items-center pt-24 pb-20 px-4 space-y-12">
+  <!-- 자바스크립트로 세로 리스트를 여기에 복사 생성하여 스케일 조절할 예정 -->
 </main>
 
-<!-- 공통 푸터 -->
-<footer class="text-center pb-12 px-6 text-xs text-slate-400 dark:text-slate-600 border-t border-slate-200/60 dark:border-slate-800/40 pt-8 mt-12 bg-white/40 dark:bg-slate-950/40">
-  <p class="font-semibold text-slate-500 dark:text-slate-500">제21회 금융공모전 카드뉴스 부문 최우수상 선정작</p>
-  <p class="mt-1 font-light text-[10px]">유심 해킹 사태와 저축은행 비대면 인증 재구축 금융보안 에세이</p>
+<!-- 최하단 공통 푸터 -->
+<footer class="py-8 bg-slate-900 border-t border-slate-800/80 text-center text-xs text-slate-500 font-medium">
+  <p>© 2026 제21회 금융공모전 출품작 카드뉴스 시각화 빌더. All Rights Reserved.</p>
 </footer>
 
+<!-- html2canvas 다운로드를 위해 오프스크린에 1080px 고정 상태로 띄울 캡처 레이아웃 -->
+<div id="capture-sandbox" class="absolute -top-[9999px] -left-[9999px] w-[1080px] h-[1080px] overflow-hidden" style="width: 1080px; height: 1080px;"></div>
+
 <script>
-  // 초기화 및 CDN 아이콘 로드 완료
-  lucide.createIcons();
+  // DOM 요소 참조
+  const scaleContainer = document.getElementById('scale-container');
+  const canvasViewport = document.getElementById('canvas-viewport');
+  const viewModeToggle = document.getElementById('view-mode-toggle');
+  const viewModeIcon = document.getElementById('view-mode-icon');
+  const viewModeLabel = document.getElementById('view-mode-label');
+  const sliderView = document.getElementById('slider-view');
+  const gridView = document.getElementById('grid-view');
+  const progressIndicator = document.getElementById('progress-indicator');
+  const captureSandbox = document.getElementById('capture-sandbox');
+  
+  // 슬라이드 버튼
+  const prevCardBtn = document.getElementById('prev-card-btn');
+  const nextCardBtn = document.getElementById('next-card-btn');
+  const sliderPageCounter = document.getElementById('slider-page-counter');
+  const sliderDots = document.getElementById('slider-dots');
+  const singleSaveBtn = document.getElementById('single-save-btn');
+  const downloadAllBtn = document.getElementById('download-all-btn');
 
-  // 상단 진행률 프로그레스 바 제어
-  const progBar = document.getElementById('progress-bar');
-  window.addEventListener('scroll', () => {
-    const h = document.documentElement;
-    const progress = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100);
-    progBar.style.width = progress + '%';
-  });
+  // 상태 관리
+  let currentActiveIndex = 0;
+  const totalCards = 10;
+  let isSliderMode = true;
 
-  // 모아보기 리벨 애니메이션 옵저버
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        obs.unobserve(e.target);
+  // 1:1 반응형 스케일 조절 함수
+  function handleResize() {
+    if (!isSliderMode) return;
+    
+    // 뷰포트 너비 기준으로 스케일 비율 계산
+    const viewportWidth = window.innerWidth;
+    const padding = 32; // 양옆 마진
+    const targetWidth = Math.min(1080, Math.min(540, viewportWidth - padding));
+    const scaleFactor = targetWidth / 1080;
+    
+    // scale transform 적용
+    scaleContainer.style.transform = `scale(${scaleFactor})`;
+    
+    // 부모 뷰포트의 높이를 비율에 맞춰 강제 설정하여 영역 크기 조정
+    canvasViewport.style.width = `${1080 * scaleFactor}px`;
+    canvasViewport.style.height = `${1080 * scaleFactor}px`;
+  }
+
+  // 슬라이드 이동 함수
+  function showCard(index) {
+    if (index < 0 || index >= totalCards) return;
+    currentActiveIndex = index;
+
+    // 모든 슬라이드 아이템의 클래스 리셋 및 활성화 처리
+    const cardItems = document.querySelectorAll('.slider-card-item');
+    cardItems.forEach((card, idx) => {
+      if (idx === currentActiveIndex) {
+        card.classList.add('active');
+      } else {
+        card.classList.remove('active');
       }
     });
-  }, { threshold: 0.1 });
 
-  // 뷰 모드 토글 (Slide <-> Grid)
-  const viewToggleBtn = document.getElementById('view-toggle-btn');
-  const viewToggleIcon = document.getElementById('view-toggle-icon');
-  const viewToggleText = document.getElementById('view-toggle-text');
-  
-  const slideView = document.getElementById('slide-view-container');
-  const gridView = document.getElementById('grid-view-container');
-  
-  let isGridView = false;
+    // 버튼 상태 제어
+    prevCardBtn.disabled = currentActiveIndex === 0;
+    nextCardBtn.disabled = currentActiveIndex === totalCards - 1;
 
-  viewToggleBtn.addEventListener('click', () => {
-    isGridView = !isGridView;
-    if (isGridView) {
-      // 그리드 모드로 전환
-      slideView.classList.add('hidden');
-      gridView.classList.remove('hidden');
-      viewToggleIcon.innerHTML = `<i data-lucide="layers" class="w-4 h-4 mr-1.5"></i>`;
-      viewToggleText.innerText = "슬라이드 뷰";
-      
-      // 모아보기 상태 프로그레스 바 제어 바인딩 복원
-      progBar.style.width = '0%';
-      document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-    } else {
-      // 슬라이드 모드로 전환
-      gridView.classList.add('hidden');
-      slideView.classList.remove('hidden');
-      viewToggleIcon.innerHTML = `<i data-lucide="grid" class="w-4 h-4 mr-1.5"></i>`;
-      viewToggleText.innerText = "모아보기";
-      
-      // 슬라이드 뷰 진행 바 갱신
-      updateProgress();
-    }
-    lucide.createIcons();
-  });
+    // 페이지 인디케이터 갱신
+    sliderPageCounter.innerText = `${currentActiveIndex + 1} / ${totalCards}`;
+    progressIndicator.style.width = `${((currentActiveIndex) / (totalCards - 1)) * 100}%`;
 
-  // 슬라이드 카드 내비게이션 로직
-  const cards = document.querySelectorAll('#slide-view-container .slide-card');
-  const prevBtn = document.getElementById('prev-btn');
-  const nextBtn = document.getElementById('next-btn');
-  const pageCounter = document.getElementById('page-counter');
-  const dotIndicator = document.getElementById('dot-indicator');
-  
-  let currentIdx = 0;
-  const totalCards = cards.length;
+    // 도트 갱신
+    buildDots();
+  }
 
-  // 도트 인디케이터 동적 생성
+  // 도트 빌더
   function buildDots() {
-    dotIndicator.innerHTML = '';
+    sliderDots.innerHTML = '';
     for (let i = 0; i < totalCards; i++) {
       const dot = document.createElement('button');
-      dot.className = `w-2 h-2 rounded-full transition-all duration-300 ${i === currentIdx ? 'bg-brand-600 w-5' : 'bg-slate-300 dark:bg-slate-700'}`;
-      dot.addEventListener('click', () => {
-        goToCard(i);
-      });
-      dotIndicator.appendChild(dot);
+      dot.className = `w-2 h-2 rounded-full transition-all duration-300 ${i === currentActiveIndex ? 'bg-blue-500 w-5' : 'bg-slate-700'}`;
+      dot.addEventListener('click', () => showCard(i));
+      sliderDots.appendChild(dot);
     }
   }
 
-  // 특정 카드로 점프
-  function goToCard(idx) {
-    if (idx < 0 || idx >= totalCards) return;
-    
-    currentIdx = idx;
-    
-    cards.forEach((card, i) => {
-      card.className = "slide-card w-full max-w-[620px] bg-blur-glass dark:bg-slate-900/85 border border-slate-200/80 dark:border-slate-800/60 rounded-[32px] overflow-hidden shadow-2xl p-8 md:p-10 absolute min-h-[430px] md:min-h-[460px] flex flex-col justify-between";
-      
-      // 0, 8번째 카드는 패딩 없는 풀 레이아웃
-      if (i === 0 || i === totalCards - 1) {
-        card.className = "slide-card w-full max-w-[620px] bg-blur-glass dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/60 rounded-[32px] overflow-hidden shadow-2xl p-0 absolute";
-      }
+  // 이전/다음 핸들러
+  prevCardBtn.addEventListener('click', () => showCard(currentActiveIndex - 1));
+  nextCardBtn.addEventListener('click', () => showCard(currentActiveIndex + 1));
 
-      if (i < currentIdx) {
-        card.classList.add('inactive-left');
-      } else if (i > currentIdx) {
-        card.classList.add('inactive-right');
-      } else {
-        card.classList.add('active');
-      }
-    });
-
-    // 버튼 상태 업데이트
-    prevBtn.disabled = currentIdx === 0;
-    nextBtn.disabled = currentIdx === totalCards - 1;
-    
-    // 텍스트/도트/상단 프로그레스바 갱신
-    pageCounter.innerText = `${currentIdx + 1} / ${totalCards}`;
-    buildDots();
-    updateProgress();
-  }
-
-  function updateProgress() {
-    if (!isGridView) {
-      const progress = ((currentIdx) / (totalCards - 1) * 100);
-      progBar.style.width = progress + '%';
-    }
-  }
-
-  prevBtn.addEventListener('click', () => {
-    if (currentIdx > 0) goToCard(currentIdx - 1);
-  });
-
-  nextBtn.addEventListener('click', () => {
-    if (currentIdx < totalCards - 1) goToCard(currentIdx + 1);
-  });
-
-  // 키보드 방향키 슬라이드 제어
+  // 방향키 제어
   window.addEventListener('keydown', (e) => {
-    if (isGridView) return;
-    if (e.key === 'ArrowLeft' && currentIdx > 0) {
-      goToCard(currentIdx - 1);
-    } else if (e.key === 'ArrowRight' && currentIdx < totalCards - 1) {
-      goToCard(currentIdx + 1);
+    if (!isSliderMode) return;
+    if (e.key === 'ArrowLeft' && currentActiveIndex > 0) {
+      showCard(currentActiveIndex - 1);
+    } else if (e.key === 'ArrowRight' && currentActiveIndex < totalCards - 1) {
+      showCard(currentActiveIndex + 1);
     }
   });
 
-  // 모바일 스와이프 제어 지원
+  // 모바일 터치 스와이프 제어
   let touchStartX = 0;
   let touchEndX = 0;
-
-  const cardSliderArea = document.getElementById('slide-view-container');
   
-  cardSliderArea.addEventListener('touchstart', (e) => {
+  canvasViewport.addEventListener('touchstart', (e) => {
     touchStartX = e.changedTouches[0].screenX;
   }, false);
 
-  cardSliderArea.addEventListener('touchend', (e) => {
+  canvasViewport.addEventListener('touchend', (e) => {
     touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
+    const swipeThreshold = 60;
+    if (touchEndX < touchStartX - swipeThreshold && currentActiveIndex < totalCards - 1) {
+      showCard(currentActiveIndex + 1);
+    } else if (touchEndX > touchStartX + swipeThreshold && currentActiveIndex > 0) {
+      showCard(currentActiveIndex - 1);
+    }
   }, false);
 
-  function handleSwipe() {
-    const swipeThreshold = 50; // 최소 스와이프 거리 (px)
-    if (touchEndX < touchStartX - swipeThreshold) {
-      // 오른쪽에서 왼쪽으로 스와이프 -> 다음 카드
-      if (currentIdx < totalCards - 1) goToCard(currentIdx + 1);
-    }
-    if (touchEndX > touchStartX + swipeThreshold) {
-      // 왼쪽에서 오른쪽으로 스와이프 -> 이전 카드
-      if (currentIdx > 0) goToCard(currentIdx - 1);
-    }
+  // 세로 정렬 뷰어 생성 및 렌더링
+  function buildGridView() {
+    gridView.innerHTML = '';
+    
+    // 원본 카드를 가져와서 복제 생성
+    const cardTemplates = document.querySelectorAll('.slider-card-item');
+    
+    cardTemplates.forEach((template, idx) => {
+      // 카드 래퍼
+      const gridItemWrapper = document.createElement('div');
+      gridItemWrapper.className = 'flex flex-col items-center space-y-4 w-full';
+      
+      // 스케일링용 뷰포트
+      const viewPort = document.createElement('div');
+      viewPort.className = 'relative overflow-visible';
+      viewPort.style.width = '1080px';
+      viewPort.style.height = '1080px';
+      
+      // 복제본 생성
+      const clone = template.cloneNode(true);
+      clone.className = 'card-canvas rounded-[48px] p-[80px] flex flex-col justify-between absolute top-0 left-0';
+      clone.style.opacity = '1';
+      clone.style.pointerEvents = 'auto';
+
+      // 9번째 체크박스 상호작용 적용을 위해 복제본에 이벤트 바인딩
+      if (idx === 8) {
+        const checkboxes = clone.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(chk => {
+          chk.addEventListener('change', (e) => {
+            const labelText = e.target.nextElementSibling;
+            if (e.target.checked) {
+              labelText.classList.add('line-through', 'text-slate-400');
+            } else {
+              labelText.classList.remove('line-through', 'text-slate-400');
+            }
+          });
+        });
+      }
+
+      // 스케일 조절을 위해 래퍼 클래스 지정
+      const scaleWrap = document.createElement('div');
+      scaleWrap.className = 'scale-wrapper absolute top-0 left-0 w-[1080px] h-[1080px]';
+      scaleWrap.appendChild(clone);
+      viewPort.appendChild(scaleWrap);
+      
+      // 개별 다운로드 버튼
+      const saveBtn = document.createElement('button');
+      saveBtn.className = 'flex items-center gap-1.5 px-4 py-2 rounded-full border border-slate-700 bg-slate-800 text-xs font-bold text-slate-300 hover:bg-slate-700 transition shadow';
+      saveBtn.innerHTML = `
+        <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path></svg>
+        ${idx + 1}번 카드 다운로드
+      `;
+      saveBtn.addEventListener('click', () => downloadCardImage(idx));
+
+      gridItemWrapper.appendChild(viewPort);
+      gridItemWrapper.appendChild(saveBtn);
+      gridView.appendChild(gridItemWrapper);
+    });
+
+    // 그리드 뷰 전체 반응형 리사이즈 함수 바인딩
+    handleGridResize();
   }
 
-  // 테마 관리 (다크모드 토글)
-  const themeBtn = document.getElementById('theme-btn');
-  const html = document.documentElement;
-  const moon = document.getElementById('icon-moon');
-  const sun  = document.getElementById('icon-sun');
-  let isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  function handleGridResize() {
+    if (isSliderMode) return;
 
-  function applyTheme() {
-    html.classList.toggle('dark', isDark);
-    moon.classList.toggle('hidden', isDark);
-    sun.classList.toggle('hidden', !isDark);
+    const gridWrappers = document.querySelectorAll('#grid-view .scale-wrapper');
+    const viewports = document.querySelectorAll('#grid-view > div > div');
+    
+    const viewportWidth = window.innerWidth;
+    const padding = 32;
+    const targetWidth = Math.min(1080, Math.min(540, viewportWidth - padding));
+    const scaleFactor = targetWidth / 1080;
+
+    gridWrappers.forEach((wrapper, i) => {
+      wrapper.style.transform = `scale(${scaleFactor})`;
+    });
+
+    viewports.forEach(viewport => {
+      viewport.style.width = `${1080 * scaleFactor}px`;
+      viewport.style.height = `${1080 * scaleFactor}px`;
+    });
   }
 
-  applyTheme();
-  themeBtn.addEventListener('click', () => { 
-    isDark = !isDark; 
-    applyTheme(); 
+  // 모드 스위칭 리스너
+  viewModeToggle.addEventListener('click', () => {
+    isSliderMode = !isSliderMode;
+    if (isSliderMode) {
+      gridView.classList.add('hidden');
+      sliderView.classList.remove('hidden');
+      viewModeLabel.innerText = "세로 정렬로 보기";
+      viewModeIcon.innerHTML = `
+        <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+        <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+        <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+        <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+      `;
+      // 진행바 복원
+      showCard(currentActiveIndex);
+      handleResize();
+    } else {
+      sliderView.classList.add('hidden');
+      gridView.classList.remove('hidden');
+      viewModeLabel.innerText = "슬라이더 뷰로 보기";
+      viewModeIcon.innerHTML = `
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"></path>
+      `;
+      buildGridView();
+      // 프로그레스 바 리셋 (세로 모드에선 전체를 스크롤로 보기 때문)
+      progressIndicator.style.width = '0%';
+    }
   });
 
-  // 인터랙티브 체크박스 취소선 애니메이션
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-  checkboxes.forEach(chk => {
+  // 개별 카드 다운로드 처리 로직
+  function downloadCardImage(cardIdx) {
+    const cardTemplates = document.querySelectorAll('.slider-card-item');
+    const targetTemplate = cardTemplates[cardIdx];
+
+    // 오프스크린 샌드박스로 원본 카드 복제
+    captureSandbox.innerHTML = '';
+    const clone = targetTemplate.cloneNode(true);
+    
+    // 샌드박스 내부용 리셋 클래스 적용 (스케일링 걷고 원본 크기 1080x1080 유지)
+    clone.className = 'card-canvas rounded-[48px] p-[80px] flex flex-col justify-between bg-[#0E1A2B] text-[#EaF0F6]';
+    
+    const stage = clone.getAttribute('data-stage');
+    if (stage === 'B') {
+      clone.className = 'card-canvas rounded-[48px] p-[80px] flex flex-col justify-between bg-[#FFFFFF] border-4 border-slate-100 text-[#16263A]';
+    } else if (stage === 'C') {
+      clone.className = 'card-canvas rounded-[48px] p-[80px] flex flex-col justify-between bg-gradient-to-br from-[#FFF6EC] to-[#EAF2FB] border-4 border-white text-[#2A3A4A]';
+    }
+    
+    clone.style.opacity = '1';
+    clone.style.position = 'relative';
+    clone.style.left = '0';
+    clone.style.top = '0';
+
+    // 체크박스 상태 동기화 (기존 렌더링된 상태 복사)
+    let sourceCheckboxes;
+    if (isSliderMode) {
+      sourceCheckboxes = targetTemplate.querySelectorAll('input[type="checkbox"]');
+    } else {
+      const activeGridCards = document.querySelectorAll('#grid-view .card-canvas');
+      sourceCheckboxes = activeGridCards[cardIdx].querySelectorAll('input[type="checkbox"]');
+    }
+
+    if (sourceCheckboxes.length > 0) {
+      const destCheckboxes = clone.querySelectorAll('input[type="checkbox"]');
+      sourceCheckboxes.forEach((srcChk, srcIdx) => {
+        destCheckboxes[srcIdx].checked = srcChk.checked;
+        const textSpan = destCheckboxes[srcIdx].nextElementSibling;
+        if (srcChk.checked) {
+          textSpan.classList.add('line-through', 'text-slate-400');
+        } else {
+          textSpan.classList.remove('line-through', 'text-slate-400');
+        }
+      });
+    }
+
+    captureSandbox.appendChild(clone);
+
+    // html2canvas 실행
+    html2canvas(clone, {
+      scale: 1, // 1배수 스케일로 정확한 1080x1080 캡처
+      useCORS: true,
+      backgroundColor: null,
+      logging: false
+    }).then(canvas => {
+      const link = document.createElement('a');
+      link.download = `금융공모전_카드뉴스_${String(cardIdx + 1).padStart(2, '0')}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      captureSandbox.innerHTML = ''; // 완료 후 정리
+    });
+  }
+
+  // 단일 슬라이드 저장 이벤트
+  singleSaveBtn.addEventListener('click', () => {
+    downloadCardImage(currentActiveIndex);
+  });
+
+  // 전체 카드 일괄 다운로드 로직 (지연 시간을 두어 브라우저가 순차 처리하게 유도)
+  function downloadAllCards() {
+    let delay = 0;
+    for (let i = 0; i < totalCards; i++) {
+      setTimeout(() => {
+        downloadCardImage(i);
+      }, delay);
+      delay += 800; // 0.8초 딜레이
+    }
+  }
+
+  downloadAllBtn.addEventListener('click', downloadAllCards);
+
+  // 9번째(8번인덱스) 카드 체크박스 라인쓰루 토글링 등록 (초기 바인딩)
+  const initialCheckboxes = document.querySelectorAll('.slider-card-item input[type="checkbox"]');
+  initialCheckboxes.forEach(chk => {
     chk.addEventListener('change', (e) => {
       const labelText = e.target.nextElementSibling;
       if (e.target.checked) {
-        labelText.classList.add('line-through', 'text-slate-400', 'dark:text-slate-600');
-        labelText.classList.remove('text-slate-700', 'dark:text-slate-300');
+        labelText.classList.add('line-through', 'text-slate-400');
       } else {
-        labelText.classList.remove('line-through', 'text-slate-400', 'dark:text-slate-600');
-        labelText.classList.add('text-slate-700', 'dark:text-slate-300');
+        labelText.classList.remove('line-through', 'text-slate-400');
       }
     });
   });
 
-  // 첫 실행
-  goToCard(0);
+  // 리사이즈 및 윈도우 스크롤바 바인딩
+  window.addEventListener('resize', () => {
+    handleResize();
+    handleGridResize();
+  });
+  window.addEventListener('scroll', () => {
+    if (!isSliderMode) {
+      const h = document.documentElement;
+      const progress = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100);
+      progressIndicator.style.width = progress + '%';
+    }
+  });
+
+  // 초기 시작 실행
+  showCard(0);
+  handleResize();
 </script>
 </body>
 </html>
