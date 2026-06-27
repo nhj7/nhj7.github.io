@@ -671,10 +671,9 @@
     canvasViewport.style.height = `${1080 * scaleFactor}px`;
   }
 
-  // 슬라이드 이동 함수
+  // 슬라이드 이동 함수 (무한 루프 적용)
   function showCard(index) {
-    if (index < 0 || index >= totalCards) return;
-    currentActiveIndex = index;
+    currentActiveIndex = (index + totalCards) % totalCards;
 
     const cardItems = document.querySelectorAll('.slider-card-item');
     cardItems.forEach((card, idx) => {
@@ -685,8 +684,9 @@
       }
     });
 
-    prevCardBtn.disabled = currentActiveIndex === 0;
-    nextCardBtn.disabled = currentActiveIndex === totalCards - 1;
+    // 무한 루프이므로 버튼 비활성화를 하지 않음
+    prevCardBtn.disabled = false;
+    nextCardBtn.disabled = false;
 
     sliderPageCounter.innerText = `${currentActiveIndex + 1} / ${totalCards}`;
     progressIndicator.style.width = `${((currentActiveIndex) / (totalCards - 1)) * 100}%`;
@@ -709,17 +709,17 @@
   prevCardBtn.addEventListener('click', () => showCard(currentActiveIndex - 1));
   nextCardBtn.addEventListener('click', () => showCard(currentActiveIndex + 1));
 
-  // 방향키 제어
+  // 방향키 제어 (무한 루프 적용)
   window.addEventListener('keydown', (e) => {
     if (!isSliderMode) return;
-    if (e.key === 'ArrowLeft' && currentActiveIndex > 0) {
+    if (e.key === 'ArrowLeft') {
       showCard(currentActiveIndex - 1);
-    } else if (e.key === 'ArrowRight' && currentActiveIndex < totalCards - 1) {
+    } else if (e.key === 'ArrowRight') {
       showCard(currentActiveIndex + 1);
     }
   });
 
-  // 모바일 터치 스와이프 제어
+  // 모바일 터치 스와이프 제어 (무한 루프 적용)
   let touchStartX = 0;
   let touchEndX = 0;
   
@@ -730,9 +730,9 @@
   canvasViewport.addEventListener('touchend', (e) => {
     touchEndX = e.changedTouches[0].screenX;
     const swipeThreshold = 60;
-    if (touchEndX < touchStartX - swipeThreshold && currentActiveIndex < totalCards - 1) {
+    if (touchEndX < touchStartX - swipeThreshold) {
       showCard(currentActiveIndex + 1);
-    } else if (touchEndX > touchStartX + swipeThreshold && currentActiveIndex > 0) {
+    } else if (touchEndX > touchStartX + swipeThreshold) {
       showCard(currentActiveIndex - 1);
     }
   }, false);
