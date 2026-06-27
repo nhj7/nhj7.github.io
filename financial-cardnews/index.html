@@ -32,8 +32,8 @@
     body {
       font-family: 'Pretendard', sans-serif;
       -webkit-font-smoothing: antialiased;
-      background-color: #0b0f19;
-      color: #e2e8f0;
+      background-color: #f8fafc; /* 화사하고 부드러운 라이트 그레이 */
+      color: #1e293b; /* 짙은 Slate 텍스트 */
       overflow-x: hidden;
     }
 
@@ -44,7 +44,7 @@
       position: relative;
       flex-shrink: 0;
       overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.15); /* 부드러운 라이트 섀도우 */
     }
 
     /* 스케일 다운을 위해 transform의 중심축 설정 */
@@ -87,24 +87,23 @@
 <body class="min-h-screen flex flex-col justify-between select-none">
 
 <!-- 프로그레스 인디케이터 (상단 얇은 바) -->
-<div id="progress-indicator" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-emerald-400 to-blue-500 z-50 transition-all duration-300" style="width: 0%;"></div>
+<div id="progress-indicator" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-emerald-500 to-blue-600 z-50 transition-all duration-300" style="width: 0%;"></div>
 
-<!-- 상단 네비게이션 헤더 -->
-<header class="fixed top-0 inset-x-0 h-16 bg-slate-900/90 backdrop-blur border-b border-slate-800/80 z-40 flex items-center justify-between px-6">
-  <div class="flex items-center gap-2">
-    <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white text-xs">금융</div>
+<!-- 상단 네비게이션 헤더 (라이트 모드 고정) -->
+<header class="fixed top-0 inset-x-0 h-16 bg-white/90 backdrop-blur border-b border-slate-200/80 z-40 flex items-center justify-between px-6">
+  <div class="flex items-center gap-2.5">
+    <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white text-xs shadow-md shadow-blue-500/20">금융</div>
     <div class="flex flex-col">
-      <span class="text-xs font-extrabold text-white tracking-tight">제21회 금융공모전 카드뉴스</span>
-      <span class="text-[9px] text-slate-400 font-semibold tracking-widest uppercase">Security Campaign Infographics</span>
+      <span class="text-xs font-extrabold text-slate-900 tracking-tight">제21회 금융공모전 카드뉴스</span>
+      <span class="text-[9px] text-slate-500 font-bold tracking-widest uppercase">Security Campaign Infographics</span>
     </div>
   </div>
 
-  <!-- 콘트롤 영역 -->
+  <!-- 콘트롤 영역 (라이트 모드 고정) -->
   <div class="flex items-center gap-3">
     <!-- 모드 토글 (슬라이더 / 세로 정렬) -->
-    <button id="view-mode-toggle" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-700 bg-slate-800 text-xs font-bold text-slate-200 hover:bg-slate-700 transition">
+    <button id="view-mode-toggle" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 hover:bg-slate-100 hover:border-slate-300 transition">
       <svg id="view-mode-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-        <!-- 기본 그리드/리스트 아이콘 -->
         <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
         <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
         <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
@@ -114,7 +113,7 @@
     </button>
 
     <!-- 전체 다운로드 버튼 -->
-    <button id="download-all-btn" class="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-xs font-black text-white shadow-lg transition">
+    <button id="download-all-btn" class="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-xs font-black text-white shadow-md shadow-emerald-500/10 transition">
       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path></svg>
       전체 저장
     </button>
@@ -125,7 +124,7 @@
 <main id="slider-view" class="flex-1 flex flex-col items-center justify-center pt-24 pb-16 px-4">
   <div class="relative w-full max-w-[540px] flex items-center justify-center">
     
-    <!-- 카드 캔버스 뷰포트 (실제 1080px 크기의 박스를 스케일링해서 보여줌) -->
+    <!-- 카드 캔버스 뷰포트 (실제 1080px 크기를 스케일링해서 보여줌) -->
     <div id="canvas-viewport" class="relative overflow-visible" style="width: 1080px; height: 1080px;">
       <div id="scale-container" class="scale-wrapper absolute top-0 left-0 w-[1080px] h-[1080px]">
         
@@ -148,26 +147,19 @@
           <!-- 일러스트 영역 -->
           <div class="w-full h-[400px] flex items-center justify-center relative">
             <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- 화면광 그라데이션 -->
               <radialGradient id="screen-glow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
                 <stop offset="0%" stop-color="#3FB6A8" stop-opacity="0.3"></stop>
                 <stop offset="100%" stop-color="#3FB6A8" stop-opacity="0"></stop>
               </radialGradient>
               <circle cx="300" cy="180" r="180" fill="url(#screen-glow)"></circle>
               
-              <!-- 모니터 -->
               <rect x="150" y="80" width="300" height="200" rx="16" fill="#14202E" stroke="#3FB6A8" stroke-width="4"></rect>
               <rect x="165" y="95" width="270" height="170" rx="8" fill="#0E1A2B"></rect>
-              <!-- 받침대 -->
               <path d="M260 280 L340 280 L360 330 L240 330 Z" fill="#14202E" stroke="#3FB6A8" stroke-width="4" stroke-linejoin="round"></path>
               
-              <!-- 자물쇠 -->
               <g transform="translate(265, 125)">
-                <!-- 고리 -->
                 <path d="M15 25 V15 A20 20 0 0 1 55 15 V25" stroke="#3FB6A8" stroke-width="6" stroke-linecap="round" fill="none"></path>
-                <!-- 몸통 -->
                 <rect x="0" y="23" width="70" height="52" rx="12" fill="#3FB6A8"></rect>
-                <!-- 열쇠구멍 -->
                 <circle cx="35" cy="45" r="8" fill="#0E1A2B"></circle>
                 <path d="M35 50 V60" stroke="#0E1A2B" stroke-width="5" stroke-linecap="round"></path>
               </g>
@@ -202,20 +194,15 @@
           <!-- 일러스트 영역 -->
           <div class="w-full h-[400px] flex items-center justify-center relative">
             <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- 유출 데이터 라인 데코 -->
               <path d="M100 200 Q200 100 300 200 T500 200" stroke="#3FB6A8" stroke-dasharray="8,8" stroke-width="2" opacity="0.3"></path>
               <path d="M100 240 Q200 340 300 240 T500 240" stroke="#D86A6A" stroke-dasharray="6,6" stroke-width="2" opacity="0.2"></path>
               
-              <!-- 해진 자물쇠 형태 -->
               <g transform="translate(250, 130)">
                 <path d="M20 30 V15 A30 30 0 0 1 80 15 V30" stroke="#D86A6A" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.5" stroke-dasharray="10,5"></path>
-                <!-- 금이 간 자물쇠 몸통 -->
                 <rect x="0" y="25" width="100" height="70" rx="16" fill="#14202E" stroke="#D86A6A" stroke-width="4"></rect>
-                <!-- 번개형 크랙 -->
                 <path d="M50 35 L45 55 L55 50 L50 75" stroke="#D86A6A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
               </g>
 
-              <!-- 사람들 실루엣 심플 도식 -->
               <g opacity="0.35" fill="#3FB6A8">
                 <circle cx="100" cy="300" r="16"></circle><path d="M80 325 C80 325 80 370 100 370 C120 370 120 325 120 325 Z"></path>
                 <circle cx="180" cy="300" r="16"></circle><path d="M160 325 C160 325 160 370 180 370 C200 370 200 325 200 325 Z"></path>
@@ -223,7 +210,6 @@
                 <circle cx="500" cy="300" r="16"></circle><path d="M480 325 C480 325 480 370 500 370 C520 370 520 325 520 325 Z"></path>
               </g>
               
-              <!-- 2500만 타이포 강조 배경 -->
               <text x="300" y="80" text-anchor="middle" fill="#D86A6A" font-size="54" font-weight="900" opacity="0.8">2,500,000,000</text>
             </svg>
           </div>
@@ -253,28 +239,23 @@
           <!-- 일러스트 영역 -->
           <div class="w-full h-[400px] flex items-center justify-center relative">
             <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- 진짜 폰 (좌) -->
               <g transform="translate(100, 60)">
                 <rect x="0" y="0" width="140" height="260" rx="20" fill="#14202E" stroke="#3FB6A8" stroke-width="4"></rect>
                 <rect x="10" y="10" width="120" height="210" rx="12" fill="#0E1A2B"></rect>
                 <circle cx="70" cy="240" r="10" fill="#3FB6A8"></circle>
-                <!-- 정상 기호 -->
                 <circle cx="70" cy="110" r="30" fill="#3FB6A8" fill-opacity="0.2"></circle>
                 <path d="M58 110 L66 118 L82 102" stroke="#3FB6A8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
                 <text x="70" y="180" text-anchor="middle" fill="#3FB6A8" font-size="18" font-weight="bold">진짜 나</text>
               </g>
 
-              <!-- 복제 흐름 점선 화살표 -->
               <path d="M260 190 H340" stroke="#D86A6A" stroke-width="4" stroke-dasharray="10,6" stroke-linecap="round"></path>
               <path d="M330 180 L345 190 L330 200" fill="#D86A6A"></path>
               <text x="300" y="160" text-anchor="middle" fill="#D86A6A" font-size="16" font-weight="bold">유심 복제</text>
 
-              <!-- 가짜 폰 (우) -->
               <g transform="translate(360, 60)">
                 <rect x="0" y="0" width="140" height="260" rx="20" fill="#14202E" stroke="#D86A6A" stroke-width="4"></rect>
                 <rect x="10" y="10" width="120" height="210" rx="12" fill="#0E1A2B"></rect>
                 <circle cx="70" cy="240" r="10" fill="#D86A6A"></circle>
-                <!-- 경고 기호 -->
                 <circle cx="70" cy="110" r="30" fill="#D86A6A" fill-opacity="0.2"></circle>
                 <path d="M70 95 V115 M70 125 H70.01" stroke="#D86A6A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
                 <text x="70" y="180" text-anchor="middle" fill="#D86A6A" font-size="18" font-weight="bold">공격자</text>
@@ -307,7 +288,6 @@
           <!-- 일러스트 영역 -->
           <div class="w-full h-[400px] flex items-center justify-center relative">
             <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- 코드 백그라운드 라인 데코 -->
               <g stroke="#3FB6A8" stroke-width="2" opacity="0.15">
                 <path d="M50 80 H200 M50 110 H150 M50 140 H280"></path>
                 <path d="M50 170 H180 M50 200 H320 M50 230 H220"></path>
@@ -317,22 +297,15 @@
                 <path d="M50 170 H220 M50 200 H190 M50 230 H270"></path>
               </g>
 
-              <!-- 세 명의 개발자 실루엣 -->
               <g fill="#14202E" stroke="#3FB6A8" stroke-width="3">
-                <!-- 개발자 1 -->
                 <circle cx="200" cy="220" r="35"></circle>
                 <path d="M140 330 C140 280 170 270 200 270 C230 270 260 280 260 330 Z"></path>
-                
-                <!-- 개발자 2 -->
                 <circle cx="300" cy="190" r="35"></circle>
                 <path d="M240 300 C240 250 270 240 300 240 C330 240 360 250 360 300 Z"></path>
-                
-                <!-- 개발자 3 -->
                 <circle cx="400" cy="220" r="35"></circle>
                 <path d="M340 330 C340 280 370 270 400 270 C430 270 460 280 460 330 Z"></path>
               </g>
 
-              <!-- 흐름도 안면/신분증 아이콘 -->
               <rect x="270" y="270" width="60" height="40" rx="6" fill="#3FB6A8" stroke="#14202E" stroke-width="2"></rect>
               <circle cx="300" cy="285" r="7" fill="#0E1A2B"></circle>
               <path d="M292 298 C292 298 292 305 300 305 C308 305 308 298 308 298 Z" fill="#0E1A2B"></path>
@@ -364,20 +337,14 @@
           <!-- 일러스트 영역 -->
           <div class="w-full h-[400px] flex items-center justify-center relative">
             <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- 스마트폰 배경 -->
               <rect x="230" y="60" width="140" height="260" rx="24" fill="#F4F7FB" stroke="#E2E8F0" stroke-width="4"></rect>
               <rect x="245" y="75" width="110" height="210" rx="14" fill="#FFFFFF"></rect>
 
-              <!-- 방패 3중 보호막 -->
-              <!-- 1번 방패 (깨진 바깥 방패) -->
               <path d="M300 130 L360 110 V160 C360 210 300 240 300 240 C300 240 240 210 240 160 V110 Z" fill="none" stroke="#D86A6A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"></path>
-              <!-- 깨짐 크랙 선 -->
               <path d="M260 140 L285 155 L275 175" stroke="#D86A6A" stroke-width="4" stroke-linecap="round"></path>
 
-              <!-- 2번 방패 (중간 방패) -->
               <path d="M300 150 L340 135 V170 C340 205 300 225 300 225 C300 225 260 205 260 170 V135 Z" fill="none" stroke="#2D6BE0" stroke-width="4" opacity="0.6"></path>
 
-              <!-- 3번 방패 (안전한 안쪽 방패) -->
               <path d="M300 170 L320 160 V180 C320 200 300 210 300 210 C300 210 280 200 280 180 V160 Z" fill="#2D6BE0" stroke="#2D6BE0" stroke-width="2" opacity="0.9"></path>
             </svg>
           </div>
@@ -407,24 +374,17 @@
           <!-- 일러스트 영역 -->
           <div class="w-full h-[400px] flex items-center justify-center relative">
             <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- 유심 카드 칩 -->
               <g transform="translate(180, 80)">
                 <rect x="0" y="0" width="240" height="180" rx="20" fill="#F4F7FB" stroke="#E2E8F0" stroke-width="4"></rect>
                 <path d="M40 0 H200 A40 40 0 0 1 240 40 V180 H0 V40 A40 40 0 0 1 40 0 Z" fill="#2D6BE0" fill-opacity="0.08"></path>
-                <!-- 잘려나간 유심 귀퉁이 -->
                 <path d="M210 0 L240 30 V0 Z" fill="#FFFFFF"></path>
-                <!-- 금속 단자 모양 -->
                 <rect x="40" y="50" width="100" height="80" rx="8" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="3"></rect>
                 <path d="M90 50 V130 M40 90 H140 M40 70 H140 M40 110 H140" stroke="#E2E8F0" stroke-width="2"></path>
               </g>
 
-              <!-- 잠긴 자물쇠 -->
               <g transform="translate(300, 150)">
-                <!-- 고리 -->
                 <path d="M15 25 V15 A20 20 0 0 1 55 15 V25" stroke="#2D6BE0" stroke-width="6" stroke-linecap="round" fill="none"></path>
-                <!-- 몸통 -->
                 <rect x="0" y="23" width="70" height="52" rx="10" fill="#2D6BE0"></rect>
-                <!-- 체크 표시 -->
                 <path d="M23 48 L31 56 L47 40" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
               </g>
             </svg>
@@ -455,7 +415,6 @@
           <!-- 일러스트 영역 -->
           <div class="w-full h-[400px] flex items-center justify-center relative">
             <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- 대출 서류 / 계약서 -->
               <g transform="translate(150, 70)">
                 <rect x="0" y="0" width="150" height="200" rx="12" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="4"></rect>
                 <line x1="30" y1="40" x2="120" y2="40" stroke="#E2E8F0" stroke-width="6" stroke-linecap="round"></line>
@@ -465,7 +424,6 @@
                 <circle cx="110" cy="160" r="15" fill="#E2E8F0" fill-opacity="0.5"></circle>
               </g>
 
-              <!-- 신용 카드 -->
               <g transform="translate(260, 130)">
                 <rect x="0" y="0" width="180" height="110" rx="10" fill="#2D6BE0" opacity="0.15" stroke="#2D6BE0" stroke-width="3"></rect>
                 <rect x="20" y="20" width="35" height="25" rx="4" fill="#2D6BE0" opacity="0.4"></rect>
@@ -473,12 +431,9 @@
                 <circle cx="155" cy="80" r="12" fill="#2D6BE0" opacity="0.2"></circle>
               </g>
 
-              <!-- 차단 게이트 / 방패 장벽 -->
               <g transform="translate(120, 260)">
-                <!-- 차단 봉/가로막대 -->
                 <rect x="0" y="0" width="360" height="20" rx="10" fill="#D86A6A"></rect>
                 <path d="M40 0 L60 20 M120 0 L140 20 M200 0 L220 20 M280 0 L300 20" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
-                <!-- 경고 텍스트/표시 -->
                 <circle cx="180" cy="10" r="22" fill="#D86A6A" stroke="#FFFFFF" stroke-width="3"></circle>
                 <path d="M180 3 V13 M180 17 H180.01" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
               </g>
@@ -510,29 +465,22 @@
           <!-- 일러스트 영역 -->
           <div class="w-full h-[400px] flex items-center justify-center relative">
             <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- 서로 다른 열쇠 모음 -->
               <g transform="translate(100, 100)" stroke="#2D6BE0" stroke-width="4" fill="none">
-                <!-- 열쇠 1 -->
                 <g transform="rotate(-30 50 50)">
                   <circle cx="40" cy="40" r="16" stroke-width="5"></circle>
                   <path d="M56 40 H110 M100 40 V50 M90 40 V50" stroke-linecap="round"></path>
                 </g>
-                <!-- 열쇠 2 -->
                 <g transform="translate(100, 120) rotate(15 50 50)" opacity="0.5">
                   <circle cx="40" cy="40" r="14" stroke-width="4"></circle>
                   <path d="M54 40 H95 M85 40 V48 M75 40 V48" stroke-linecap="round"></path>
                 </g>
               </g>
 
-              <!-- 지문 / 생체 인식 아이콘 -->
               <g transform="translate(340, 100)">
                 <rect x="0" y="0" width="140" height="170" rx="16" fill="#F4F7FB" stroke="#E2E8F0" stroke-width="3"></rect>
-                <!-- 지문 나선 효과 -->
                 <path d="M70 45 A25 25 0 0 1 95 70 C95 85 85 95 70 95 A25 25 0 0 1 45 70" stroke="#2D6BE0" stroke-width="4" stroke-linecap="round" fill="none"></path>
                 <path d="M70 55 A15 15 0 0 1 85 70 C85 80 80 85 70 85 A15 15 0 0 1 55 70" stroke="#2D6BE0" stroke-width="3" stroke-linecap="round" fill="none"></path>
                 <path d="M70 65 A5 5 0 0 1 75 70 C75 72 72 75 70 75 A5 5 0 0 1 65 70" stroke="#2D6BE0" stroke-width="2" stroke-linecap="round" fill="none"></path>
-                
-                <!-- 하단 패스 신호 -->
                 <path d="M45 135 L60 150 L95 115" stroke="#3FB6A8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
               </g>
             </svg>
@@ -563,26 +511,19 @@
           <!-- 일러스트 영역 -->
           <div class="w-full h-[400px] flex items-center justify-center relative">
             <svg class="w-full h-full max-h-[350px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- 클립보드 체크리스트 -->
               <g transform="translate(130, 80)">
                 <rect x="0" y="0" width="140" height="190" rx="12" fill="#F4F7FB" stroke="#E2E8F0" stroke-width="4"></rect>
                 <rect x="40" y="-10" width="60" height="25" rx="6" fill="#E2E8F0"></rect>
-                <!-- 점선들 -->
                 <line x1="25" y1="40" x2="115" y2="40" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"></line>
                 <line x1="25" y1="70" x2="115" y2="70" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"></line>
                 <line x1="25" y1="100" x2="95" y2="100" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"></line>
                 <line x1="25" y1="130" x2="115" y2="130" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"></line>
               </g>
 
-              <!-- 긴급 전화기 / 경고음 -->
               <g transform="translate(320, 100)">
-                <!-- 전화기 바닥 본체 -->
                 <rect x="0" y="40" width="140" height="110" rx="20" fill="#E8A33D"></rect>
-                <!-- 전화 수화기 -->
                 <path d="M-10 35 C-10 10, 150 10, 150 35 C150 45, 130 50, 120 40 C110 30, 30 30, 20 40 C10 50, -10 45, -10 35 Z" fill="#E8A33D"></path>
-                <!-- 다이얼 구멍 데코 -->
                 <circle cx="70" cy="95" r="25" fill="#FFFFFF" fill-opacity="0.3"></circle>
-                <!-- 경고 광파선 -->
                 <path d="M-25 10 Q30 -20 70 -20 T165 10" stroke="#E8A33D" stroke-dasharray="10,5" stroke-width="4" stroke-linecap="round" fill="none"></path>
               </g>
             </svg>
@@ -613,33 +554,26 @@
           <!-- 일러스트 영역 -->
           <div class="w-full h-[380px] flex items-center justify-center relative">
             <svg class="w-full h-full max-h-[330px]" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- 아침 창가 격자 데코 -->
               <g opacity="0.05" stroke="#16263A" stroke-width="4">
                 <rect x="150" y="30" width="300" height="240" rx="10"></rect>
                 <line x1="300" y1="30" x2="300" y2="270"></line>
                 <line x1="150" y1="150" x2="450" y2="150"></line>
               </g>
               
-              <!-- 아침 햇빛 그라데이션 광배 -->
               <radialGradient id="morning-sun" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
                 <stop offset="0%" stop-color="#E8A33D" stop-opacity="0.15"></stop>
                 <stop offset="100%" stop-color="#EAF2FB" stop-opacity="0"></stop>
               </radialGradient>
               <circle cx="300" cy="180" r="190" fill="url(#morning-sun)"></circle>
 
-              <!-- 스마트폰을 든 실루엣 구조 -->
               <g fill="#2D6BE0" fill-opacity="0.1" stroke="#2D6BE0" stroke-width="3" opacity="0.6">
-                <!-- 뒤에서 보호막을 두르는 아우라 실루엣 -->
                 <path d="M220 330 C220 250 260 230 300 230 C340 230 380 250 380 330 Z"></path>
                 <circle cx="300" cy="170" r="45"></circle>
               </g>
 
               <g fill="#16263A" opacity="0.8">
-                <!-- 폰을 보는 사람 본체 실루엣 -->
                 <circle cx="260" cy="200" r="30"></circle>
                 <path d="M200 330 C200 270 230 260 260 260 C290 260 320 270 320 330 Z"></path>
-                
-                <!-- 손 및 스마트폰 모양 -->
                 <rect x="300" y="220" width="30" height="55" rx="6" fill="#16263A" stroke="#FFF6EC" stroke-width="2" transform="rotate(15 300 220)"></rect>
               </g>
             </svg>
@@ -659,26 +593,26 @@
 
   </div>
 
-  <!-- 슬라이더 컨트롤 UI -->
+  <!-- 슬라이더 컨트롤 UI (라이트 모드 고정) -->
   <div class="w-full max-w-[540px] flex items-center justify-between mt-8 z-30">
-    <button id="prev-card-btn" class="w-12 h-12 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-200 transition disabled:opacity-40 disabled:pointer-events-none active:scale-95 shadow">
+    <button id="prev-card-btn" class="w-12 h-12 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-700 transition disabled:opacity-40 disabled:pointer-events-none active:scale-95 shadow">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"></path></svg>
     </button>
     
     <div class="flex flex-col items-center gap-1.5">
       <div id="slider-dots" class="flex gap-2"></div>
-      <span id="slider-page-counter" class="text-xs font-bold text-slate-400 tracking-widest mt-1">1 / 10</span>
+      <span id="slider-page-counter" class="text-xs font-bold text-slate-500 tracking-widest mt-1">1 / 10</span>
     </div>
 
-    <button id="next-card-btn" class="w-12 h-12 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-200 transition disabled:opacity-40 disabled:pointer-events-none active:scale-95 shadow">
+    <button id="next-card-btn" class="w-12 h-12 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-700 transition disabled:opacity-40 disabled:pointer-events-none active:scale-95 shadow">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path></svg>
     </button>
   </div>
 
-  <!-- 개별 저장 패널 (슬라이더 전용) -->
+  <!-- 개별 저장 패널 (라이트 모드 고정) -->
   <div class="mt-8 flex justify-center">
-    <button id="single-save-btn" class="flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 shadow-md transition">
-      <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path></svg>
+    <button id="single-save-btn" class="flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 shadow transition">
+      <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path></svg>
       현재 카드 고화질 PNG로 저장
     </button>
   </div>
@@ -690,7 +624,7 @@
 </main>
 
 <!-- 최하단 공통 푸터 -->
-<footer class="py-8 bg-slate-900 border-t border-slate-800/80 text-center text-xs text-slate-500 font-medium">
+<footer class="py-8 bg-white border-t border-slate-200/80 text-center text-xs text-slate-400 font-semibold shadow-inner">
   <p>© 2026 제21회 금융공모전 출품작 카드뉴스 시각화 빌더. All Rights Reserved.</p>
 </footer>
 
@@ -726,16 +660,13 @@
   function handleResize() {
     if (!isSliderMode) return;
     
-    // 뷰포트 너비 기준으로 스케일 비율 계산
     const viewportWidth = window.innerWidth;
-    const padding = 32; // 양옆 마진
+    const padding = 32; 
     const targetWidth = Math.min(1080, Math.min(540, viewportWidth - padding));
     const scaleFactor = targetWidth / 1080;
     
-    // scale transform 적용
     scaleContainer.style.transform = `scale(${scaleFactor})`;
     
-    // 부모 뷰포트의 높이를 비율에 맞춰 강제 설정하여 영역 크기 조정
     canvasViewport.style.width = `${1080 * scaleFactor}px`;
     canvasViewport.style.height = `${1080 * scaleFactor}px`;
   }
@@ -745,7 +676,6 @@
     if (index < 0 || index >= totalCards) return;
     currentActiveIndex = index;
 
-    // 모든 슬라이드 아이템의 클래스 리셋 및 활성화 처리
     const cardItems = document.querySelectorAll('.slider-card-item');
     cardItems.forEach((card, idx) => {
       if (idx === currentActiveIndex) {
@@ -755,15 +685,12 @@
       }
     });
 
-    // 버튼 상태 제어
     prevCardBtn.disabled = currentActiveIndex === 0;
     nextCardBtn.disabled = currentActiveIndex === totalCards - 1;
 
-    // 페이지 인디케이터 갱신
     sliderPageCounter.innerText = `${currentActiveIndex + 1} / ${totalCards}`;
     progressIndicator.style.width = `${((currentActiveIndex) / (totalCards - 1)) * 100}%`;
 
-    // 도트 갱신
     buildDots();
   }
 
@@ -772,7 +699,7 @@
     sliderDots.innerHTML = '';
     for (let i = 0; i < totalCards; i++) {
       const dot = document.createElement('button');
-      dot.className = `w-2 h-2 rounded-full transition-all duration-300 ${i === currentActiveIndex ? 'bg-blue-500 w-5' : 'bg-slate-700'}`;
+      dot.className = `w-2 h-2 rounded-full transition-all duration-300 ${i === currentActiveIndex ? 'bg-blue-600 w-5' : 'bg-slate-300'}`;
       dot.addEventListener('click', () => showCard(i));
       sliderDots.appendChild(dot);
     }
@@ -814,52 +741,31 @@
   function buildGridView() {
     gridView.innerHTML = '';
     
-    // 원본 카드를 가져와서 복제 생성
     const cardTemplates = document.querySelectorAll('.slider-card-item');
     
     cardTemplates.forEach((template, idx) => {
-      // 카드 래퍼
       const gridItemWrapper = document.createElement('div');
       gridItemWrapper.className = 'flex flex-col items-center space-y-4 w-full';
       
-      // 스케일링용 뷰포트
       const viewPort = document.createElement('div');
       viewPort.className = 'relative overflow-visible';
       viewPort.style.width = '1080px';
       viewPort.style.height = '1080px';
       
-      // 복제본 생성
       const clone = template.cloneNode(true);
       clone.className = 'card-canvas rounded-[48px] p-[80px] flex flex-col justify-between absolute top-0 left-0';
       clone.style.opacity = '1';
       clone.style.pointerEvents = 'auto';
 
-      // 9번째 체크박스 상호작용 적용을 위해 복제본에 이벤트 바인딩
-      if (idx === 8) {
-        const checkboxes = clone.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(chk => {
-          chk.addEventListener('change', (e) => {
-            const labelText = e.target.nextElementSibling;
-            if (e.target.checked) {
-              labelText.classList.add('line-through', 'text-slate-400');
-            } else {
-              labelText.classList.remove('line-through', 'text-slate-400');
-            }
-          });
-        });
-      }
-
-      // 스케일 조절을 위해 래퍼 클래스 지정
       const scaleWrap = document.createElement('div');
       scaleWrap.className = 'scale-wrapper absolute top-0 left-0 w-[1080px] h-[1080px]';
       scaleWrap.appendChild(clone);
       viewPort.appendChild(scaleWrap);
       
-      // 개별 다운로드 버튼
       const saveBtn = document.createElement('button');
-      saveBtn.className = 'flex items-center gap-1.5 px-4 py-2 rounded-full border border-slate-700 bg-slate-800 text-xs font-bold text-slate-300 hover:bg-slate-700 transition shadow';
+      saveBtn.className = 'flex items-center gap-1.5 px-4 py-2 rounded-full border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 transition shadow';
       saveBtn.innerHTML = `
-        <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path></svg>
+        <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path></svg>
         ${idx + 1}번 카드 다운로드
       `;
       saveBtn.addEventListener('click', () => downloadCardImage(idx));
@@ -869,7 +775,6 @@
       gridView.appendChild(gridItemWrapper);
     });
 
-    // 그리드 뷰 전체 반응형 리사이즈 함수 바인딩
     handleGridResize();
   }
 
@@ -884,7 +789,7 @@
     const targetWidth = Math.min(1080, Math.min(540, viewportWidth - padding));
     const scaleFactor = targetWidth / 1080;
 
-    gridWrappers.forEach((wrapper, i) => {
+    gridWrappers.forEach((wrapper) => {
       wrapper.style.transform = `scale(${scaleFactor})`;
     });
 
@@ -907,7 +812,6 @@
         <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
         <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
       `;
-      // 진행바 복원
       showCard(currentActiveIndex);
       handleResize();
     } else {
@@ -918,7 +822,6 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"></path>
       `;
       buildGridView();
-      // 프로그레스 바 리셋 (세로 모드에선 전체를 스크롤로 보기 때문)
       progressIndicator.style.width = '0%';
     }
   });
@@ -928,11 +831,9 @@
     const cardTemplates = document.querySelectorAll('.slider-card-item');
     const targetTemplate = cardTemplates[cardIdx];
 
-    // 오프스크린 샌드박스로 원본 카드 복제
     captureSandbox.innerHTML = '';
     const clone = targetTemplate.cloneNode(true);
     
-    // 샌드박스 내부용 리셋 클래스 적용 (스케일링 걷고 원본 크기 1080x1080 유지)
     clone.className = 'card-canvas rounded-[48px] p-[80px] flex flex-col justify-between bg-[#0E1A2B] text-[#EaF0F6]';
     
     const stage = clone.getAttribute('data-stage');
@@ -947,33 +848,10 @@
     clone.style.left = '0';
     clone.style.top = '0';
 
-    // 체크박스 상태 동기화 (기존 렌더링된 상태 복사)
-    let sourceCheckboxes;
-    if (isSliderMode) {
-      sourceCheckboxes = targetTemplate.querySelectorAll('input[type="checkbox"]');
-    } else {
-      const activeGridCards = document.querySelectorAll('#grid-view .card-canvas');
-      sourceCheckboxes = activeGridCards[cardIdx].querySelectorAll('input[type="checkbox"]');
-    }
-
-    if (sourceCheckboxes.length > 0) {
-      const destCheckboxes = clone.querySelectorAll('input[type="checkbox"]');
-      sourceCheckboxes.forEach((srcChk, srcIdx) => {
-        destCheckboxes[srcIdx].checked = srcChk.checked;
-        const textSpan = destCheckboxes[srcIdx].nextElementSibling;
-        if (srcChk.checked) {
-          textSpan.classList.add('line-through', 'text-slate-400');
-        } else {
-          textSpan.classList.remove('line-through', 'text-slate-400');
-        }
-      });
-    }
-
     captureSandbox.appendChild(clone);
 
-    // html2canvas 실행
     html2canvas(clone, {
-      scale: 1, // 1배수 스케일로 정확한 1080x1080 캡처
+      scale: 1, 
       useCORS: true,
       backgroundColor: null,
       logging: false
@@ -982,7 +860,7 @@
       link.download = `금융공모전_카드뉴스_${String(cardIdx + 1).padStart(2, '0')}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
-      captureSandbox.innerHTML = ''; // 완료 후 정리
+      captureSandbox.innerHTML = ''; 
     });
   }
 
@@ -991,31 +869,18 @@
     downloadCardImage(currentActiveIndex);
   });
 
-  // 전체 카드 일괄 다운로드 로직 (지연 시간을 두어 브라우저가 순차 처리하게 유도)
+  // 전체 카드 일괄 다운로드 로직
   function downloadAllCards() {
     let delay = 0;
     for (let i = 0; i < totalCards; i++) {
       setTimeout(() => {
         downloadCardImage(i);
       }, delay);
-      delay += 800; // 0.8초 딜레이
+      delay += 800; 
     }
   }
 
   downloadAllBtn.addEventListener('click', downloadAllCards);
-
-  // 9번째(8번인덱스) 카드 체크박스 라인쓰루 토글링 등록 (초기 바인딩)
-  const initialCheckboxes = document.querySelectorAll('.slider-card-item input[type="checkbox"]');
-  initialCheckboxes.forEach(chk => {
-    chk.addEventListener('change', (e) => {
-      const labelText = e.target.nextElementSibling;
-      if (e.target.checked) {
-        labelText.classList.add('line-through', 'text-slate-400');
-      } else {
-        labelText.classList.remove('line-through', 'text-slate-400');
-      }
-    });
-  });
 
   // 리사이즈 및 윈도우 스크롤바 바인딩
   window.addEventListener('resize', () => {
