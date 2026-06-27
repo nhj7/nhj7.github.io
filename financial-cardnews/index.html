@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" class="scroll-smooth">
+<html lang="ko" class="scroll-smooth overflow-x-hidden">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -144,8 +144,8 @@
 </header>
 
 <!-- 메인 콘텐츠 영역 (슬라이더 모드) -->
-<main id="slider-view" class="flex-1 flex flex-col items-center justify-center pt-24 pb-16 px-4">
-  <div class="relative w-full max-w-[540px] flex items-center justify-center">
+<main id="slider-view" class="flex-1 flex flex-col items-center justify-center pt-24 pb-16 px-4 w-full overflow-x-hidden">
+  <div class="relative w-full max-w-[540px] flex items-center justify-center overflow-x-hidden">
     
     <!-- 카드 캔버스 뷰포트 (실제 1080px 크기를 스케일링해서 보여줌) -->
     <div id="canvas-viewport" class="relative overflow-visible" style="width: 1080px; height: 1080px;">
@@ -652,7 +652,7 @@
 </main>
 
 <!-- 메인 콘텐츠 영역 (세로 정렬 모드) -->
-<main id="grid-view" class="hidden flex-1 flex flex-col items-center pt-24 pb-20 px-4 space-y-12">
+<main id="grid-view" class="hidden flex-1 flex flex-col items-center pt-24 pb-20 px-4 space-y-12 w-full overflow-x-hidden">
   <!-- 자바스크립트로 세로 리스트를 여기에 복사 생성하여 스케일 조절할 예정 -->
 </main>
 
