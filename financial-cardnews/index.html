@@ -1,354 +1,470 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="light">
+<html lang="ko" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>제21회 금융공모전 카드뉴스 — 유심 해킹 사태와 금융 인증 재구축</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>제21회 금융공모전 카드뉴스 — 유심 해킹과 금융 인증 재구축</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Noto Serif KR"', 'Georgia', 'serif'],
+            sans:  ['"Noto Sans KR"', '"Apple SD Gothic Neo"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50:  '#fff1f0',
+              100: '#ffe0dd',
+              200: '#ffc5c0',
+              300: '#ff9f98',
+              400: '#ff6b60',
+              500: '#f83b2f',
+              600: '#e52216',
+              700: '#c0180d',
+              800: '#9f180f',
+              900: '#831b14',
+              950: '#480908',
+            },
+            navy: {
+              50:  '#f0f4ff',
+              100: '#dde6ff',
+              200: '#c2d1ff',
+              300: '#9cb3ff',
+              400: '#7490ff',
+              500: '#4e6af5',
+              600: '#3a4fea',
+              700: '#2e3cd0',
+              800: '#2834a8',
+              900: '#263085',
+              950: '#161a4d',
+            },
+          },
+        },
+      },
+    };
+  </script>
   <style>
-    :root, [data-theme="light"] {
-      --color-bg: #f7f6f2; --color-surface: #f9f8f5; --color-surface-2: #fbfbf9;
-      --color-surface-offset: #f0ede8; --color-divider: #dcd9d5; --color-border: #d4d1ca;
-      --color-text: #1a1814; --color-text-muted: #6b6a65; --color-text-faint: #b0afa9;
-      --color-text-inverse: #f9f8f4; --color-primary: #c0392b; --color-primary-hover: #922b21;
-      --color-primary-highlight: #fde8e6; --color-accent: #1a3a5c; --color-accent-muted: #2e6da4;
-      --color-gold: #b7860b; --color-gold-bg: #fdf3dc; --color-success: #1e7e34; --color-success-bg: #d4edda;
-      --shadow-sm: 0 1px 4px rgba(0,0,0,0.06); --shadow-md: 0 4px 16px rgba(0,0,0,0.08); --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
-      --radius-sm: 0.375rem; --radius-md: 0.5rem; --radius-lg: 0.875rem; --radius-xl: 1.25rem; --radius-full: 9999px;
-      --font-display: 'Noto Serif KR', 'Georgia', serif; --font-body: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem); --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
-      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
-      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem); --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
-      --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; --space-5: 1.25rem;
-      --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem; --space-12: 3rem; --space-16: 4rem; --space-24: 6rem;
+    *, *::before, *::after { box-sizing: border-box; }
+    body { -webkit-font-smoothing: antialiased; font-family: "Noto Sans KR", sans-serif; }
+    #progress { position:fixed; top:0; left:0; height:3px; width:0%;
+      background: linear-gradient(90deg,#e52216,#f83b2f); z-index:9999;
+      transition: width .1s linear; }
+    .reveal { opacity:0; transform:translateY(28px);
+      transition: opacity .65s cubic-bezier(.16,1,.3,1), transform .65s cubic-bezier(.16,1,.3,1); }
+    .reveal.visible { opacity:1; transform:none; }
+    .tl-line::before {
+      content:''; position:absolute; left:19px; top:40px; bottom:0;
+      width:2px; background:#e2e2e2;
     }
-    [data-theme="dark"] {
-      --color-bg: #111110; --color-surface: #181715; --color-surface-2: #1e1d1b;
-      --color-surface-offset: #242220; --color-divider: #2a2826; --color-border: #353330;
-      --color-text: #e8e6e1; --color-text-muted: #8a8880; --color-text-faint: #5a5855;
-      --color-text-inverse: #1a1814; --color-primary: #e74c3c; --color-primary-hover: #c0392b;
-      --color-primary-highlight: #3d1a18; --color-accent: #1a3a5c; --color-accent-muted: #3a7cbf;
-      --color-gold: #d4a017; --color-gold-bg: #2a2210; --color-success: #2ecc71; --color-success-bg: #0d2b1a;
-      --shadow-sm: 0 1px 4px rgba(0,0,0,0.3); --shadow-md: 0 4px 16px rgba(0,0,0,0.4); --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
+    .dark .tl-line::before { background:#2e2e2e; }
+    .stat-num {
+      background: linear-gradient(135deg, #e52216 0%, #c0180d 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: none; }
-    body { font-family: var(--font-body); font-size: var(--text-base); color: var(--color-text); background: var(--color-bg); line-height: 1.7; transition: background 0.3s, color 0.3s; }
-    img { display: block; max-width: 100%; height: auto; }
-    #progress-bar { position: fixed; top: 0; left: 0; height: 3px; width: 0%; background: var(--color-primary); z-index: 9999; transition: width 0.1s linear; }
-    .site-header { position: sticky; top: 0; z-index: 100; background: rgba(247,246,242,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--color-border); padding: var(--space-3) var(--space-6); display: flex; align-items: center; justify-content: space-between; }
-    [data-theme="dark"] .site-header { background: rgba(17,17,16,0.92); }
-    .site-header .logo { font-family: var(--font-display); font-size: var(--text-sm); font-weight: 700; color: var(--color-primary); letter-spacing: -0.01em; }
-    .header-right { display: flex; align-items: center; gap: var(--space-3); }
-    .badge-contest { font-size: var(--text-xs); font-weight: 500; color: var(--color-text-muted); background: var(--color-surface-offset); padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); border: 1px solid var(--color-border); }
-    #theme-toggle { width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--color-surface-offset); border: 1px solid var(--color-border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--color-text-muted); transition: background 0.2s, color 0.2s; }
-    #theme-toggle:hover { background: var(--color-divider); color: var(--color-text); }
-    main { max-width: 680px; margin: 0 auto; padding: var(--space-12) var(--space-4) var(--space-24); }
-    .card { background: var(--color-surface); border-radius: var(--radius-xl); border: 1px solid var(--color-border); overflow: hidden; margin-bottom: var(--space-8); box-shadow: var(--shadow-md); opacity: 0; transform: translateY(24px); transition: opacity 0.55s ease, transform 0.55s ease, box-shadow 0.2s; }
-    .card.visible { opacity: 1; transform: none; }
-    .card:hover { box-shadow: var(--shadow-lg); }
-    .card-inner { padding: var(--space-10) var(--space-8); }
-    @media (max-width: 480px) { .card-inner { padding: var(--space-8) var(--space-6); } }
-    .card-num { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-primary); margin-bottom: var(--space-3); }
-    .card-hero { background: var(--color-accent); border-color: transparent; position: relative; overflow: hidden; }
-    .card-hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(192,57,43,0.25) 0%, transparent 60%); }
-    .card-hero .card-inner { position: relative; z-index: 1; padding: var(--space-16) var(--space-10); }
-    .hero-eyebrow { font-size: var(--text-xs); font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: var(--space-4); }
-    .hero-title { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: var(--space-6); }
-    .hero-title em { font-style: normal; color: #ff9f9f; }
-    .hero-sub { font-size: var(--text-base); color: rgba(255,255,255,0.72); max-width: 44ch; line-height: 1.7; }
-    .hero-date { margin-top: var(--space-8); font-size: var(--text-xs); color: rgba(255,255,255,0.45); letter-spacing: 0.06em; }
-    .card-heading { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 700; color: var(--color-text); line-height: 1.25; margin-bottom: var(--space-4); }
-    .card-body { font-size: var(--text-base); color: var(--color-text-muted); line-height: 1.8; max-width: 55ch; }
-    .card-body strong { color: var(--color-text); font-weight: 600; }
-    .card-body em { font-style: italic; color: var(--color-primary); }
-    .accent-line { width: 36px; height: 3px; background: var(--color-primary); border-radius: 2px; margin-bottom: var(--space-6); }
-    .blockquote { border-left: 3px solid var(--color-primary); margin: var(--space-6) 0; padding: var(--space-4) var(--space-6); background: var(--color-primary-highlight); border-radius: 0 var(--radius-md) var(--radius-md) 0; }
-    .blockquote p { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 600; color: var(--color-primary); line-height: 1.5; }
-    .blockquote cite { display: block; margin-top: var(--space-2); font-size: var(--text-xs); color: var(--color-text-muted); font-style: normal; }
-    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); margin: var(--space-6) 0; }
-    @media (max-width: 520px) { .stat-grid { grid-template-columns: 1fr; } }
-    .stat-item { background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-6) var(--space-4); text-align: center; }
-    .stat-num { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 700; color: var(--color-primary); line-height: 1; margin-bottom: var(--space-2); }
-    .stat-label { font-size: var(--text-xs); color: var(--color-text-muted); line-height: 1.4; }
-    .timeline { margin: var(--space-6) 0; }
-    .timeline-item { display: grid; grid-template-columns: 80px 1fr; gap: var(--space-4); padding-bottom: var(--space-6); position: relative; }
-    .timeline-item:not(:last-child)::before { content: ''; position: absolute; left: 39px; top: 28px; bottom: 0; width: 2px; background: var(--color-divider); }
-    .timeline-time { font-size: var(--text-xs); font-weight: 700; color: var(--color-text-inverse); background: var(--color-primary); border-radius: var(--radius-md); padding: var(--space-1) var(--space-2); text-align: center; line-height: 1.4; height: fit-content; margin-top: 2px; }
-    .timeline-content h4 { font-size: var(--text-base); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-1); }
-    .timeline-content p { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.6; }
-    .auth-diagram { margin: var(--space-6) 0; }
-    .auth-row { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4); }
-    .auth-label { font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; min-width: 60px; color: var(--color-text-muted); }
-    .auth-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); flex: 1; }
-    .chip { font-size: var(--text-xs); font-weight: 500; padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); border: 1px solid var(--color-border); }
-    .chip-bad { background: var(--color-primary-highlight); color: var(--color-primary); border-color: var(--color-primary); text-decoration: line-through; opacity: 0.7; }
-    .chip-good { background: var(--color-success-bg); color: var(--color-success); border-color: var(--color-success); }
-    .chip-neutral { background: var(--color-surface-offset); color: var(--color-text); }
-    .auth-arrow { font-size: var(--text-lg); color: var(--color-text-faint); }
-    .principle-list { margin: var(--space-6) 0; display: flex; flex-direction: column; gap: var(--space-4); }
-    .principle-item { display: flex; gap: var(--space-4); align-items: flex-start; background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-5); }
-    .principle-icon { width: 40px; height: 40px; flex-shrink: 0; background: var(--color-primary-highlight); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
-    .principle-icon.gold-bg { background: var(--color-gold-bg); }
-    .principle-icon.success-bg { background: var(--color-success-bg); }
-    .principle-text h4 { font-size: var(--text-sm); font-weight: 700; color: var(--color-text); margin-bottom: var(--space-1); }
-    .principle-text p { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.6; }
-    .checklist { margin: var(--space-6) 0; display: flex; flex-direction: column; gap: var(--space-3); }
-    .check-item { display: flex; gap: var(--space-3); align-items: center; background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-4) var(--space-5); font-size: var(--text-sm); color: var(--color-text); font-weight: 500; }
-    .check-box { width: 20px; height: 20px; flex-shrink: 0; border-radius: var(--radius-sm); border: 2px solid var(--color-primary); background: var(--color-primary-highlight); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: var(--color-primary); }
-    .card-closing { background: linear-gradient(135deg, #1a3a5c 0%, #0d2137 100%); border-color: transparent; text-align: center; }
-    .card-closing .card-inner { padding: var(--space-16) var(--space-10); }
-    .closing-symbol { font-size: 2.5rem; margin-bottom: var(--space-6); }
-    .closing-title { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 700; color: #fff; line-height: 1.35; margin-bottom: var(--space-6); }
-    .closing-title em { font-style: normal; color: #ff9f9f; }
-    .closing-sub { font-size: var(--text-sm); color: rgba(255,255,255,0.6); line-height: 1.7; }
-    .closing-badge { display: inline-block; margin-top: var(--space-8); font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.45); border: 1px solid rgba(255,255,255,0.2); border-radius: var(--radius-full); padding: var(--space-2) var(--space-5); }
-    .site-footer { text-align: center; padding: var(--space-12) var(--space-4) var(--space-8); font-size: var(--text-xs); color: var(--color-text-faint); border-top: 1px solid var(--color-divider); }
+    .dark .stat-num {
+      background: linear-gradient(135deg, #ff6b60 0%, #f83b2f 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-pattern {
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(248,59,47,.18) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(46,52,208,.25) 0%, transparent 45%),
+        url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM0 1.4l2.83 2.83 1.41-1.41L1.41 0H0v1.41zM38.59 40l-2.83-2.83 1.41-1.41L40 38.59V40h-1.41zM40 1.41l-2.83 2.83-1.41-1.41L38.59 0H40v1.41z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .check-icon {
+      width:22px; height:22px; flex-shrink:0; border-radius:9999px;
+      background: linear-gradient(135deg,#e52216,#f83b2f);
+      display:flex; align-items:center; justify-content:center; color:#fff; font-size:.65rem;
+    }
+    .site-nav-glass {
+      background: rgba(249,248,245,.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .dark .site-nav-glass {
+      background: rgba(14,14,18,.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
   </style>
 </head>
-<body>
-<div id="progress-bar"></div>
+<body class="bg-stone-50 text-stone-800 dark:bg-[#0e0e12] dark:text-stone-200 transition-colors duration-300">
 
-<header class="site-header">
-  <div class="logo">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-label="금융공모" style="display:inline-block;vertical-align:middle;margin-right:6px;">
-      <rect x="2" y="6" width="20" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/>
-      <path d="M7 10h10M7 14h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-      <path d="M12 2 L6 6 H18 Z" fill="currentColor"/>
+<div id="progress"></div>
+
+<header class="site-nav-glass fixed top-0 inset-x-0 z-50 border-b border-stone-200/80 dark:border-white/5
+               flex items-center justify-between px-5 py-3 transition-colors duration-300">
+  <div class="flex items-center gap-2.5">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2" y="7" width="20" height="13" rx="2.5" stroke="#e52216" stroke-width="1.8"/>
+      <path d="M7 11h10M7 15h6" stroke="#e52216" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M12 2L5.5 7h13L12 2z" fill="#e52216"/>
     </svg>
-    제21회 금융공모전
+    <span class="font-serif font-bold text-sm text-stone-800 dark:text-stone-100 tracking-tight">제21회 금융공모전</span>
   </div>
-  <div class="header-right">
-    <span class="badge-contest">카드뉴스 부문</span>
-    <button id="theme-toggle" aria-label="다크모드 전환">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+  <div class="flex items-center gap-2.5">
+    <span class="hidden sm:inline-block text-xs font-medium text-stone-500 dark:text-stone-400
+                 bg-stone-100 dark:bg-white/5 border border-stone-200 dark:border-white/10
+                 px-3 py-1 rounded-full">카드뉴스 부문</span>
+    <button id="theme-btn"
+      class="w-9 h-9 rounded-full bg-stone-100 dark:bg-white/8 border border-stone-200 dark:border-white/10
+             flex items-center justify-center text-stone-500 dark:text-stone-400
+             hover:bg-stone-200 dark:hover:bg-white/15 transition-colors"
+      aria-label="테마 전환">
+      <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <svg id="icon-sun" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/>
+        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
       </svg>
     </button>
   </div>
 </header>
 
-<main>
+<main class="max-w-[680px] mx-auto px-4 pt-28 pb-32 space-y-7">
 
-  <article class="card card-hero">
-    <div class="card-inner">
-      <p class="hero-eyebrow">제21회 금융공모전 · 금융IT 에세이</p>
-      <h1 class="hero-title">본인을<br><em>증명할 수 없게</em><br>된 날</h1>
-      <p class="hero-sub">유심 해킹 사태, 2,500만 명이 흔들렸던 그 밤에<br>저축은행 비대면 인증을 다시 쌓아 올린 이야기</p>
-      <p class="hero-date">2026 · 금융보안 에세이</p>
+  <!-- 히어로 -->
+  <article class="reveal rounded-3xl overflow-hidden shadow-2xl">
+    <div class="hero-pattern bg-navy-950 relative min-h-[380px] flex flex-col justify-end px-10 py-12">
+      <span class="absolute top-8 left-10 text-[11px] font-semibold tracking-widest uppercase
+                   text-white/50 border border-white/15 rounded-full px-4 py-1.5">
+        금융IT 에세이 · 2026
+      </span>
+      <p class="text-white/50 text-xs tracking-widest uppercase mb-4">제21회 금융공모전 카드뉴스</p>
+      <h1 class="font-serif text-4xl sm:text-5xl font-black text-white leading-[1.15] mb-5">
+        본인을<br>
+        <span class="text-brand-300">증명할 수 없게</span><br>
+        된 날
+      </h1>
+      <p class="text-white/65 text-sm sm:text-base leading-relaxed max-w-xs">
+        유심 해킹 사태, 2,500만 명이 흔들렸던 그 밤에<br>
+        저축은행 비대면 인증을 다시 쌓아 올린 이야기
+      </p>
     </div>
   </article>
 
-  <article class="card">
-    <div class="card-inner">
-      <p class="card-num">01 — 발단</p>
-      <div class="accent-line"></div>
-      <h2 class="card-heading">믿어 왔던 문이<br>흔들렸다</h2>
-      <div class="blockquote">
-        <p>"문자 인증번호만으로 신원을 확인하는 거, 지금도 괜찮은 겁니까?"</p>
-        <cite>— 회의실 한 마디, 2025년 봄</cite>
-      </div>
-      <p class="card-body">2025년 봄, 국내 최대 이동통신사의 유심 정보가 유출됐다.<br>순식간에 <strong>2,500만 명</strong>의 '폰 번호 = 나'라는 등식이 의심받기 시작했다.</p>
+  <!-- 01 발단 -->
+  <article class="reveal bg-white dark:bg-[#16161e] rounded-3xl shadow-sm
+                  border border-stone-100 dark:border-white/5 overflow-hidden">
+    <div class="px-9 py-10">
+      <p class="text-xs font-bold tracking-widest uppercase text-brand-600 dark:text-brand-400 mb-4">01 — 발단</p>
+      <div class="w-8 h-[3px] bg-brand-600 rounded-full mb-6"></div>
+      <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-50 leading-snug mb-6">믿어 왔던 문이<br>흔들렸다</h2>
+      <blockquote class="relative mb-7 pl-6 border-l-[3px] border-brand-500
+                         bg-brand-50 dark:bg-brand-950/30 rounded-r-xl py-4 pr-5">
+        <p class="font-serif text-base sm:text-lg font-semibold text-brand-700 dark:text-brand-300 leading-relaxed">
+          "문자 인증번호만으로 신원을 확인하는 거,<br>지금도 괜찮은 겁니까?"
+        </p>
+        <cite class="block mt-2 text-xs text-stone-400 dark:text-stone-500 not-italic">— 회의실 한 마디, 2025년 봄</cite>
+      </blockquote>
+      <p class="text-sm sm:text-base text-stone-600 dark:text-stone-400 leading-[1.9]">
+        2025년 봄, 국내 최대 이동통신사의 유심 정보가 유출됐다.
+        순식간에 <strong class="text-stone-800 dark:text-stone-200 font-semibold">2,500만 명</strong>의
+        '폰 번호 = 나'라는 등식이 의심받기 시작했다.
+      </p>
     </div>
   </article>
 
-  <article class="card">
-    <div class="card-inner">
-      <p class="card-num">숫자로 보는 위기</p>
-      <div class="accent-line"></div>
-      <div class="stat-grid">
-        <div class="stat-item">
-          <div class="stat-num">2,500<span style="font-size:var(--text-lg)">만</span></div>
-          <div class="stat-label">유출 유심<br>추정 규모</div>
+  <!-- 통계 -->
+  <article class="reveal bg-white dark:bg-[#16161e] rounded-3xl shadow-sm
+                  border border-stone-100 dark:border-white/5 overflow-hidden">
+    <div class="px-9 py-10">
+      <p class="text-xs font-bold tracking-widest uppercase text-brand-600 dark:text-brand-400 mb-4">숫자로 보는 위기</p>
+      <div class="w-8 h-[3px] bg-brand-600 rounded-full mb-8"></div>
+      <div class="grid grid-cols-3 gap-4 mb-7">
+        <div class="flex flex-col items-center text-center bg-stone-50 dark:bg-white/4
+                    border border-stone-100 dark:border-white/8 rounded-2xl py-6 px-3">
+          <span class="stat-num font-serif text-3xl font-black leading-none mb-2">2,500<span class="text-xl">만</span></span>
+          <span class="text-[11px] text-stone-500 dark:text-stone-400 leading-tight">유출 유심<br>추정 규모</span>
         </div>
-        <div class="stat-item">
-          <div class="stat-num">1개</div>
-          <div class="stat-label">당시 인증<br>수단 (SMS)</div>
+        <div class="flex flex-col items-center text-center bg-stone-50 dark:bg-white/4
+                    border border-stone-100 dark:border-white/8 rounded-2xl py-6 px-3">
+          <span class="stat-num font-serif text-3xl font-black leading-none mb-2">1<span class="text-xl">개</span></span>
+          <span class="text-[11px] text-stone-500 dark:text-stone-400 leading-tight">당시 인증<br>수단(SMS)</span>
         </div>
-        <div class="stat-item">
-          <div class="stat-num">48<span style="font-size:var(--text-lg)">h</span></div>
-          <div class="stat-label">비상 대응<br>소요 시간</div>
-        </div>
-      </div>
-      <p class="card-body" style="margin-top:var(--space-4)">하나의 인증 수단에 의존하는 구조는 <strong>그 수단이 무너지는 순간</strong> 모든 문이 열린다.</p>
-    </div>
-  </article>
-
-  <article class="card">
-    <div class="card-inner">
-      <p class="card-num">02 — 위협 구조</p>
-      <div class="accent-line"></div>
-      <h2 class="card-heading">복제폰이<br>'나'가 되는 순간</h2>
-      <div class="auth-diagram">
-        <div class="auth-row">
-          <span class="auth-label">기존</span>
-          <div class="auth-chips"><span class="chip chip-bad">SMS 인증번호</span></div>
-        </div>
-        <div class="auth-row" style="padding-left:20px;">
-          <span class="auth-label"></span>
-          <span class="auth-arrow">↓ 유심 복제 시</span>
-        </div>
-        <div class="auth-row">
-          <span class="auth-label">위협</span>
-          <div class="auth-chips">
-            <span class="chip chip-neutral">공격자가 인증번호 수신</span>
-            <span class="chip chip-neutral">계좌 접근 가능</span>
-          </div>
-        </div>
-      </div>
-      <p class="card-body">번호 하나가 정체성 전부가 된 구조에서,<br><em>복제된 유심은 곧 복제된 나</em>였다.</p>
-    </div>
-  </article>
-
-  <article class="card">
-    <div class="card-inner">
-      <p class="card-num">03 — 48시간 대응</p>
-      <div class="accent-line"></div>
-      <h2 class="card-heading">이틀을<br>거의 잠들지 않았다</h2>
-      <div class="timeline">
-        <div class="timeline-item">
-          <div class="timeline-time">D+0<br>오후</div>
-          <div class="timeline-content">
-            <h4>사태 인지 · 긴급 회의</h4>
-            <p>현행 SMS 단일 인증 구조 위험성 확인, 비상대응팀 구성</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-time">D+0<br>밤</div>
-          <div class="timeline-content">
-            <h4>임시 보호 조치 가동</h4>
-            <p>고위험 거래 일시 제한, 고객 이상거래 모니터링 강화</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-time">D+1<br>오전</div>
-          <div class="timeline-content">
-            <h4>신인증 아키텍처 설계</h4>
-            <p>신분증 OCR + 안면인식 + SMS 3중 다중 인증 체계 설계</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-time">D+2</div>
-          <div class="timeline-content">
-            <h4>파일럿 배포 완료</h4>
-            <p>비대면 인증 재구축 1차 배포, 고객 안내 발송</p>
-          </div>
+        <div class="flex flex-col items-center text-center bg-stone-50 dark:bg-white/4
+                    border border-stone-100 dark:border-white/8 rounded-2xl py-6 px-3">
+          <span class="stat-num font-serif text-3xl font-black leading-none mb-2">48<span class="text-xl">h</span></span>
+          <span class="text-[11px] text-stone-500 dark:text-stone-400 leading-tight">비상 대응<br>소요 시간</span>
         </div>
       </div>
+      <p class="text-sm text-stone-600 dark:text-stone-400 leading-[1.9]">
+        하나의 인증 수단에 의존하는 구조는
+        <strong class="text-stone-800 dark:text-stone-200 font-semibold">그 수단이 무너지는 순간</strong>
+        모든 문이 열린다.
+      </p>
     </div>
   </article>
 
-  <article class="card">
-    <div class="card-inner">
-      <p class="card-num">04 — 해법</p>
-      <div class="accent-line"></div>
-      <h2 class="card-heading">하나가 무너져도<br>나머지가 버틴다</h2>
-      <div class="auth-diagram" style="margin-top:var(--space-4)">
-        <div class="auth-row">
-          <span class="auth-label">구 구조</span>
-          <div class="auth-chips"><span class="chip chip-bad">SMS 인증번호</span></div>
+  <!-- 02 위협 -->
+  <article class="reveal bg-white dark:bg-[#16161e] rounded-3xl shadow-sm
+                  border border-stone-100 dark:border-white/5 overflow-hidden">
+    <div class="px-9 py-10">
+      <p class="text-xs font-bold tracking-widest uppercase text-brand-600 dark:text-brand-400 mb-4">02 — 위협 구조</p>
+      <div class="w-8 h-[3px] bg-brand-600 rounded-full mb-6"></div>
+      <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-50 leading-snug mb-8">
+        복제폰이<br>'나'가 되는 순간
+      </h2>
+      <div class="space-y-4">
+        <div class="flex items-center gap-3">
+          <span class="text-[11px] font-bold tracking-wide uppercase text-stone-400 w-14 shrink-0">기존</span>
+          <span class="text-xs font-semibold px-3 py-1.5 rounded-full
+                       bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300
+                       border border-brand-200 dark:border-brand-800 line-through decoration-brand-500">
+            SMS 인증번호
+          </span>
         </div>
-        <div class="auth-row" style="padding-left:20px;"><span class="auth-label"></span><span class="auth-arrow">→ 재구축</span></div>
-        <div class="auth-row">
-          <span class="auth-label">신 구조</span>
-          <div class="auth-chips">
-            <span class="chip chip-good">신분증 OCR</span>
-            <span class="chip chip-good">안면 인식</span>
-            <span class="chip chip-good">SMS (보조)</span>
+        <div class="flex items-center gap-2 pl-16 text-stone-400 dark:text-stone-600">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          <span class="text-xs">유심 복제 시</span>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="text-[11px] font-bold tracking-wide uppercase text-stone-400 w-14 shrink-0 mt-1.5">위협</span>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs font-medium px-3 py-1.5 rounded-full
+                         bg-stone-100 dark:bg-white/5 text-stone-700 dark:text-stone-300
+                         border border-stone-200 dark:border-white/10">공격자가 인증번호 수신</span>
+            <span class="text-xs font-medium px-3 py-1.5 rounded-full
+                         bg-stone-100 dark:bg-white/5 text-stone-700 dark:text-stone-300
+                         border border-stone-200 dark:border-white/10">계좌 무단 접근</span>
           </div>
         </div>
       </div>
-      <p class="card-body" style="margin-top:var(--space-6)">다중 인증의 핵심은 <strong>각 수단이 서로 다른 취약점</strong>을 가져야 한다는 것.<br>하나가 뚫려도 나머지 방어선이 공격자를 막는다.</p>
+      <p class="mt-8 text-sm text-stone-600 dark:text-stone-400 leading-[1.9]">
+        번호 하나가 정체성 전부가 된 구조에서,
+        <em class="not-italic text-brand-600 dark:text-brand-400 font-semibold">복제된 유심은 곧 복제된 나</em>였다.
+      </p>
     </div>
   </article>
 
-  <article class="card">
-    <div class="card-inner">
-      <p class="card-num">05 — 금융 IT의 원칙</p>
-      <div class="accent-line"></div>
-      <h2 class="card-heading">"하나면 충분한가"에서<br>"하나가 무너지면 무엇이 남는가"</h2>
-      <div class="principle-list">
-        <div class="principle-item">
-          <div class="principle-icon">🔐</div>
-          <div class="principle-text">
-            <h4>다중 인증 (MFA) 설계</h4>
-            <p>알고 있는 것 · 가진 것 · 타고난 것 — 세 범주를 교차하여 단일 실패점 제거</p>
+  <!-- 03 타임라인 -->
+  <article class="reveal bg-white dark:bg-[#16161e] rounded-3xl shadow-sm
+                  border border-stone-100 dark:border-white/5 overflow-hidden">
+    <div class="px-9 py-10">
+      <p class="text-xs font-bold tracking-widest uppercase text-brand-600 dark:text-brand-400 mb-4">03 — 48시간 대응</p>
+      <div class="w-8 h-[3px] bg-brand-600 rounded-full mb-6"></div>
+      <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-50 leading-snug mb-8">
+        이틀을<br>거의 잠들지 않았다
+      </h2>
+      <div class="space-y-0">
+        <div class="relative tl-line flex gap-5 pb-7">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-600 text-white
+                      flex flex-col items-center justify-center text-[10px] font-bold leading-tight z-10">D+0<br>낮</div>
+          <div class="pt-1.5">
+            <h4 class="text-sm font-bold text-stone-800 dark:text-stone-200 mb-1">사태 인지 · 긴급 회의</h4>
+            <p class="text-xs text-stone-500 dark:text-stone-500 leading-relaxed">현행 SMS 단일 인증 구조 위험성 확인, 비상대응팀 구성</p>
           </div>
         </div>
-        <div class="principle-item">
-          <div class="principle-icon gold-bg">⚡</div>
-          <div class="principle-text">
-            <h4>위기 대응 속도</h4>
-            <p>인지에서 임시 조치까지 24시간 이내. 보안 사고에는 "내일"이 없다</p>
+        <div class="relative tl-line flex gap-5 pb-7">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-700 text-white
+                      flex flex-col items-center justify-center text-[10px] font-bold leading-tight z-10">D+0<br>밤</div>
+          <div class="pt-1.5">
+            <h4 class="text-sm font-bold text-stone-800 dark:text-stone-200 mb-1">임시 보호 조치 가동</h4>
+            <p class="text-xs text-stone-500 dark:text-stone-500 leading-relaxed">고위험 거래 일시 제한, 고객 이상거래 모니터링 강화</p>
           </div>
         </div>
-        <div class="principle-item">
-          <div class="principle-icon success-bg">🤝</div>
-          <div class="principle-text">
-            <h4>고객과의 신뢰 재건</h4>
-            <p>기술적 조치와 동시에 투명한 고객 공지. 침묵은 불신을 키운다</p>
+        <div class="relative tl-line flex gap-5 pb-7">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-800 text-white
+                      flex flex-col items-center justify-center text-[10px] font-bold leading-tight z-10">D+1<br>오전</div>
+          <div class="pt-1.5">
+            <h4 class="text-sm font-bold text-stone-800 dark:text-stone-200 mb-1">신인증 아키텍처 설계</h4>
+            <p class="text-xs text-stone-500 dark:text-stone-500 leading-relaxed">신분증 OCR + 안면인식 + SMS 3중 다중 인증 체계 설계</p>
+          </div>
+        </div>
+        <div class="relative flex gap-5">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-navy-700 text-white
+                      flex flex-col items-center justify-center text-[10px] font-bold leading-tight z-10">D+2</div>
+          <div class="pt-1.5">
+            <h4 class="text-sm font-bold text-stone-800 dark:text-stone-200 mb-1">파일럿 배포 완료</h4>
+            <p class="text-xs text-stone-500 dark:text-stone-500 leading-relaxed">비대면 인증 재구축 1차 배포, 고객 안내 발송</p>
           </div>
         </div>
       </div>
     </div>
   </article>
 
-  <article class="card">
-    <div class="card-inner">
-      <p class="card-num">06 — 개인 실천</p>
-      <div class="accent-line"></div>
-      <h2 class="card-heading">가장 안전한 금융은<br>함께 지킬 때</h2>
-      <div class="checklist">
-        <div class="check-item"><div class="check-box">✓</div>유심 보호 서비스 가입 (통신사 공식 앱)</div>
-        <div class="check-item"><div class="check-box">✓</div>금융앱 OTP / 생체 인증 활성화</div>
-        <div class="check-item"><div class="check-box">✓</div>해외 로밍 중 SMS 인증 사용 자제</div>
-        <div class="check-item"><div class="check-box">✓</div>이상 거래 알림 설정 (계좌 1만원 이상)</div>
-        <div class="check-item"><div class="check-box">✓</div>비밀번호 SMS 수신 연동 서비스 재점검</div>
+  <!-- 04 해법 -->
+  <article class="reveal bg-white dark:bg-[#16161e] rounded-3xl shadow-sm
+                  border border-stone-100 dark:border-white/5 overflow-hidden">
+    <div class="px-9 py-10">
+      <p class="text-xs font-bold tracking-widest uppercase text-brand-600 dark:text-brand-400 mb-4">04 — 해법</p>
+      <div class="w-8 h-[3px] bg-brand-600 rounded-full mb-6"></div>
+      <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-50 leading-snug mb-8">
+        하나가 무너져도<br>나머지가 버틴다
+      </h2>
+      <div class="space-y-4 mb-8">
+        <div class="flex items-center gap-3">
+          <span class="text-[11px] font-bold tracking-wide uppercase text-stone-400 w-14 shrink-0">구 구조</span>
+          <span class="text-xs font-semibold px-3 py-1.5 rounded-full
+                       bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300
+                       border border-brand-200 dark:border-brand-800 line-through decoration-brand-500">SMS 인증번호</span>
+        </div>
+        <div class="flex items-center gap-2 pl-16 text-stone-400 dark:text-stone-600">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <span class="text-xs font-medium">재구축</span>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="text-[11px] font-bold tracking-wide uppercase text-stone-400 w-14 shrink-0 mt-1.5">신 구조</span>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs font-semibold px-3 py-1.5 rounded-full
+                         bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300
+                         border border-emerald-200 dark:border-emerald-800">신분증 OCR</span>
+            <span class="text-xs font-semibold px-3 py-1.5 rounded-full
+                         bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300
+                         border border-emerald-200 dark:border-emerald-800">안면 인식</span>
+            <span class="text-xs font-semibold px-3 py-1.5 rounded-full
+                         bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300
+                         border border-sky-200 dark:border-sky-800">SMS (보조)</span>
+          </div>
+        </div>
+      </div>
+      <p class="text-sm text-stone-600 dark:text-stone-400 leading-[1.9]">
+        다중 인증의 핵심은
+        <strong class="text-stone-800 dark:text-stone-200 font-semibold">각 수단이 서로 다른 취약점</strong>을
+        가져야 한다는 것. 하나가 뚫려도 나머지 방어선이 공격자를 막는다.
+      </p>
+    </div>
+  </article>
+
+  <!-- 05 원칙 -->
+  <article class="reveal bg-white dark:bg-[#16161e] rounded-3xl shadow-sm
+                  border border-stone-100 dark:border-white/5 overflow-hidden">
+    <div class="px-9 py-10">
+      <p class="text-xs font-bold tracking-widest uppercase text-brand-600 dark:text-brand-400 mb-4">05 — 금융 IT의 원칙</p>
+      <div class="w-8 h-[3px] bg-brand-600 rounded-full mb-6"></div>
+      <h2 class="font-serif text-xl sm:text-2xl font-bold text-stone-900 dark:text-stone-50 leading-snug mb-8">
+        "하나면 충분한가"에서<br>"하나가 무너지면 무엇이 남는가"
+      </h2>
+      <div class="space-y-4">
+        <div class="flex gap-4 items-start bg-stone-50 dark:bg-white/3
+                    border border-stone-100 dark:border-white/6 rounded-2xl p-5">
+          <div class="w-10 h-10 shrink-0 rounded-xl bg-brand-50 dark:bg-brand-950/50
+                      flex items-center justify-center text-lg">🔐</div>
+          <div>
+            <h4 class="text-sm font-bold text-stone-800 dark:text-stone-200 mb-1">다중 인증 (MFA) 설계</h4>
+            <p class="text-xs text-stone-500 dark:text-stone-500 leading-relaxed">알고 있는 것 · 가진 것 · 타고난 것 — 세 범주를 교차하여 단일 실패점 제거</p>
+          </div>
+        </div>
+        <div class="flex gap-4 items-start bg-stone-50 dark:bg-white/3
+                    border border-stone-100 dark:border-white/6 rounded-2xl p-5">
+          <div class="w-10 h-10 shrink-0 rounded-xl bg-amber-50 dark:bg-amber-950/40
+                      flex items-center justify-center text-lg">⚡</div>
+          <div>
+            <h4 class="text-sm font-bold text-stone-800 dark:text-stone-200 mb-1">위기 대응 속도</h4>
+            <p class="text-xs text-stone-500 dark:text-stone-500 leading-relaxed">인지에서 임시 조치까지 24시간 이내. 보안 사고에는 "내일"이 없다</p>
+          </div>
+        </div>
+        <div class="flex gap-4 items-start bg-stone-50 dark:bg-white/3
+                    border border-stone-100 dark:border-white/6 rounded-2xl p-5">
+          <div class="w-10 h-10 shrink-0 rounded-xl bg-emerald-50 dark:bg-emerald-950/40
+                      flex items-center justify-center text-lg">🤝</div>
+          <div>
+            <h4 class="text-sm font-bold text-stone-800 dark:text-stone-200 mb-1">고객과의 신뢰 재건</h4>
+            <p class="text-xs text-stone-500 dark:text-stone-500 leading-relaxed">기술적 조치와 동시에 투명한 고객 공지. 침묵은 불신을 키운다</p>
+          </div>
+        </div>
       </div>
     </div>
   </article>
 
-  <article class="card card-closing">
-    <div class="card-inner">
-      <div class="closing-symbol">🏦</div>
-      <h2 class="closing-title">돈을 직접 만지지 않아도,<br><em>돈을 지키는 일</em>은 있다</h2>
-      <p class="closing-sub">보이지 않는 곳에서 코드를 고치고,<br>새벽에 서버를 붙잡고 앉아 있는 사람들.<br>금융 IT 개발자는 고객의 일상이 무사한 아침을<br>만드는 사람이다.</p>
-      <span class="closing-badge">제21회 금융공모전 · 2026</span>
+  <!-- 06 체크리스트 -->
+  <article class="reveal bg-white dark:bg-[#16161e] rounded-3xl shadow-sm
+                  border border-stone-100 dark:border-white/5 overflow-hidden">
+    <div class="px-9 py-10">
+      <p class="text-xs font-bold tracking-widest uppercase text-brand-600 dark:text-brand-400 mb-4">06 — 개인 실천</p>
+      <div class="w-8 h-[3px] bg-brand-600 rounded-full mb-6"></div>
+      <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-50 leading-snug mb-8">
+        가장 안전한 금융은<br>함께 지킬 때
+      </h2>
+      <div class="space-y-3">
+        <div class="flex items-center gap-3.5 bg-stone-50 dark:bg-white/3 border border-stone-100 dark:border-white/6 rounded-xl px-5 py-4">
+          <div class="check-icon">✓</div>
+          <span class="text-sm text-stone-700 dark:text-stone-300 font-medium">유심 보호 서비스 가입 (통신사 공식 앱)</span>
+        </div>
+        <div class="flex items-center gap-3.5 bg-stone-50 dark:bg-white/3 border border-stone-100 dark:border-white/6 rounded-xl px-5 py-4">
+          <div class="check-icon">✓</div>
+          <span class="text-sm text-stone-700 dark:text-stone-300 font-medium">금융앱 OTP / 생체 인증 활성화</span>
+        </div>
+        <div class="flex items-center gap-3.5 bg-stone-50 dark:bg-white/3 border border-stone-100 dark:border-white/6 rounded-xl px-5 py-4">
+          <div class="check-icon">✓</div>
+          <span class="text-sm text-stone-700 dark:text-stone-300 font-medium">해외 로밍 중 SMS 인증 사용 자제</span>
+        </div>
+        <div class="flex items-center gap-3.5 bg-stone-50 dark:bg-white/3 border border-stone-100 dark:border-white/6 rounded-xl px-5 py-4">
+          <div class="check-icon">✓</div>
+          <span class="text-sm text-stone-700 dark:text-stone-300 font-medium">이상 거래 알림 설정 (1만원 이상 즉시)</span>
+        </div>
+        <div class="flex items-center gap-3.5 bg-stone-50 dark:bg-white/3 border border-stone-100 dark:border-white/6 rounded-xl px-5 py-4">
+          <div class="check-icon">✓</div>
+          <span class="text-sm text-stone-700 dark:text-stone-300 font-medium">SMS 수신 연동 서비스 재점검</span>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 클로징 -->
+  <article class="reveal rounded-3xl overflow-hidden shadow-2xl">
+    <div class="bg-navy-950 px-10 py-14 text-center relative">
+      <div class="absolute inset-0 bg-gradient-to-br from-brand-900/30 via-transparent to-navy-900/50"></div>
+      <div class="relative z-10">
+        <div class="text-4xl mb-6">🏦</div>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white leading-[1.4] mb-6">
+          돈을 직접 만지지 않아도,<br>
+          <span class="text-brand-300">돈을 지키는 일</span>은 있다
+        </h2>
+        <p class="text-white/60 text-sm leading-[1.9] mb-8">
+          보이지 않는 곳에서 코드를 고치고,<br>
+          새벽에 서버를 붙잡고 앉아 있는 사람들.<br>
+          금융 IT 개발자는 고객의 일상이 무사한 아침을<br>
+          만드는 사람이다.
+        </p>
+        <span class="inline-block text-[11px] font-semibold tracking-widest uppercase
+                     text-white/35 border border-white/15 rounded-full px-5 py-2">
+          제21회 금융공모전 · 2026
+        </span>
+      </div>
     </div>
   </article>
 
 </main>
 
-<footer class="site-footer">
+<footer class="text-center pb-10 px-4 text-xs text-stone-400 dark:text-stone-600
+               border-t border-stone-100 dark:border-white/5 pt-8">
   <p>제21회 금융공모전 카드뉴스 부문 · 금융보안 에세이 시각화</p>
-  <p style="margin-top:4px;">유심 해킹 사태와 저축은행 비대면 인증 재구축 경험</p>
+  <p class="mt-1">유심 해킹 사태와 저축은행 비대면 인증 재구축 경험</p>
 </footer>
 
 <script>
+  const prog = document.getElementById('progress');
   window.addEventListener('scroll', () => {
-    const el = document.getElementById('progress-bar');
     const h = document.documentElement;
-    el.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+    prog.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
   });
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.card').forEach(c => obs.observe(c));
-  (function() {
-    const btn = document.getElementById('theme-toggle');
-    const html = document.documentElement;
-    let theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    html.setAttribute('data-theme', theme);
-    function setIcon(t) {
-      btn.innerHTML = t === 'dark'
-        ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
-        : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-    }
-    setIcon(theme);
-    btn.addEventListener('click', () => { theme = theme === 'dark' ? 'light' : 'dark'; html.setAttribute('data-theme', theme); setIcon(theme); });
-  })();
+  const obs = new IntersectionObserver(entries =>
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } }),
+    { threshold: 0.1 }
+  );
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  const btn  = document.getElementById('theme-btn');
+  const html = document.documentElement;
+  const moon = document.getElementById('icon-moon');
+  const sun  = document.getElementById('icon-sun');
+  let dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  function applyTheme() {
+    html.classList.toggle('dark', dark);
+    moon.classList.toggle('hidden', dark);
+    sun.classList.toggle('hidden', !dark);
+  }
+  applyTheme();
+  btn.addEventListener('click', () => { dark = !dark; applyTheme(); });
 </script>
 </body>
 </html>
