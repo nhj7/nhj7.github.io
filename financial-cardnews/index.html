@@ -54,7 +54,13 @@
       transition: transform 0.3s ease;
     }
 
-    /* 슬라이더 모드 카드 페이드 전환 효과 */
+    /* 3D 원근감을 위한 뷰포트 설정 */
+    #canvas-viewport {
+      perspective: 2000px;
+      transform-style: preserve-3d;
+    }
+
+    /* 슬라이더 모드 3D 책장 넘김 효과 */
     .slider-card-item {
       position: absolute;
       top: 0;
@@ -62,9 +68,25 @@
       opacity: 0;
       z-index: 10;
       pointer-events: none;
-      transition: opacity 0.5s ease, transform 0.5s ease;
+      backface-visibility: hidden;
+      transform-style: preserve-3d;
+      transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), 
+                  opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .slider-card-item.inactive-left {
+      transform: rotateY(-90deg);
+      transform-origin: left center;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .slider-card-item.inactive-right {
+      transform: rotateY(90deg);
+      transform-origin: right center;
+      opacity: 0;
+      pointer-events: none;
     }
     .slider-card-item.active {
+      transform: rotateY(0deg);
       opacity: 1;
       z-index: 20;
       pointer-events: auto;
@@ -664,6 +686,7 @@
 
   // 상태 관리
   let currentActiveIndex = 0;
+  let lastActiveIndex = 0;
   const totalCards = 10;
   let isSliderMode = true;
 
@@ -682,18 +705,43 @@
     canvasViewport.style.height = `${1080 * scaleFactor}px`;
   }
 
-  // 슬라이드 이동 함수 (무한 루프 적용)
+  // 슬라이드 이동 함수 (무한 루프 & 3D 책장 넘김 전환 적용)
   function showCard(index) {
-    currentActiveIndex = (index + totalCards) % totalCards;
+    const nextActiveIndex = (index + totalCards) % totalCards;
+    
+    // 첫 로드 시 currentActiveIndex와 nextActiveIndex가 같을 때 클래스를 리셋하지 않기 위해 예외 처리
+    const hasActive = document.querySelector('.slider-card-item.active');
+    if (nextActiveIndex === currentActiveIndex && hasActive) {
+      return;
+    }
+
+    // 전환 방향 판단 (Forward: 책 넘김 / Backward: 책 뒤로 넘김)
+    let isForward = true;
+    if (
+      (nextActiveIndex > currentActiveIndex && !(currentActiveIndex === 0 && nextActiveIndex === totalCards - 1)) ||
+      (currentActiveIndex === totalCards - 1 && nextActiveIndex === 0)
+    ) {
+      isForward = true;
+    } else {
+      isForward = false;
+    }
 
     const cardItems = document.querySelectorAll('.slider-card-item');
     cardItems.forEach((card, idx) => {
-      if (idx === currentActiveIndex) {
+      card.classList.remove('active', 'inactive-left', 'inactive-right');
+      
+      if (idx === nextActiveIndex) {
         card.classList.add('active');
+      } else if (idx === currentActiveIndex) {
+        // 방금 정면에 있던 카드는 방향에 따라 좌/우로 회전 퇴장
+        card.classList.add(isForward ? 'inactive-left' : 'inactive-right');
       } else {
-        card.classList.remove('active');
+        // 대기 중인 카드들도 진행 방향에 맞춰 뒤에서 준비
+        card.classList.add(isForward ? 'inactive-right' : 'inactive-left');
       }
     });
+
+    currentActiveIndex = nextActiveIndex;
 
     prevCardBtn.disabled = false;
     nextCardBtn.disabled = false;
