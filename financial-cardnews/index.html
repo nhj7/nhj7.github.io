@@ -107,38 +107,38 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between select-none">
+<body class="min-h-screen flex flex-col justify-between select-none w-full max-w-full overflow-x-hidden">
 
 <!-- 프로그레스 인디케이터 (상단 얇은 바) -->
 <div id="progress-indicator" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-emerald-500 to-blue-600 z-50 transition-all duration-300" style="width: 0%;"></div>
 
-<!-- 상단 네비게이션 헤더 (라이트 모드 고정) -->
-<header class="fixed top-0 inset-x-0 h-16 bg-white/90 backdrop-blur border-b border-slate-200/80 z-40 flex items-center justify-between px-6">
-  <div class="flex items-center gap-2.5">
-    <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white text-xs shadow-md shadow-blue-500/20">금융</div>
+<!-- 상단 네비게이션 헤더 (라이트 모드 고정, 모바일 반응형 최적화) -->
+<header class="fixed top-0 inset-x-0 h-16 bg-white/90 backdrop-blur border-b border-slate-200/80 z-40 flex items-center justify-between px-4 md:px-6">
+  <div class="flex items-center gap-2">
+    <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white text-xs shadow-md shadow-blue-500/20 shrink-0">금융</div>
     <div class="flex flex-col">
-      <span class="text-xs font-extrabold text-slate-900 tracking-tight">제21회 금융공모전 카드뉴스</span>
-      <span class="text-[9px] text-slate-500 font-bold tracking-widest uppercase">Security Campaign Infographics</span>
+      <span class="text-xs font-extrabold text-slate-900 tracking-tight">금융공모전 카드뉴스</span>
+      <span class="text-[9px] text-slate-500 font-bold tracking-widest uppercase hidden sm:block">Security Campaign Infographics</span>
     </div>
   </div>
 
   <!-- 콘트롤 영역 -->
-  <div class="flex items-center gap-3">
+  <div class="flex items-center gap-2 md:gap-3">
     <!-- 모드 토글 (슬라이더 / 세로 정렬) -->
-    <button id="view-mode-toggle" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 hover:bg-slate-100 hover:border-slate-300 transition">
+    <button id="view-mode-toggle" class="flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 hover:bg-slate-100 hover:border-slate-300 transition">
       <svg id="view-mode-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
         <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
         <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
         <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
         <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
       </svg>
-      <span id="view-mode-label">세로 정렬로 보기</span>
+      <span id="view-mode-label" class="hidden sm:inline">세로 정렬로 보기</span>
     </button>
 
     <!-- 전체 다운로드 버튼 -->
-    <button id="download-all-btn" class="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-xs font-black text-white shadow-md shadow-emerald-500/10 transition">
+    <button id="download-all-btn" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-xs font-black text-white shadow-md shadow-emerald-500/10 transition">
       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path></svg>
-      전체 저장
+      <span class="hidden sm:inline">전체 저장</span>
     </button>
   </div>
 </header>
