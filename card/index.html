@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="금융 정보를 쉽고 빠르게 이해하는 카드뉴스 - NSpace" />
+  <meta property="og:title" content="NSpace 금융 카드뉴스" />
+  <meta property="og:description" content="금융 정보를 카드 한 장으로 이해하세요" />
+  <meta property="og:url" content="https://nhj7.github.io/card" />
+  <title>NSpace | 금융 카드뉴스</title>
+  <link rel="icon" href="../favicon.ico" />
+  <style>
+    /* ── Reset & Base ──────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:   #1a56db;
+      --primary-d: #1344b0;
+      --accent:    #f59e0b;
+      --bg:        #f1f5f9;
+      --surface:   #ffffff;
+      --text:      #1e293b;
+      --text-s:    #64748b;
+      --border:    #e2e8f0;
+      --radius:    18px;
+      --shadow:    0 8px 32px rgba(0,0,0,.10);
+    }
+
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ────────────────────────────────────── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    .logo {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--accent); }
+    nav a {
+      color: var(--text-s);
+      text-decoration: none;
+      font-size: .9rem;
+      margin-left: 20px;
+      transition: color .2s;
+    }
+    nav a:hover { color: var(--primary); }
+
+    /* ── Hero ──────────────────────────────────────── */
+    .hero {
+      text-align: center;
+      padding: 56px 24px 40px;
+    }
+    .hero h1 {
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.25;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--primary);
+    }
+    .hero p {
+      margin-top: 12px;
+      color: var(--text-s);
+      font-size: 1rem;
+    }
+
+    /* ── Category Tabs ─────────────────────────────── */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+      padding: 0 16px;
+    }
+    .tab-btn {
+      padding: 8px 20px;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text-s);
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .tab-btn:hover, .tab-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    /* ── Card Grid ─────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+
+    /* ── Card ──────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform .25s, box-shadow .25s;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(0,0,0,.14);
+    }
+    .card-thumb {
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: 900;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-thumb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.15) 0%, transparent 60%);
+    }
+    .card-body { padding: 20px 20px 18px; flex: 1; }
+    .card-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: .72rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.45;
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: .85rem;
+      color: var(--text-s);
+      line-height: 1.6;
+    }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      font-size: .78rem;
+      color: var(--text-s);
+    }
+    .slide-count {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .slide-count svg { width:14px; height:14px; }
+
+    /* ── Modal Overlay ─────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.65);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ── Slide Viewer ──────────────────────────────── */
+    .viewer {
+      background: var(--surface);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 540px;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,.3);
+      display: flex;
+      flex-direction: column;
+      max-height: 90vh;
+    }
+    .viewer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .viewer-title { font-size: .95rem; font-weight: 700; }
+    .close-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-s); font-size: 1.4rem; line-height: 1;
+      padding: 4px 8px;
+      transition: color .2s;
+    }
+    .close-btn:hover { color: var(--text); }
+
+    /* ── Slide Area ─────────────────────────────────── */
+    .slides-wrapper {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+    }
+    .slide {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 36px 32px 28px;
+      min-height: 400px;
+      animation: slideIn .3s ease;
+    }
+    .slide.active { display: flex; }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .slide-num {
+      font-size: .75rem;
+      font-weight: 600;
+      color: #fff;
+      background: rgba(0,0,0,.25);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+      align-self: flex-end;
+    }
+    .slide-icon { font-size: 3.2rem; margin-bottom: 16px; }
+    .slide-headline {
+      font-size: 1.35rem;
+      font-weight: 800;
+      text-align: center;
+      line-height: 1.35;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+    .slide-body {
+      font-size: .9rem;
+      text-align: center;
+      line-height: 1.8;
+      color: rgba(255,255,255,.9);
+      max-width: 420px;
+    }
+    .slide-highlight {
+      display: inline-block;
+      background: rgba(255,255,255,.2);
+      border-radius: 8px;
+      padding: 2px 10px;
+      font-weight: 700;
+      margin: 0 2px;
+    }
+    .slide-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      background: rgba(255,255,255,.12);
+      border-radius: 10px;
+      overflow: hidden;
+      font-size: .85rem;
+    }
+    .slide-table th {
+      background: rgba(255,255,255,.2);
+      color: #fff;
+      padding: 9px 14px;
+      text-align: left;
+      font-weight: 700;
+    }
+    .slide-table td {
+      color: rgba(255,255,255,.9);
+      padding: 9px 14px;
+      border-top: 1px solid rgba(255,255,255,.1);
+    }
+    .slide-list {
+      list-style: none;
+      text-align: left;
+      width: 100%;
+      margin-top: 14px;
+    }
+    .slide-list li {
+      color: rgba(255,255,255,.9);
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      font-size: .88rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .slide-list li:last-child { border-bottom: none; }
+    .bullet { flex-shrink: 0; font-size: 1rem; }
+
+    /* ── Slide Controls ─────────────────────────────── */
+    .viewer-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .nav-btn {
+      padding: 9px 22px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: .875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+    .nav-btn:disabled { opacity: .35; cursor: default; }
+    .progress-dots {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: all .25s;
+      cursor: pointer;
+    }
+    .dot.active {
+      width: 22px;
+      border-radius: 4px;
+      background: var(--primary);
+    }
+
+    /* ── Footer ─────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--text-s);
+      font-size: .8rem;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--primary); text-decoration: none; }
+
+    /* ── Responsive ──────────────────────────────────── */
+    @media (max-width: 480px) {
+      .grid { padding: 0 14px 48px; gap: 16px; }
+      .slide { padding: 28px 20px 20px; min-height: 340px; }
+      .slide-headline { font-size: 1.15rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <a href="https://nhj7.github.io" class="logo">N<span>Space</span></a>
+  <nav>
+    <a href="https://nhj7.github.io">홈</a>
+    <a href="https://nhj7.github.io/card">카드뉴스</a>
+  </nav>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>금융 정보, <em>카드 한 장</em>으로</h1>
+  <p>복잡한 금융 지식을 슬라이드로 쉽게 이해하세요</p>
+</div>
+
+<!-- Category Tabs -->
+<div class="tabs" id="tabs">
+  <button class="tab-btn active" data-cat="all">전체</button>
+  <button class="tab-btn" data-cat="금리">금리</button>
+  <button class="tab-btn" data-cat="대출">대출</button>
+  <button class="tab-btn" data-cat="저축">저축</button>
+  <button class="tab-btn" data-cat="투자">투자</button>
+  <button class="tab-btn" data-cat="규제">규제·정책</button>
+</div>
+
+<!-- Card Grid -->
+<div class="grid" id="grid"></div>
+
+<!-- Footer -->
+<footer>
+  <p>© 2026 <a href="https://nhj7.github.io">NSpace</a> · 금융 정보는 참고용이며 투자·대출 결정은 전문가와 상담하세요</p>
+</footer>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="viewer">
+    <div class="viewer-header">
+      <span class="viewer-title" id="viewer-title"></span>
+      <button class="close-btn" id="close-btn">✕</button>
+    </div>
+    <div class="slides-wrapper" id="slides-wrapper"></div>
+    <div class="viewer-controls">
+      <button class="nav-btn" id="prev-btn">← 이전</button>
+      <div class="progress-dots" id="dots"></div>
+      <button class="nav-btn" id="next-btn">다음 →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   DATA — 카드뉴스 데이터
+   새 카드를 추가하려면 이 배열에 객체를 추가하세요.
+   ═══════════════════════════════════════════════ */
+const CARDS = [
+  {
+    id: 1,
+    title: "2026년 기준금리, 지금이 맞나요?",
+    desc: "한국은행 금리 결정의 배경과 내 자산에 미치는 영향",
+    cat: "금리",
+    date: "2026.06",
+    color: "linear-gradient(135deg, #1a56db 0%, #0e3aa0 100%)",
+    thumb: "📊",
+    badge: { text: "금리", bg: "#dbeafe", color: "#1d4ed8" },
+    slides: [
+      {
+        bg: "linear-gradient(135deg, #1a56db 0%, #0e3aa0 100%)",
+        icon: "📊",
+        headline: "2026년 기준금리,\n지금이 맞나요?",
+        body: "한국은행은 <span class='slide-highlight'>연 2.75%</span>로 금리를 동결했습니다.\n물가와 성장 사이의 균형을 유지하기 위한 결정입니다."
+      },
+      {
+        bg: "linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)",
+        icon: "🏦",
+        headline: "금리 결정의 3가지 기준",
+        body: null,
+        list: [
+          { emoji: "📈", text: "소비자물가지수(CPI): 목표 2% 수준 안정화 확인" },
+          { emoji: "💼", text: "고용지표: 실업률 3.1%, 완전고용에 근접" },
+          { emoji: "🌐", text: "글로벌 환경: 미 연준 금리 동결 기조 반영" }
+        ]
+      },
+      {
+        bg: "linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%)",
+        icon: "💸",
+        headline: "내 대출·예금에 어떤 영향?",
+        body: null,
+        table: {
+          headers: ["구분", "영향"],
+          rows: [
+            ["주택담보대출", "변동금리 큰 변화 없음"],
+            ["정기예금", "고금리 상품 서서히 감소"],
+            ["전세대출", "은행채 연동 소폭 하락 가능"]
+          ]
+        }
+      },
+      {
+        bg: "linear-gradient(135deg, #1a56db 0%, #0369a1 100%)",
+        icon: "💡",
+        headline: "지금 당신이 해야 할 행동",
+        body: null,
+        list: [
+          { emoji: "✅", text: "변동금리 대출 → 고정금리 전환 타이밍 검토" },
+          { emoji: "✅", text: "만기 예금 → 장기 고금리 상품으로 갈아타기" },
+          { emoji: "✅", text: "다음 금통위(8월 28일) 일정 체크" }
+        ]
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: "DSR 규제 총정리, 나는 얼마까지 빌릴 수 있나?",
+    desc: "총부채원리금상환비율(DSR) 규제의 핵심을 4장으로 정리",
+    cat: "대출",
+    date: "2026.06",
+    color: "linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)",
+    thumb: "🏠",
+    badge: { text: "대출", bg: "#ede9fe", color: "#7c3aed" },
+    slides: [
+      {
+        bg: "linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)",
+        icon: "🏠",
+        headline: "DSR 규제,\n나는 얼마까지 빌릴 수 있나?",
+        body: "<span class='slide-highlight'>총부채원리금상환비율(DSR)</span>은 연 소득 대비 모든 대출의 원리금 상환액 비율입니다.\n2026년 기준 40% 규제가 적용됩니다."
+      },
+      {
+        bg: "linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%)",
+        icon: "🧮",
+        headline: "DSR 계산법",
+        body: "연봉 5,000만원 기준\n\nDSR 40% = 연 <span class='slide-highlight'>2,000만원</span> 한도\n월 <span class='slide-highlight'>약 167만원</span>까지 상환 가능\n\n기존 대출이 있다면 그만큼 한도가 줄어듭니다."
+      },
+      {
+        bg: "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)",
+        icon: "📋",
+        headline: "금융권별 DSR 적용 기준",
+        body: null,
+        table: {
+          headers: ["금융권", "DSR 한도"],
+          rows: [
+            ["은행·저축은행", "40%"],
+            ["보험사·카드사", "40%"],
+            ["신협·새마을금고", "40% (2024~)"],
+            ["P2P·대부업", "미적용"]
+          ]
+        }
+      },
+      {
+        bg: "linear-gradient(135deg, #5b21b6 0%, #4c1d95 100%)",
+        icon: "💡",
+        headline: "DSR 예외 & 절세 포인트",
+        body: null,
+        list: [
+          { emoji: "🔑", text: "전세자금대출·중도금대출은 DSR 산정 제외" },
+          { emoji: "🔑", text: "소득 증빙 강화 시 한도 상향 가능" },
+          { emoji: "🔑", text: "장기 분할상환 선택 시 월 부담 완화" },
+          { emoji: "📌", text: "2026년 하반기 스트레스 DSR 3단계 시행 예정" }
+        ]
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: "요즘 뜨는 파킹통장, 제대로 비교해봤습니다",
+    desc: "수시 입출금하면서 고금리를 노리는 파킹통장 완전 분석",
+    cat: "저축",
+    date: "2026.06",
+    color: "linear-gradient(135deg, #059669 0%, #065f46 100%)",
+    thumb: "💰",
+    badge: { text: "저축", bg: "#d1fae5", color: "#059669" },
+    slides: [
+      {
+        bg: "linear-gradient(135deg, #059669 0%, #065f46 100%)",
+        icon: "💰",
+        headline: "파킹통장,\n제대로 비교했습니다",
+        body: "수시 입출금이 가능하면서도\n<span class='slide-highlight'>연 3%대 이상</span>의 이자를 주는\n파킹통장이 주목받고 있습니다."
+      },
+      {
+        bg: "linear-gradient(135deg, #047857 0%, #064e3b 100%)",
+        icon: "📊",
+        headline: "주요 파킹통장 금리 비교",
+        body: null,
+        table: {
+          headers: ["상품", "최고 금리", "조건"],
+          rows: [
+            ["카카오뱅크 세이프박스", "연 2.80%", "제한 없음"],
+            ["토스뱅크 통장", "연 2.00%", "제한 없음"],
+            ["저축은행 사이다뱅크", "연 3.20%", "5천만원 한도"],
+            ["OK저축은행 OK읏통장", "연 3.50%", "500만원 한도"]
+          ]
+        }
+      },
+      {
+        bg: "linear-gradient(135deg, #059669 0%, #047857 100%)",
+        icon: "⚠️",
+        headline: "파킹통장 선택 전 체크리스트",
+        body: null,
+        list: [
+          { emoji: "✔️", text: "예금자 보호 한도 확인 (1인당 5,000만원)" },
+          { emoji: "✔️", text: "우대금리 조건: 급여 이체·카드 실적 여부" },
+          { emoji: "✔️", text: "한도 초과 금액의 금리 확인" },
+          { emoji: "✔️", text: "저축은행 NICE 신용평가 등급 영향 없음" }
+        ]
+      },
+      {
+        bg: "linear-gradient(135deg, #065f46 0%, #064e3b 100%)",
+        icon: "💡",
+        headline: "이렇게 활용하세요",
+        body: "비상금·단기 여윳돈 → <span class='slide-highlight'>파킹통장</span>\n3~6개월 이상 묶을 돈 → <span class='slide-highlight'>정기예금</span>\n1년 이상 장기 → <span class='slide-highlight'>ISA 또는 연금저축</span>\n\n분산 배치가 절세와 수익률 모두 유리합니다."
+      }
+    ]
+  }
+];
+
+/* ═══════════════════════════════════════════
+   RENDER CARDS
+   ═══════════════════════════════════════════ */
+function renderCards(cat) {
+  const grid = document.getElementById('grid');
+  const filtered = cat === 'all' ? CARDS : CARDS.filter(c => c.cat === cat);
+  grid.innerHTML = filtered.map(card => `
+    <div class="card" onclick="openViewer(${card.id})">
+      <div class="card-thumb" style="background:${card.color}">
+        <span style="font-size:3.6rem;filter:drop-shadow(0 2px 8px rgba(0,0,0,.2))">${card.thumb}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-badge" style="background:${card.badge.bg};color:${card.badge.color}">${card.badge.text}</div>
+        <div class="card-title">${card.title}</div>
+        <div class="card-desc">${card.desc}</div>
+      </div>
+      <div class="card-footer">
+        <span>${card.date}</span>
+        <span class="slide-count">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+          </svg>
+          ${card.slides.length}장
+        </span>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ═══════════════════════════════════════════
+   VIEWER LOGIC
+   ═══════════════════════════════════════════ */
+let current = { card: null, idx: 0 };
+
+function buildSlideHTML(slide) {
+  let inner = '';
+  if (slide.table) {
+    inner = `<table class="slide-table">
+      <tr>${slide.table.headers.map(h=>`<th>${h}</th>`).join('')}</tr>
+      ${slide.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}
+    </table>`;
+  } else if (slide.list) {
+    inner = `<ul class="slide-list">${slide.list.map(li=>`
+      <li><span class="bullet">${li.emoji}</span>${li.text}</li>`).join('')}</ul>`;
+  } else if (slide.body) {
+    inner = `<p class="slide-body">${slide.body.replace(/\n/g,'<br>')}</p>`;
+  }
+
+  return `<div class="slide" style="background:${slide.bg}">
+    <div class="slide-num">${current.idx + 1} / ${current.card.slides.length}</div>
+    <div class="slide-icon">${slide.icon}</div>
+    <div class="slide-headline">${slide.headline.replace(/\n/g,'<br>')}</div>
+    ${inner}
+  </div>`;
+}
+
+function refreshViewer() {
+  const card = current.card;
+  const idx  = current.idx;
+
+  document.getElementById('viewer-title').textContent = card.title;
+
+  // Slides
+  const wrapper = document.getElementById('slides-wrapper');
+  wrapper.innerHTML = card.slides.map((s, i) => {
+    const savedIdx = current.idx;
+    current.idx = i;
+    const html = buildSlideHTML(s);
+    current.idx = savedIdx;
+    return html;
+  }).join('');
+
+  const allSlides = wrapper.querySelectorAll('.slide');
+  allSlides.forEach((el, i) => el.classList.toggle('active', i === idx));
+
+  // Dots
+  const dots = document.getElementById('dots');
+  dots.innerHTML = card.slides.map((_, i) =>
+    `<div class="dot ${i === idx ? 'active' : ''}" onclick="goTo(${i})"></div>`
+  ).join('');
+
+  // Buttons
+  document.getElementById('prev-btn').disabled = idx === 0;
+  document.getElementById('next-btn').disabled = idx === card.slides.length - 1;
+
+  // Update slide number labels
+  allSlides.forEach((el, i) => {
+    const numEl = el.querySelector('.slide-num');
+    if (numEl) numEl.textContent = `${i + 1} / ${card.slides.length}`;
+  });
+}
+
+function openViewer(id) {
+  current.card = CARDS.find(c => c.id === id);
+  current.idx  = 0;
+  refreshViewer();
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeViewer() {
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function goTo(idx) {
+  current.idx = idx;
+  refreshViewer();
+}
+
+document.getElementById('prev-btn').addEventListener('click', () => {
+  if (current.idx > 0) { current.idx--; refreshViewer(); }
+});
+document.getElementById('next-btn').addEventListener('click', () => {
+  if (current.idx < current.card.slides.length - 1) { current.idx++; refreshViewer(); }
+});
+document.getElementById('close-btn').addEventListener('click', closeViewer);
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeViewer();
+});
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('modal').classList.contains('open')) return;
+  if (e.key === 'ArrowRight') document.getElementById('next-btn').click();
+  if (e.key === 'ArrowLeft')  document.getElementById('prev-btn').click();
+  if (e.key === 'Escape')     closeViewer();
+});
+
+// Touch swipe
+let touchX = 0;
+document.querySelector('.viewer').addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
+document.querySelector('.viewer').addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (dx < -50) document.getElementById('next-btn').click();
+  if (dx >  50) document.getElementById('prev-btn').click();
+});
+
+/* ═══════════════════════════════════════════
+   TABS
+   ═══════════════════════════════════════════ */
+document.getElementById('tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.tab-btn');
+  if (!btn) return;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCards(btn.dataset.cat);
+});
+
+// Init
+renderCards('all');
+</script>
+</body>
+</html>
